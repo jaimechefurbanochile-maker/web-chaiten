@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
   Search, Home, ShoppingBag, Tag, User,
-  Plane, Building2, Train, Ship, Bus, ChevronRight, Star,
+  Plane, Building2, Train, Ship, Bus, ChevronRight, Star, MapPin,
   AlertCircle,
   Fuel, Banknote, Stethoscope, ShieldCheck, Wifi, MessageCircle
 } from 'lucide-react';
@@ -116,80 +116,110 @@ export default function ModernHome() {
       {/* ════ SCROLL ══════════════════════════════════════════════════════ */}
       <div style={{ flex:1, overflowY:'auto', overflowX:'hidden' }} className="hide-scrollbar">
 
-        {/* ══ HEADER TEAL ══════════════════════════════════════════════════ */}
-        <div style={{ background:T.teal, paddingBottom:28 }}>
+        {/* ══ HERO ═════════════════════════════════════════════════════════ */}
+        <div style={{ position:'relative', height:420, overflow:'hidden' }}>
 
-          {/* Greeting */}
-          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', padding:'52px 20px 0' }}>
-            <div>
-              <h1 style={{ fontSize:30, fontWeight:800, color:T.white, letterSpacing:'-0.5px', lineHeight:1.1, margin:0 }}>Hola, viajero</h1>
-              <div style={{ display:'flex', alignItems:'center', gap:5, marginTop:5 }}>
-                <span style={{ width:18, height:18, borderRadius:'50%', background:'#FBBF24', display:'flex', alignItems:'center', justifyContent:'center', fontSize:11 }}>✦</span>
-                <span style={{ fontSize:13, color:'rgba(255,255,255,0.9)', fontWeight:600 }}>
-                  {wx.loading ? '...' : `${wx.temp}°C · ${wx.description} · Chaitén`}
-                </span>
+          {/* Background photo */}
+          <img
+            src="https://picsum.photos/seed/patagonia-hero/430/420"
+            alt=""
+            style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover' }}
+          />
+
+          {/* Gradient overlays */}
+          <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, rgba(10,30,20,0.55) 0%, rgba(10,30,20,0.1) 45%, rgba(10,30,20,0.75) 100%)' }} />
+
+          {/* Content */}
+          <div style={{ position:'relative', zIndex:1, height:'100%', display:'flex', flexDirection:'column', justifyContent:'space-between' }}>
+
+            {/* Top bar */}
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'52px 20px 0' }}>
+              <div style={{ display:'flex', alignItems:'center', gap:6, background:'rgba(255,255,255,0.15)', backdropFilter:'blur(8px)', borderRadius:100, padding:'7px 14px' }}>
+                <MapPin size={13} color={T.accent} fill={T.accent} />
+                <span style={{ fontSize:12, fontWeight:700, color:T.white }}>Chaitén, Patagonia Norte</span>
               </div>
-            </div>
-            <div style={{ width:48, height:48, borderRadius:'50%', background:'rgba(255,255,255,0.25)', border:'2px solid rgba(255,255,255,0.5)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:24, flexShrink:0 }}>
-              🧑‍🌿
-            </div>
-          </div>
-
-          {/* Search */}
-          <div style={{ margin:'16px 20px 0', display:'flex', alignItems:'center', gap:10, background:T.white, borderRadius:12, padding:'13px 16px' }}>
-            <Search size={18} color='#BDBDBD' />
-            <span style={{ fontSize:14, color:'#BDBDBD' }}>¿A dónde vas?</span>
-          </div>
-
-          {/* Upcoming card */}
-          <div style={{ margin:'14px 20px 0', background:T.white, borderRadius:16 }}>
-            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'14px 16px 12px' }}>
-              <span style={{ fontSize:11, fontWeight:700, color:T.white, background:T.tealDark, padding:'4px 12px', borderRadius:100 }}>Próximo viaje</span>
-              <span style={{ fontSize:11, color:T.gray }}>14 Jun 2026</span>
-            </div>
-            <div style={{ display:'flex', alignItems:'center', padding:'0 16px' }}>
-              <div style={{ minWidth:52 }}>
-                <div style={{ display:'flex', alignItems:'center', gap:4 }}>
-                  <span style={{ fontSize:22, fontWeight:800, color:T.dark }}>QCH</span>
-                  <Plane size={13} color={T.gray} />
-                </div>
-                <p style={{ fontSize:11, color:T.gray, marginTop:2 }}>09:00</p>
-              </div>
-              <div style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', gap:2, padding:'0 8px' }}>
-                <span style={{ fontSize:11, color:T.gray }}>4h 30m</span>
-                <div style={{ width:'100%', borderTop:'1.5px dashed #D0D0D0', position:'relative' }}>
-                  <span style={{ position:'absolute', right:-4, top:-8, fontSize:10, color:T.gray }}>›</span>
+              <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                {!wx.loading && (
+                  <div style={{ display:'flex', alignItems:'center', gap:5, background:'rgba(255,255,255,0.15)', backdropFilter:'blur(8px)', borderRadius:100, padding:'7px 12px' }}>
+                    <span style={{ fontSize:13 }}>{wx.icon ?? '🌤️'}</span>
+                    <span style={{ fontSize:12, fontWeight:700, color:T.white }}>{wx.temp}°C</span>
+                  </div>
+                )}
+                <div style={{ width:38, height:38, borderRadius:'50%', background:'rgba(255,255,255,0.2)', backdropFilter:'blur(8px)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20 }}>
+                  🧑‍🌿
                 </div>
               </div>
-              <div style={{ minWidth:52, textAlign:'right' }}>
-                <div style={{ display:'flex', alignItems:'center', justifyContent:'flex-end', gap:4 }}>
-                  <Ship size={13} color={T.gray} />
-                  <span style={{ fontSize:22, fontWeight:800, color:T.dark }}>CHT</span>
-                </div>
-                <p style={{ fontSize:11, color:T.gray, marginTop:2 }}>13:30</p>
+            </div>
+
+            {/* Headline */}
+            <div style={{ padding:'0 22px' }}>
+              <p style={{ fontSize:13, fontWeight:600, color:T.accent, letterSpacing:2, textTransform:'uppercase', marginBottom:8 }}>BIENVENIDO AL FIN DEL MUNDO</p>
+              <h1 style={{ fontSize:38, fontWeight:900, color:T.white, lineHeight:1.1, letterSpacing:'-1px', margin:0 }}>
+                Descubre la<br />
+                <span style={{ color:T.accent }}>Patagonia</span> Norte
+              </h1>
+              <div style={{ display:'flex', gap:12, marginTop:14 }}>
+                {[['🗺️','126 destinos'],['🥾','45 rutas'],['⭐','4.9 rating']].map(([e,l]) => (
+                  <div key={l as string} style={{ display:'flex', alignItems:'center', gap:4 }}>
+                    <span style={{ fontSize:12 }}>{e}</span>
+                    <span style={{ fontSize:11, fontWeight:600, color:'rgba(255,255,255,0.85)' }}>{l}</span>
+                  </div>
+                ))}
               </div>
             </div>
-            <p style={{ fontSize:11, color:T.gray, padding:'8px 16px 0' }}>Navimag · Económico · Directo</p>
-            <div style={{ display:'flex', justifyContent:'space-between', borderTop:`1px solid ${T.grayLight}`, margin:'12px 16px 0', padding:'10px 0 14px' }}>
-              <span style={{ fontSize:12, color:T.gray }}>Booking ID</span>
-              <span style={{ fontSize:12, fontWeight:800, color:T.dark, letterSpacing:1 }}>NV2026</span>
-            </div>
-          </div>
 
-          {/* Category icons */}
-          <div style={{ display:'flex', justifyContent:'space-between', padding:'20px 20px 0' }}>
+            {/* Search card floating */}
+            <div style={{ margin:'0 16px 0', background:T.white, borderRadius:20, padding:'14px 16px', boxShadow:'0 8px 32px rgba(0,0,0,0.18)' }}>
+              <div style={{ display:'flex', alignItems:'center', gap:10, borderBottom:`1px solid ${T.grayLight}`, paddingBottom:12, marginBottom:12 }}>
+                <div style={{ width:36, height:36, borderRadius:10, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                  <Search size={16} color={T.teal} />
+                </div>
+                <div>
+                  <p style={{ fontSize:11, color:T.gray, marginBottom:1 }}>¿A dónde quieres ir?</p>
+                  <p style={{ fontSize:13, fontWeight:700, color:T.dark }}>Chaitén y alrededores</p>
+                </div>
+              </div>
+              <div style={{ display:'flex', justifyContent:'space-between' }}>
+                {[
+                  { label:'Llegada',  Icon: Plane,  val:'14 Jun' },
+                  { label:'Salida',   Icon: Ship,   val:'21 Jun' },
+                  { label:'Viajeros', Icon: ShoppingBag, val:'2 pers.' },
+                ].map(({ label, Icon, val }) => (
+                  <div key={label} style={{ display:'flex', flexDirection:'column', gap:2, flex:1, alignItems:'center' }}>
+                    <div style={{ display:'flex', alignItems:'center', gap:4 }}>
+                      <Icon size={11} color={T.gray} />
+                      <span style={{ fontSize:10, color:T.gray }}>{label}</span>
+                    </div>
+                    <span style={{ fontSize:12, fontWeight:700, color:T.dark }}>{val}</span>
+                  </div>
+                ))}
+                <div style={{ width:1, background:T.grayLight, alignSelf:'stretch', flexShrink:0 }} />
+                <button style={{ marginLeft:12, background:T.teal, border:'none', borderRadius:12, padding:'8px 16px', cursor:'pointer', display:'flex', alignItems:'center', gap:4, flexShrink:0 }}>
+                  <Search size={13} color={T.white} />
+                  <span style={{ fontSize:12, fontWeight:700, color:T.white }}>Buscar</span>
+                </button>
+              </div>
+            </div>
+
+            <div style={{ height:20 }} />
+          </div>
+        </div>
+
+        {/* ══ CATEGORY QUICK ACCESS ════════════════════════════════════════ */}
+        <div style={{ background:T.white, paddingBottom:8 }}>
+          <div style={{ display:'flex', justifyContent:'space-around', padding:'16px 10px 8px' }}>
             {[
-              { label:'Vuelos',  Icon: Plane     },
-              { label:'Hoteles', Icon: Building2 },
-              { label:'Trenes',  Icon: Train     },
-              { label:'Ferry',   Icon: Ship      },
-              { label:'Buses',   Icon: Bus       },
+              { label:'Vuelos',  Icon: Plane,     emoji:'✈️' },
+              { label:'Hoteles', Icon: Building2, emoji:'🏨' },
+              { label:'Ferry',   Icon: Ship,      emoji:'⛴️' },
+              { label:'Buses',   Icon: Bus,       emoji:'🚌' },
+              { label:'Rutas',   Icon: Train,     emoji:'🥾' },
             ].map(({ label, Icon }) => (
               <button key={label} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer' }}>
-                <div style={{ width:52, height:52, borderRadius:'50%', background:'rgba(255,255,255,0.2)', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                  <Icon size={22} color={T.white} />
+                <div style={{ width:50, height:50, borderRadius:14, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center' }}>
+                  <Icon size={20} color={T.teal} />
                 </div>
-                <span style={{ fontSize:11, fontWeight:600, color:'rgba(255,255,255,0.95)' }}>{label}</span>
+                <span style={{ fontSize:10, fontWeight:600, color:T.dark }}>{label}</span>
               </button>
             ))}
           </div>
