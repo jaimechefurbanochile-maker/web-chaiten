@@ -93,12 +93,12 @@ const DONDE_COMPRAR = [
 ];
 
 const EN_PUEBLO = [
-  { titulo:'Borde Costero',      desc:'Paseo frente al mar · ideal al atardecer', Icon: Waves        },
-  { titulo:'Plaza de Armas',     desc:'Centro del pueblo · mercado y artesanías', Icon: Landmark     },
-  { titulo:'Zona Exclusión',     desc:'Historia viva de la erupción del 2008',    Icon: Flame        },
-  { titulo:'Mirador Volcán',     desc:'Vista del Corcovado desde el pueblo',      Icon: Mountain     },
-  { titulo:'Feria Artesanos',    desc:'Productos locales · recuerdos auténticos', Icon: ShoppingCart },
-  { titulo:'Museo Histórico',    desc:'Fotos y relatos del pueblo renacido',       Icon: Landmark     },
+  { titulo:'Borde Costero',      desc:'Paseo frente al mar · ideal al atardecer', Icon: Waves,        target:'ruta:r3'      },
+  { titulo:'Plaza de Armas',     desc:'Centro del pueblo · mercado y artesanías', Icon: Landmark,     target:'tab:info'     },
+  { titulo:'Zona Exclusión',     desc:'Historia viva de la erupción del 2008',    Icon: Flame,        target:'lugar:a6'     },
+  { titulo:'Mirador Volcán',     desc:'Vista del Corcovado desde el pueblo',      Icon: Mountain,     target:'lugar:a1'     },
+  { titulo:'Feria Artesanos',    desc:'Productos locales · recuerdos auténticos', Icon: ShoppingCart, target:'tab:servicios' },
+  { titulo:'Museo Histórico',    desc:'Fotos y relatos del pueblo renacido',       Icon: Landmark,     target:'tab:info'     },
 ];
 
 const DESTINOS_CERCANOS = [
@@ -768,9 +768,9 @@ function ComoLlegarDetailPage({ id, onBack }: { id: string; onBack: () => void }
           {det.empresas.map((emp, i) => (
             <div key={i} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'13px 16px', borderBottom: i < det.empresas.length - 1 ? `1px solid ${T.grayLight}` : 'none' }}>
               <p style={{ fontSize:13, fontWeight:700, color:T.dark }}>{emp.nombre}</p>
-              <button style={{ display:'flex', alignItems:'center', gap:4, background:T.tealBg, border:`1px solid ${T.teal}`, borderRadius:100, padding:'6px 12px', cursor:'pointer', color:T.teal, fontSize:11, fontWeight:600, flexShrink:0 }}>
+              <a href={`tel:${emp.tel}`} style={{ display:'flex', alignItems:'center', gap:4, background:T.tealBg, border:`1px solid ${T.teal}`, borderRadius:100, padding:'6px 12px', color:T.teal, fontSize:11, fontWeight:600, flexShrink:0, textDecoration:'none' }}>
                 <Phone size={12} color={T.teal} /> {emp.tel}
-              </button>
+              </a>
             </div>
           ))}
         </div>
@@ -885,7 +885,7 @@ function HomeTab({ wx, navigate, onTabChange }: { wx: ReturnType<typeof useWeath
 
       {/* Principales atractivos */}
       <div style={{ paddingTop:28 }}>
-        <SectionHeader title="Principales atractivos" onSeeAll={() => {}} />
+        <SectionHeader title="Principales atractivos" onSeeAll={() => onTabChange('explorar')} />
         <div style={{ display:'flex', gap:14, overflowX:'auto', padding:'0 20px 4px' }} className="hide-scrollbar">
           {ATRACTIVOS.map(a => <AttractivoCard key={a.id} a={a} onClick={() => navigate({ type:'lugar', id:a.id })} />)}
         </div>
@@ -989,15 +989,23 @@ function HomeTab({ wx, navigate, onTabChange }: { wx: ReturnType<typeof useWeath
       <div style={{ paddingTop:28 }}>
         <SectionHeader title="Qué hacer en el pueblo" />
         <div style={{ display:'flex', gap:10, overflowX:'auto', padding:'0 20px 4px' }} className="hide-scrollbar">
-          {EN_PUEBLO.map(item => (
-            <div key={item.titulo} style={{ width:138, flexShrink:0, background:T.white, borderRadius:16, padding:'14px 12px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', cursor:'pointer' }}>
+          {EN_PUEBLO.map(item => {
+            const [type, id] = item.target.split(':');
+            const handleClick = () => {
+              if (type === 'lugar') navigate({ type:'lugar', id });
+              else if (type === 'ruta') navigate({ type:'ruta', id });
+              else onTabChange(id as NavTab);
+            };
+            return (
+            <div key={item.titulo} onClick={handleClick} style={{ width:138, flexShrink:0, background:T.white, borderRadius:16, padding:'14px 12px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', cursor:'pointer' }}>
               <div style={{ width:44, height:44, borderRadius:12, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:10 }}>
                 <item.Icon size={22} color={T.teal} />
               </div>
               <p style={{ fontSize:12, fontWeight:700, color:T.dark, marginBottom:4, lineHeight:1.3 }}>{item.titulo}</p>
               <p style={{ fontSize:10, color:T.gray, lineHeight:1.4 }}>{item.desc}</p>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -1055,7 +1063,7 @@ function HomeTab({ wx, navigate, onTabChange }: { wx: ReturnType<typeof useWeath
 
       {/* Alojamientos */}
       <div style={{ paddingTop:28 }}>
-        <SectionHeader title="Alojamientos recomendados" onSeeAll={() => {}} />
+        <SectionHeader title="Alojamientos recomendados" />
         <div style={{ padding:'0 20px' }}>
           <ListCard first last>
             {ALOJAMIENTOS.map((d, i) => (
@@ -1067,7 +1075,7 @@ function HomeTab({ wx, navigate, onTabChange }: { wx: ReturnType<typeof useWeath
 
       {/* Gastronomía */}
       <div style={{ paddingTop:28 }}>
-        <SectionHeader title="Gastronomía local" onSeeAll={() => {}} />
+        <SectionHeader title="Gastronomía local" onSeeAll={() => onTabChange('explorar')} />
         <div style={{ padding:'0 20px' }}>
           <ListCard first last>
             {GASTRONOMIA.map((c, i) => (
@@ -1212,7 +1220,7 @@ function ExplorarTab({ navigate }: { navigate: Navigate }) {
             </div>
             <div style={{ padding:'12px 16px 14px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
               <Stars v={a.rating} />
-              <span style={{ fontSize:12, fontWeight:700, color:T.teal }}>Desde {a.precio}</span>
+              <span style={{ fontSize:12, fontWeight:700, color:T.teal }}>{filtro === 'Gastronomía' ? a.precio : `Desde ${a.precio}`}</span>
             </div>
           </div>
         ))}
@@ -1357,7 +1365,7 @@ function ServiciosTab() {
             { Icon: ShieldCheck, label:'Carabineros', num:'133'            },
             { Icon: Stethoscope, label:'Urgencia',    num:'(65) 2 731 244' },
           ].map(({ Icon, label, num }) => (
-            <button key={label} style={{ display:'flex', alignItems:'center', gap:8, background:T.white, borderRadius:10, padding:'10px 12px', border:`1px solid #FECACA`, cursor:'pointer' }}>
+            <a key={label} href={`tel:${num}`} style={{ display:'flex', alignItems:'center', gap:8, background:T.white, borderRadius:10, padding:'10px 12px', border:`1px solid #FECACA`, textDecoration:'none' }}>
               <div style={{ width:32, height:32, borderRadius:8, background:'#FEF2F2', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
                 <Icon size={16} color={T.red} />
               </div>
@@ -1365,7 +1373,7 @@ function ServiciosTab() {
                 <p style={{ fontSize:10, color:T.gray }}>{label}</p>
                 <p style={{ fontSize:14, fontWeight:800, color:T.red }}>{num}</p>
               </div>
-            </button>
+            </a>
           ))}
         </div>
       </div>
@@ -1376,7 +1384,7 @@ function ServiciosTab() {
         <div style={{ padding:'0 20px' }}>
           <ListCard first last>
             {SERVICIOS_ESENCIALES.map((s, i) => (
-              <div key={s.id} style={{ display:'flex', alignItems:'center', gap:14, padding:'14px', borderBottom: i < SERVICIOS_ESENCIALES.length-1 ? `1px solid ${T.grayLight}` : 'none', cursor:'pointer' }}>
+              <div key={s.id} style={{ display:'flex', alignItems:'center', gap:14, padding:'14px', borderBottom: i < SERVICIOS_ESENCIALES.length-1 ? `1px solid ${T.grayLight}` : 'none' }}>
                 <div style={{ width:48, height:48, borderRadius:12, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
                   <s.Icon size={22} color={T.teal} />
                 </div>
@@ -1388,10 +1396,10 @@ function ServiciosTab() {
                   </div>
                 </div>
                 {s.tel && (
-                  <button style={{ display:'flex', alignItems:'center', gap:4, background:T.tealBg, border:`1px solid ${T.teal}`, borderRadius:100, padding:'6px 12px', cursor:'pointer', color:T.teal, fontSize:12, fontWeight:600, flexShrink:0 }}>
+                  <a href={`tel:${s.tel}`} style={{ display:'flex', alignItems:'center', gap:4, background:T.tealBg, border:`1px solid ${T.teal}`, borderRadius:100, padding:'6px 12px', color:T.teal, fontSize:12, fontWeight:600, flexShrink:0, textDecoration:'none' }}>
                     <Phone size={12} color={T.teal} />
                     {s.tel}
-                  </button>
+                  </a>
                 )}
               </div>
             ))}
@@ -1405,7 +1413,7 @@ function ServiciosTab() {
         <div style={{ padding:'0 20px' }}>
           <ListCard first last>
             {DONDE_COMPRAR.map((c, i) => (
-              <div key={c.titulo} style={{ display:'flex', alignItems:'center', gap:14, padding:'14px', borderBottom: i < DONDE_COMPRAR.length-1 ? `1px solid ${T.grayLight}` : 'none', cursor:'pointer' }}>
+              <div key={c.titulo} style={{ display:'flex', alignItems:'center', gap:14, padding:'14px', borderBottom: i < DONDE_COMPRAR.length-1 ? `1px solid ${T.grayLight}` : 'none' }}>
                 <div style={{ width:48, height:48, borderRadius:12, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
                   <c.Icon size={22} color={T.teal} />
                 </div>
@@ -1434,7 +1442,7 @@ function ServiciosTab() {
             { Icon: Footprints, titulo:'A pie',        sub:'Centro compacto'       },
             { Icon: Truck,      titulo:'Transfer',     sub:'Al Pumalín y rutas'    },
           ].map(m => (
-            <div key={m.titulo} style={{ flexShrink:0, background:T.white, borderRadius:16, padding:'14px 16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', cursor:'pointer', minWidth:118, textAlign:'center' }}>
+            <div key={m.titulo} style={{ flexShrink:0, background:T.white, borderRadius:16, padding:'14px 16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', minWidth:118, textAlign:'center' }}>
               <div style={{ width:48, height:48, borderRadius:12, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 8px' }}>
                 <m.Icon size={22} color={T.teal} />
               </div>
@@ -1456,7 +1464,7 @@ function ServiciosTab() {
               { Icon: Bus,   titulo:'Tur-Bus',       sub:'Puerto Montt → Carretera',  tel:'600 660 6600'   },
               { Icon: Plane, titulo:'Aerocord',      sub:'Puerto Montt–Chaitén',      tel:'(65) 2 254 411' },
             ].map((t, i, arr) => (
-              <div key={t.titulo} style={{ display:'flex', alignItems:'center', gap:14, padding:'14px', borderBottom: i < arr.length-1 ? `1px solid ${T.grayLight}` : 'none', cursor:'pointer' }}>
+              <div key={t.titulo} style={{ display:'flex', alignItems:'center', gap:14, padding:'14px', borderBottom: i < arr.length-1 ? `1px solid ${T.grayLight}` : 'none' }}>
                 <div style={{ width:44, height:44, borderRadius:12, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
                   <t.Icon size={20} color={T.teal} />
                 </div>
@@ -1464,9 +1472,9 @@ function ServiciosTab() {
                   <p style={{ fontSize:13, fontWeight:700, color:T.dark, marginBottom:2 }}>{t.titulo}</p>
                   <p style={{ fontSize:11, color:T.gray }}>{t.sub}</p>
                 </div>
-                <button style={{ display:'flex', alignItems:'center', gap:4, background:T.tealBg, border:`1px solid ${T.teal}`, borderRadius:100, padding:'6px 12px', cursor:'pointer', color:T.teal, fontSize:11, fontWeight:600, flexShrink:0 }}>
+                <a href={`tel:${t.tel}`} style={{ display:'flex', alignItems:'center', gap:4, background:T.tealBg, border:`1px solid ${T.teal}`, borderRadius:100, padding:'6px 12px', color:T.teal, fontSize:11, fontWeight:600, flexShrink:0, textDecoration:'none' }}>
                   <Phone size={11} color={T.teal} />{t.tel}
-                </button>
+                </a>
               </div>
             ))}
           </ListCard>
@@ -1601,7 +1609,7 @@ function InfoTab() {
         <SectionHeader title="Cuándo visitar" />
         <div style={{ display:'flex', flexDirection:'column', gap:10, padding:'0 20px' }}>
           {TEMPORADAS.map(t => (
-            <div key={t.mes} style={{ display:'flex', alignItems:'center', gap:14, background:T.white, borderRadius:16, padding:'14px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', cursor:'pointer' }}>
+            <div key={t.mes} style={{ display:'flex', alignItems:'center', gap:14, background:T.white, borderRadius:16, padding:'14px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)' }}>
               <div style={{ width:52, height:52, borderRadius:12, background:`${t.color}22`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
                 <t.Icon size={26} color={t.color} />
               </div>
@@ -1622,7 +1630,7 @@ function InfoTab() {
         <SectionHeader title="Tips del viajero" />
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, padding:'0 20px' }}>
           {TIPS.map(t => (
-            <div key={t.titulo} style={{ background:T.white, borderRadius:16, padding:'14px 12px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', cursor:'pointer' }}>
+            <div key={t.titulo} style={{ background:T.white, borderRadius:16, padding:'14px 12px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)' }}>
               <div style={{ width:40, height:40, borderRadius:10, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:10 }}>
                 <t.Icon size={20} color={T.teal} />
               </div>
