@@ -29,7 +29,7 @@ const T = {
 
 type NavTab = 'home' | 'explorar' | 'pudi' | 'servicios' | 'info';
 type Dificultad = 'Fácil' | 'Media' | 'Alta';
-type Page = { type: 'lugar'; id: string } | { type: 'ruta'; id: string } | { type: 'itinerario'; id: string } | { type: 'alojamiento'; id: string } | { type: 'restaurante'; id: string } | null;
+type Page = { type: 'lugar'; id: string } | { type: 'ruta'; id: string } | { type: 'itinerario'; id: string } | { type: 'alojamiento'; id: string } | { type: 'restaurante'; id: string } | { type: 'destino'; id: string } | { type: 'comollegar'; id: string } | null;
 type Navigate = (page: Page) => void;
 
 // ─── Data ────────────────────────────────────────────────────────────────────
@@ -102,12 +102,12 @@ const EN_PUEBLO = [
 ];
 
 const DESTINOS_CERCANOS = [
-  { nombre:'Caleta Gonzalo',     desc:'Entrada Pumalín',   Icon: TreePine,  color:T.teal,    distancia:'60 km',  tiempo:'1h'   },
-  { nombre:'Lago Yelcho',        desc:'Pesca · Kayak',     Icon: Waves,     color:'#0a3a6a', distancia:'32 km',  tiempo:'40m'  },
-  { nombre:'Termas El Amarillo', desc:'Aguas termales',    Icon: Droplets,  color:'#5a3a0a', distancia:'52 km',  tiempo:'1h'   },
-  { nombre:'Futaleufú',          desc:'Rafting clase V',   Icon: Mountain,  color:'#7a1a1a', distancia:'155 km', tiempo:'3h'   },
-  { nombre:'Villa S. Lucía',     desc:'Conexión sur',      Icon: Route,     color:T.tealDark,distancia:'90 km',  tiempo:'1.5h' },
-  { nombre:'La Junta',           desc:'Lago Rosselot',     Icon: Car,       color:'#3a2a6a', distancia:'150 km', tiempo:'2.5h' },
+  { id:'dc1', nombre:'Caleta Gonzalo',     desc:'Entrada Pumalín',   Icon: TreePine,  color:T.teal,    distancia:'60 km',  tiempo:'1h'   },
+  { id:'dc2', nombre:'Lago Yelcho',        desc:'Pesca · Kayak',     Icon: Waves,     color:'#0a3a6a', distancia:'32 km',  tiempo:'40m'  },
+  { id:'dc3', nombre:'Termas El Amarillo', desc:'Aguas termales',    Icon: Droplets,  color:'#5a3a0a', distancia:'52 km',  tiempo:'1h'   },
+  { id:'dc4', nombre:'Futaleufú',          desc:'Rafting clase V',   Icon: Mountain,  color:'#7a1a1a', distancia:'155 km', tiempo:'3h'   },
+  { id:'dc5', nombre:'Villa S. Lucía',     desc:'Conexión sur',      Icon: Route,     color:T.tealDark,distancia:'90 km',  tiempo:'1.5h' },
+  { id:'dc6', nombre:'La Junta',           desc:'Lago Rosselot',     Icon: Car,       color:'#3a2a6a', distancia:'150 km', tiempo:'2.5h' },
 ];
 
 const HISTORIA_ITEMS = [
@@ -197,6 +197,21 @@ const RESTAURANTE_DETAILS: Record<string, { descripcion: string; especialidades:
   'c2': { descripcion: 'El café de referencia en Chaitén. Conocido por desayunos generosos y pastelería casera. Punto de encuentro de viajeros y locales. WiFi gratuito y la mejor señal del pueblo.', especialidades: ['Desayuno patagónico completo', 'Café de especialidad', 'Tortas y pasteles caseros', 'Sándwich de ave local', 'Jugos naturales'], info: ['WiFi gratuito para clientes', 'Menú en español e inglés', 'Espacio para grupos', 'Ideal para planificar rutas'], horario: 'Todos los días · 08:00–20:00', contacto: '+56 9 6543 2109' },
   'c3': { descripcion: 'Comida casera chilena sin pretensiones y sin igual en precio. La señora Carmen cocina lo mismo desde hace 20 años: sopa caliente, cazuela y guisos abundantes. Favorito de los lugareños.', especialidades: ['Sopa de ave casera', 'Cazuela de cordero', 'Guiso de lentejas', 'Sopaipillas con pebre', 'Postre casero del día'], info: ['Menú del día: $5–8 USD', 'Solo efectivo', 'Sin reservas · llegar temprano', 'Porciones muy abundantes'], horario: 'Lunes a Sábado · 11:00–21:00', contacto: '+56 9 5432 1098' },
   'c4': { descripcion: 'La mejor marisquería de Chaitén con vista directa al mar y al muelle. Los mariscos llegan frescos cada mañana desde los propios botes. Ideal para el último almuerzo antes del ferry.', especialidades: ['Ostras frescas del fiordo', 'Congrio frito', 'Mariscal (ceviche caliente)', 'Centolla al pil-pil', 'Paila marina'], info: ['Mariscos frescos a diario', 'Vista al muelle y al mar', 'Reservas por WhatsApp', 'Menú del día incluye bebida'], horario: 'Todos los días · 12:00–23:00', contacto: '+56 9 4321 0987' },
+};
+
+const DESTINO_DETAILS: Record<string, { descripcion: string; queHacer: string[]; comoLlegar: string; tips: string[] }> = {
+  'dc1': { descripcion: 'Caleta Gonzalo es la entrada principal al Parque Nacional Pumalín, una pequeña caleta con café, artesanías y el Centro de Visitantes de CONAF. Rodeada de bosque templado lluvioso virgen con alerces milenarios, cascadas y fiordos de ensueño.', queHacer: ['Sendero Los Alerces — árbol de 4.000 años', 'Cascadas Escondidas — caída de 30 m', 'Café y artesanías locales en el centro de visitantes', 'Registro en CONAF para los senderos', 'Camping con servicios: duchas y áreas de fogata'], comoLlegar: 'Ruta 7 Norte desde Chaitén, 60 km (aproximadamente 1 hora). Camino pavimentado con algunos tramos de ripio en buenas condiciones. También accesible en ferry desde Puerto Montt o Hornopirén.', tips: ['Registro gratuito en CONAF a la entrada', 'Lleva efectivo para el café y artesanías', 'Abierto todo el año · Horario 8:00–20:00', 'Camping disponible · Reserva por teléfono en temporada alta'] },
+  'dc2': { descripcion: 'El Lago Yelcho, a 32 km al sur de Chaitén, es uno de los mejores destinos de pesca con mosca de Sudamérica. Sus aguas azul turquesa albergan truchas arcoíris y marrón de gran tamaño. Ideal también para kayak y paseos panorámicos.', queHacer: ['Pesca con mosca — truchas arcoíris y marrón', 'Kayak en aguas tranquilas del lago', 'Paseos en bote con vista a las montañas', 'Camping en ribera del lago Yelcho', 'Avistamiento de aves acuáticas patagónicas'], comoLlegar: 'Ruta 7 Sur desde Chaitén, 32 km (aproximadamente 40 minutos). Acceso público con varios miradores y bajadas al lago señalizadas. Pavimento en buen estado durante todo el año.', tips: ['Licencia de pesca obligatoria — SERNAPESCA Chaitén', 'Guías certificados disponibles en el pueblo', 'Mejor temporada de pesca: Noviembre a Abril', 'Lleva snacks y agua para el día completo'] },
+  'dc3': { descripcion: 'Las Termas El Amarillo son el destino de relax más popular de la zona. Aguas volcánicas a 35–45°C en un entorno de bosque nativo junto al Río Blanco. El complejo cuenta con piscinas techadas, al aire libre y restaurant propio.', queHacer: ['Baños en piscinas termales volcánicas 35–45°C', 'Relax en entorno de bosque nativo', 'Almuerzo o once en restaurant del complejo', 'Paseo corto por los alrededores del río', 'Combinado ideal: trekking mañana + termas tarde'], comoLlegar: 'Ruta 7 Sur desde Chaitén, 52 km (aproximadamente 1 hora). Bien señalizado en la ruta. Transfer organizado disponible desde Chaitén con operadores locales (consultar en el pueblo).', tips: ['Entrada ~$8–12 USD por persona', 'Lleva traje de baño y toalla propia', 'Abierto todos los días del año', 'Llega antes de las 11 AM en temporada alta (Dic–Feb)'] },
+  'dc4': { descripcion: 'Futaleufú es mundialmente famosa por el Río Futaleufú, considerado uno de los mejores ríos del planeta para rafting clase IV y V. Un destino de aventura extrema rodeado de un valle de belleza imposible entre montañas y bosque.', queHacer: ['Rafting extremo clase IV y V en el Río Futaleufú', 'Kayak de expedición en aguas bravas', 'Tirolesa y canopy sobre el río', 'Senderismo en los valles y montañas', 'Visita al pueblo y gastronomía local'], comoLlegar: 'Ruta 7 Sur desde Chaitén + Ruta 235 Este, 155 km total (aproximadamente 3 horas). Tramos significativos de ripio. Recomendado vehículo 4x4 en temporada de lluvias.', tips: ['Operadores de rafting certificados en el pueblo', 'Reserva con semanas de anticipación en temporada alta', 'Mejor temporada: Noviembre a Marzo', 'Pueblo con alojamiento, restaurantes y servicios básicos'] },
+  'dc5': { descripcion: 'Villa Santa Lucía es un pequeño poblado clave en la Carretera Austral. Punto de cruce hacia Futaleufú y La Junta. Tristemente conocido por el aluvión de 2017, hoy en reconstrucción y con servicios básicos para viajeros.', queHacer: ['Parada para carga de combustible y descanso', 'Conexión directa a Futaleufú (40 km este)', 'Acceso al sur del Lago Yelcho', 'Paisajes espectaculares de la Carretera Austral', 'Visita al memorial del aluvión de 2017'], comoLlegar: 'Ruta 7 Sur desde Chaitén, 90 km (aproximadamente 1.5 horas). Tramos de ripio. Punto clave de bifurcación en la Carretera Austral entre norte y sur.', tips: ['Carga combustible aquí si vas hacia el sur', 'Servicios básicos disponibles: almacén, comida', 'Punto de desvío a Futaleufú por Ruta 235', 'Lleva efectivo para todos los servicios'] },
+  'dc6': { descripcion: 'La Junta es un pintoresco pueblo a 150 km al sur de Chaitén, puerta de entrada al Lago Rosselot y al Parque Nacional Queulat con el famoso Ventisquero Colgante. Una parada obligatoria en la Carretera Austral.', queHacer: ['Lago Rosselot — pesca y naturaleza en calma', 'Parque Queulat — Ventisquero Colgante (30 km)', 'Senderismo en los alrededores del pueblo', 'Gastronomía local en restaurantes del pueblo', 'Descanso y descanso en la Carretera Austral'], comoLlegar: 'Ruta 7 Sur desde Chaitén, 150 km (aproximadamente 2.5 horas). Mayoría de ripio. Ideal como parada intermedia en ruta hacia Puyuhuapi o Coyhaique.', tips: ['Parada obligatoria en la Carretera Austral', 'Alojamiento y restaurantes básicos disponibles', 'Desde aquí al Ventisquero Colgante: 30 km más', 'Carga combustible antes de seguir rumbo al sur'] },
+};
+
+const COMO_LLEGAR_DETAILS: Record<string, { descripcion: string; empresas: { nombre: string; tel: string }[]; horarios: string[]; pasos: string[]; tips: string[] }> = {
+  'ferry': { descripcion: 'El ferry es la forma más clásica y pintoresca de llegar a Chaitén. La travesía desde Quellón cruza el Canal de Moraleda con vistas impresionantes a islas, bosques y montañas nevadas. Un viaje que es una experiencia en sí mismo.', empresas: [{ nombre:'Navimag', tel:'(65) 2 270 430' }, { nombre:'Transmarchilay (TMC)', tel:'(65) 2 253 318' }], horarios: ['Quellón → Chaitén: 3–4 veces por semana', 'Puerto Montt → Chaitén: 2–3 veces por semana', 'Temporada alta (Dic–Feb): mayor frecuencia', 'Duración: 4h 30min aproximadamente'], pasos: ['Compra pasaje online o en oficina en Quellón o Puerto Montt', 'Llega al terminal marítimo 1h antes de la salida', 'Embarca el vehículo o solo pasajero', 'Travesía 4h 30min por fiordos y canales patagónicos', 'Desembarca en el Puerto de Chaitén · centro a 300 m'], tips: ['Reserva con anticipación en temporada alta (Dic–Feb)', 'Lleva abrigo y ropa impermeable para estar en cubierta', 'El viaje puede ser agitado con mal tiempo en invierno', 'Café, snacks y baños disponibles a bordo'] },
+  'bus': { descripcion: 'El bus combina trayecto terrestre hasta Quellón y luego ferry a Chaitén. Sale desde Puerto Montt o Castro, cruza en barcaza hacia la Carretera Austral y llega al pueblo. La opción más económica para llegar desde el norte.', empresas: [{ nombre:'Tur-Bus', tel:'600 660 6600' }, { nombre:'Queilen Bus', tel:'(65) 2 682 173' }], horarios: ['Salidas desde Puerto Montt: mañana temprano (6:00–8:00h)', 'Salidas desde Castro: según temporada', 'Duración total: 8–10 horas incluyendo ferry', 'El pasaje incluye el ferry Quellón–Chaitén'], pasos: ['Compra pasaje en terminal de Puerto Montt o Castro', 'Toma el bus · recorrido terrestre hasta Quellón (~3h)', 'Embarca en el ferry Quellón–Chaitén junto al bus', 'Travesía en ferry (~4h 30min) · descansa a bordo', 'Llegada al terminal de buses de Chaitén · centro cercano'], tips: ['La opción más económica desde ~$18 USD', 'Lleva comida para el viaje (paradas muy limitadas)', 'Asiento del lado ventana para mejores vistas marítimas', 'Reserva tu asiento con anticipación en temporada alta'] },
+  'avion': { descripcion: 'La opción más rápida para llegar a Chaitén. La aerolínea Aerocord opera vuelos regulares desde el aeropuerto de Puerto Montt con impresionantes vistas aéreas sobre los fiordos, volcanes y bosques de la Patagonia.', empresas: [{ nombre:'Aerocord', tel:'(65) 2 254 411' }, { nombre:'Vuelos charter (consultar)', tel:'+56 9 operadores locales' }], horarios: ['Puerto Montt → Chaitén: 1–2 vuelos diarios (según temporada)', 'Duración del vuelo: 45 minutos aproximadamente', 'Sujeto a condiciones meteorológicas (Patagonia)', 'Temporada alta (Dic–Feb): vuelos adicionales disponibles'], pasos: ['Reserva tu vuelo directamente con Aerocord por teléfono o web', 'Preséntate 45 min antes en aeropuerto El Tepual (PMC)', 'Vuelo de 45 min con vistas impresionantes a fiordos y volcanes', 'Aterrizaje en aeródromo de Chaitén (a 2 km del centro)', 'Taxi o remis al centro del pueblo · ~$3 USD'], tips: ['Confirma el vuelo el día anterior (clima patagónico)', 'Equipaje reducido — aviones pequeños de ~12 pasajeros', 'El aeropuerto está a 2 km del centro del pueblo', 'Reservar con varios días de anticipación en verano'] },
 };
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -650,6 +665,151 @@ function RestauranteDetailPage({ id, onBack }: { id: string; onBack: () => void 
   );
 }
 
+function DestinoDetailPage({ id, onBack }: { id: string; onBack: () => void }) {
+  const d = DESTINOS_CERCANOS.find(x => x.id === id)!;
+  const det = DESTINO_DETAILS[id];
+  return (
+    <div style={{ height:'100dvh', overflowY:'auto', background:T.bg }} className="hide-scrollbar">
+      <div style={{ background:`linear-gradient(145deg,${d.color},${d.color}cc)`, padding:'52px 20px 28px', position:'relative' }}>
+        <button onClick={onBack} style={{ position:'absolute', top:52, left:20, width:42, height:42, borderRadius:'50%', background:'rgba(255,255,255,0.18)', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>
+          <ArrowLeft size={20} color='#fff' />
+        </button>
+        <div style={{ marginTop:8, display:'flex', alignItems:'center', gap:12, marginBottom:14 }}>
+          <div style={{ width:54, height:54, borderRadius:14, background:'rgba(255,255,255,0.15)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+            <d.Icon size={28} color='#fff' />
+          </div>
+          <div>
+            <p style={{ fontSize:11, color:'rgba(255,255,255,0.7)', marginBottom:3 }}>Destino cercano</p>
+            <h1 style={{ fontSize:24, fontWeight:800, color:'#fff', lineHeight:1.2, marginBottom:3 }}>{d.nombre}</h1>
+            <p style={{ fontSize:12, color:'rgba(255,255,255,0.8)' }}>{d.desc}</p>
+          </div>
+        </div>
+        <div style={{ display:'flex', gap:10 }}>
+          {[{ label:'Distancia', val:d.distancia }, { label:'Tiempo estimado', val:d.tiempo }].map(s => (
+            <div key={s.label} style={{ background:'rgba(255,255,255,0.15)', borderRadius:10, padding:'8px 16px' }}>
+              <p style={{ fontSize:10, color:'rgba(255,255,255,0.7)', marginBottom:2 }}>{s.label}</p>
+              <p style={{ fontSize:14, fontWeight:800, color:'#fff' }}>{s.val}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{ padding:'20px 20px 0' }}>
+        <div style={{ background:T.white, borderRadius:16, padding:'16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', marginBottom:20 }}>
+          <p style={{ fontSize:13, color:T.dark, lineHeight:1.8 }}>{det.descripcion}</p>
+        </div>
+        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Qué hacer aquí</p>
+        <div style={{ background:T.white, borderRadius:16, overflow:'hidden', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', marginBottom:20 }}>
+          {det.queHacer.map((item, i) => (
+            <div key={i} style={{ display:'flex', alignItems:'center', gap:14, padding:'12px 16px', borderBottom: i < det.queHacer.length - 1 ? `1px solid ${T.grayLight}` : 'none' }}>
+              <div style={{ width:28, height:28, borderRadius:'50%', background:`${d.color}22`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <span style={{ fontSize:11, fontWeight:800, color:d.color }}>{i + 1}</span>
+              </div>
+              <p style={{ fontSize:12, color:T.dark }}>{item}</p>
+            </div>
+          ))}
+        </div>
+        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Cómo llegar</p>
+        <div style={{ background:T.white, borderRadius:16, padding:'16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', display:'flex', gap:12, marginBottom:20 }}>
+          <div style={{ width:36, height:36, borderRadius:10, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginTop:2 }}>
+            <MapPin size={18} color={T.teal} />
+          </div>
+          <p style={{ fontSize:13, color:T.dark, lineHeight:1.7 }}>{det.comoLlegar}</p>
+        </div>
+        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Tips útiles</p>
+        <div style={{ display:'flex', flexDirection:'column', gap:8, marginBottom:40 }}>
+          {det.tips.map((tip, i) => (
+            <div key={i} style={{ display:'flex', alignItems:'center', gap:12, background:T.white, borderRadius:12, padding:'12px 14px', boxShadow:'0 2px 8px rgba(0,0,0,0.05)' }}>
+              <div style={{ width:24, height:24, borderRadius:'50%', background:`${d.color}22`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <span style={{ fontSize:10, fontWeight:800, color:d.color }}>{i + 1}</span>
+              </div>
+              <p style={{ fontSize:12, color:T.dark }}>{tip}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ComoLlegarDetailPage({ id, onBack }: { id: string; onBack: () => void }) {
+  const c = COMO_LLEGAR.find(x => x.id === id)!;
+  const det = COMO_LLEGAR_DETAILS[id];
+  return (
+    <div style={{ height:'100dvh', overflowY:'auto', background:T.bg }} className="hide-scrollbar">
+      <div style={{ background:`linear-gradient(145deg,${c.color},${c.color}cc)`, padding:'52px 20px 28px', position:'relative' }}>
+        <button onClick={onBack} style={{ position:'absolute', top:52, left:20, width:42, height:42, borderRadius:'50%', background:'rgba(255,255,255,0.18)', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>
+          <ArrowLeft size={20} color='#fff' />
+        </button>
+        <div style={{ marginTop:8, display:'flex', alignItems:'center', gap:12, marginBottom:14 }}>
+          <div style={{ width:54, height:54, borderRadius:14, background:'rgba(255,255,255,0.15)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+            <c.Icon size={28} color='#fff' />
+          </div>
+          <div>
+            <p style={{ fontSize:11, color:'rgba(255,255,255,0.7)', marginBottom:3 }}>Cómo llegar</p>
+            <h1 style={{ fontSize:24, fontWeight:800, color:'#fff', lineHeight:1.2, marginBottom:3 }}>{c.titulo}</h1>
+            <p style={{ fontSize:12, color:'rgba(255,255,255,0.8)' }}>{c.sub}</p>
+          </div>
+        </div>
+        <div style={{ display:'flex', gap:10 }}>
+          {[{ label:'Duración', val:c.duracion }, { label:'Desde', val:c.precio }].map(s => (
+            <div key={s.label} style={{ background:'rgba(255,255,255,0.15)', borderRadius:10, padding:'8px 16px' }}>
+              <p style={{ fontSize:10, color:'rgba(255,255,255,0.7)', marginBottom:2 }}>{s.label}</p>
+              <p style={{ fontSize:14, fontWeight:800, color:'#fff' }}>{s.val}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{ padding:'20px 20px 0' }}>
+        <div style={{ background:T.white, borderRadius:16, padding:'16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', marginBottom:20 }}>
+          <p style={{ fontSize:13, color:T.dark, lineHeight:1.8 }}>{det.descripcion}</p>
+        </div>
+        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Empresas disponibles</p>
+        <div style={{ background:T.white, borderRadius:16, overflow:'hidden', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', marginBottom:20 }}>
+          {det.empresas.map((emp, i) => (
+            <div key={i} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'13px 16px', borderBottom: i < det.empresas.length - 1 ? `1px solid ${T.grayLight}` : 'none' }}>
+              <p style={{ fontSize:13, fontWeight:700, color:T.dark }}>{emp.nombre}</p>
+              <button style={{ display:'flex', alignItems:'center', gap:4, background:T.tealBg, border:`1px solid ${T.teal}`, borderRadius:100, padding:'6px 12px', cursor:'pointer', color:T.teal, fontSize:11, fontWeight:600, flexShrink:0 }}>
+                <Phone size={12} color={T.teal} /> {emp.tel}
+              </button>
+            </div>
+          ))}
+        </div>
+        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Horarios y frecuencias</p>
+        <div style={{ background:T.white, borderRadius:16, overflow:'hidden', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', marginBottom:20 }}>
+          {det.horarios.map((h, i) => (
+            <div key={i} style={{ display:'flex', alignItems:'center', gap:12, padding:'11px 16px', borderBottom: i < det.horarios.length - 1 ? `1px solid ${T.grayLight}` : 'none' }}>
+              <Clock size={14} color={T.teal} />
+              <p style={{ fontSize:12, color:T.dark }}>{h}</p>
+            </div>
+          ))}
+        </div>
+        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Paso a paso</p>
+        <div style={{ display:'flex', flexDirection:'column', gap:8, marginBottom:20 }}>
+          {det.pasos.map((paso, i) => (
+            <div key={i} style={{ display:'flex', alignItems:'center', gap:12, background:T.white, borderRadius:12, padding:'12px 14px', boxShadow:'0 2px 8px rgba(0,0,0,0.05)' }}>
+              <div style={{ width:28, height:28, borderRadius:'50%', background:`${c.color}22`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <span style={{ fontSize:11, fontWeight:800, color:c.color }}>{i + 1}</span>
+              </div>
+              <p style={{ fontSize:12, color:T.dark }}>{paso}</p>
+            </div>
+          ))}
+        </div>
+        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Tips importantes</p>
+        <div style={{ display:'flex', flexDirection:'column', gap:8, marginBottom:40 }}>
+          {det.tips.map((tip, i) => (
+            <div key={i} style={{ display:'flex', alignItems:'center', gap:12, background:T.white, borderRadius:12, padding:'12px 14px', boxShadow:'0 2px 8px rgba(0,0,0,0.05)' }}>
+              <div style={{ width:24, height:24, borderRadius:'50%', background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <span style={{ fontSize:10, fontWeight:800, color:T.teal }}>{i + 1}</span>
+              </div>
+              <p style={{ fontSize:12, color:T.dark }}>{tip}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── HOME TAB ─────────────────────────────────────────────────────────────────
 
 function HomeTab({ wx, navigate, onTabChange }: { wx: ReturnType<typeof useWeather>; navigate: Navigate; onTabChange: (tab: NavTab) => void }) {
@@ -707,13 +867,13 @@ function HomeTab({ wx, navigate, onTabChange }: { wx: ReturnType<typeof useWeath
       <div style={{ padding:'26px 20px 0' }}>
         <div style={{ display:'flex', justifyContent:'space-between' }}>
           {[
-            { label:'Qué hacer', Icon:Compass    },
-            { label:'Dormir',    Icon:Building2  },
-            { label:'Comer',     Icon:Utensils   },
-            { label:'Naturaleza',Icon:TreePine   },
-            { label:'Moverse',   Icon:Car        },
-          ].map(({ label, Icon }) => (
-            <button key={label} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:7, background:'none', border:'none', cursor:'pointer' }}>
+            { label:'Qué hacer', Icon:Compass,   tab:'explorar'  as NavTab },
+            { label:'Dormir',    Icon:Building2, tab:'home'      as NavTab },
+            { label:'Comer',     Icon:Utensils,  tab:'home'      as NavTab },
+            { label:'Naturaleza',Icon:TreePine,  tab:'explorar'  as NavTab },
+            { label:'Moverse',   Icon:Car,       tab:'servicios' as NavTab },
+          ].map(({ label, Icon, tab }) => (
+            <button key={label} onClick={() => onTabChange(tab)} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:7, background:'none', border:'none', cursor:'pointer' }}>
               <div style={{ width:54, height:54, borderRadius:'50%', border:`1.5px solid ${T.teal}`, background:'rgba(13,165,160,0.07)', display:'flex', alignItems:'center', justifyContent:'center' }}>
                 <Icon size={22} color={T.teal} />
               </div>
@@ -809,7 +969,7 @@ function HomeTab({ wx, navigate, onTabChange }: { wx: ReturnType<typeof useWeath
         <SectionHeader title="Destinos cercanos" />
         <div style={{ display:'flex', gap:12, overflowX:'auto', padding:'0 20px 4px' }} className="hide-scrollbar">
           {DESTINOS_CERCANOS.map(d => (
-            <div key={d.nombre} style={{ width:144, flexShrink:0, background:T.white, borderRadius:16, padding:'14px 12px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', cursor:'pointer' }}>
+            <div key={d.id} onClick={() => navigate({ type:'destino', id:d.id })} style={{ width:144, flexShrink:0, background:T.white, borderRadius:16, padding:'14px 12px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', cursor:'pointer' }}>
               <div style={{ width:44, height:44, borderRadius:12, background:`${d.color}22`, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:10 }}>
                 <d.Icon size={22} color={d.color} />
               </div>
@@ -873,7 +1033,7 @@ function HomeTab({ wx, navigate, onTabChange }: { wx: ReturnType<typeof useWeath
         <SectionHeader title="Cómo llegar" />
         <div style={{ display:'flex', gap:12, overflowX:'auto', padding:'0 20px 4px' }} className="hide-scrollbar">
           {COMO_LLEGAR.map(c => (
-            <div key={c.id} style={{ width:168, flexShrink:0, borderRadius:18, overflow:'hidden', background:T.white, boxShadow:'0 4px 16px rgba(0,0,0,0.08)', cursor:'pointer' }}>
+            <div key={c.id} onClick={() => navigate({ type:'comollegar', id:c.id })} style={{ width:168, flexShrink:0, borderRadius:18, overflow:'hidden', background:T.white, boxShadow:'0 4px 16px rgba(0,0,0,0.08)', cursor:'pointer' }}>
               <div style={{ height:72, background:`linear-gradient(135deg,${c.color},${c.color}cc)`, display:'flex', alignItems:'center', justifyContent:'center' }}>
                 <c.Icon size={34} color="rgba(255,255,255,0.9)" />
               </div>
@@ -1037,7 +1197,7 @@ function ExplorarTab({ navigate }: { navigate: Navigate }) {
 
       <div style={{ padding:'20px 20px 0', display:'flex', flexDirection:'column', gap:10 }}>
         {(filtro === 'Gastronomía' ? GASTRONOMIA : filtrados).map(a => (
-          <div key={a.id} onClick={() => 'tipo' in a && a.tipo !== 'Gastronomía' ? navigate({ type:'lugar', id:a.id }) : undefined} style={{ borderRadius:18, overflow:'hidden', background:T.white, boxShadow:'0 4px 16px rgba(0,0,0,0.08)', cursor:'pointer' }}>
+          <div key={a.id} onClick={() => filtro === 'Gastronomía' ? navigate({ type:'restaurante', id:a.id }) : navigate({ type:'lugar', id:(a as typeof ATRACTIVOS[0]).id })} style={{ borderRadius:18, overflow:'hidden', background:T.white, boxShadow:'0 4px 16px rgba(0,0,0,0.08)', cursor:'pointer' }}>
             <div style={{ height:160, overflow:'hidden', position:'relative' }}>
               <img src={a.img} alt={a.nombre} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
               <div style={{ position:'absolute', inset:0, background:'linear-gradient(to top,rgba(0,0,0,0.5) 0%,transparent 50%)' }} />
@@ -1517,6 +1677,8 @@ export default function ModernHome() {
     if (page.type === 'itinerario')   return <ItinerarioDetailPage   id={page.id} onBack={() => setPage(null)} />;
     if (page.type === 'alojamiento')  return <AlojamientoDetailPage  id={page.id} onBack={() => setPage(null)} />;
     if (page.type === 'restaurante')  return <RestauranteDetailPage  id={page.id} onBack={() => setPage(null)} />;
+    if (page.type === 'destino')      return <DestinoDetailPage      id={page.id} onBack={() => setPage(null)} />;
+    if (page.type === 'comollegar')   return <ComoLlegarDetailPage   id={page.id} onBack={() => setPage(null)} />;
   }
 
   const isPudi = tab === 'pudi';
