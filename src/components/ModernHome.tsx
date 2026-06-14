@@ -29,7 +29,7 @@ const T = {
 
 type NavTab = 'home' | 'explorar' | 'pudi' | 'servicios' | 'info';
 type Dificultad = 'Fácil' | 'Media' | 'Alta';
-type Page = { type: 'lugar'; id: string } | { type: 'ruta'; id: string } | { type: 'itinerario'; id: string } | null;
+type Page = { type: 'lugar'; id: string } | { type: 'ruta'; id: string } | { type: 'itinerario'; id: string } | { type: 'alojamiento'; id: string } | { type: 'restaurante'; id: string } | null;
 type Navigate = (page: Page) => void;
 
 // ─── Data ────────────────────────────────────────────────────────────────────
@@ -185,6 +185,20 @@ const ITINERARIO_DETAILS: Record<string, { descripcion: string; programa: { dia:
   'i6': { descripcion: 'Una inmersión total en el Parque Nacional Pumalín. Bosque milenario, cascadas, termas y campamentos en pura naturaleza patagónica.', programa: [{ dia: 'Día 1 · Caleta Gonzalo', items: [{ hora: '08:00', texto: 'Salida desde Chaitén (60 km · 1h por Ruta 7)' }, { hora: '09:30', texto: 'Registro en CONAF y orientación' }, { hora: '11:00', texto: 'Cascadas Escondidas — Sendero 2h' }, { hora: '14:00', texto: 'Almuerzo en Café del parque' }, { hora: '16:00', texto: 'Instalación en Camping Caleta Gonzalo' }] }, { dia: 'Día 2 · Alerces', items: [{ hora: '09:00', texto: 'Sendero Los Alerces — 5 km · 3h · 4.000 años' }, { hora: '14:00', texto: 'Exploración libre: orillas del fiordo' }, { hora: '18:00', texto: 'Atardecer sobre el fiordo desde el campamento' }] }, { dia: 'Día 3 · Termas y regreso', items: [{ hora: '08:00', texto: 'Levantamiento campamento · regreso sur' }, { hora: '10:00', texto: 'Termas El Amarillo (52 km desde Chaitén)' }, { hora: '14:00', texto: 'Almuerzo en el complejo termal' }, { hora: '16:00', texto: 'Regreso a Chaitén (1h)' }] }], queTraer: ['Carpa o reserva camping', 'Saco dormir -5°C', 'Comida 3 días', 'Traje de baño', 'Zapatillas trekking', 'Repelente'], presupuesto: '~$50–80 USD/día (camping + comida + termas)' },
 };
 
+const ALOJAMIENTO_DETAILS: Record<string, { descripcion: string; comodidades: string[]; politicas: string[]; direccion: string; contacto: string }> = {
+  'd1': { descripcion: 'Hospedaje familiar en el corazón de Chaitén. La familia González lleva 15 años recibiendo viajeros con habitaciones cálidas, desayuno con productos locales y recomendaciones de primera mano sobre la zona.', comodidades: ['WiFi gratuito', 'Desayuno incluido', 'Cocina compartida', 'Estacionamiento', 'Lavandería'], politicas: ['Check-in: 14:00', 'Check-out: 11:00', 'Mascotas: consultar', 'No fumadores en habitaciones'], direccion: 'Av. Norte 234, Chaitén Centro', contacto: '+56 9 9876 5432' },
+  'd2': { descripcion: 'Cabañas de madera rodeadas de bosque nativo a 3 km del centro. Cada cabaña tiene chimenea, cocina equipada y vista al volcán Corcovado. Ideal para parejas o familias que buscan desconectarse.', comodidades: ['Chimenea en cabaña', 'Cocina equipada', 'WiFi', 'Leña incluida', 'BBQ compartido'], politicas: ['Check-in: 15:00', 'Check-out: 12:00', 'Mascotas bienvenidos', 'Mínimo 2 noches'], direccion: 'Sector Bosque Verde, km 3 Ruta 7 Norte', contacto: '+56 9 8765 4321' },
+  'd3': { descripcion: 'El único hotel del centro con recepción 24h. Habitaciones confortables y restaurant propio con cocina local. Estacionamiento amplio para vehículos de doble tracción y motos.', comodidades: ['Restaurant propio', 'Recepción 24h', 'WiFi', 'Estacionamiento amplio', 'Calefacción central'], politicas: ['Check-in: 14:00', 'Check-out: 11:00', 'Sin mascotas', 'Reserva anticipada recomendada'], direccion: 'Av. Corcovado 45, Chaitén Centro', contacto: '+56 65 2 731 123' },
+  'd4': { descripcion: 'Camping con servicios básicos en el Parque Pumalín, a 60 km de Chaitén. Administrado por CONAF. Sitios para carpa y furgoneta con baños, duchas y agua caliente, rodeados de bosque milenario.', comodidades: ['Duchas con agua caliente', 'Áreas de fogata', 'Agua potable', 'Café y snacks CONAF', 'Acceso directo a senderos'], politicas: ['Sin reservas previas', 'Mascotas con correa', 'Fuego solo en zonas habilitadas', 'Silencio nocturno obligatorio'], direccion: 'Caleta Gonzalo, Parque Pumalín (60 km norte de Chaitén)', contacto: 'CONAF (65) 2 731 500' },
+};
+
+const RESTAURANTE_DETAILS: Record<string, { descripcion: string; especialidades: string[]; info: string[]; horario: string; contacto: string }> = {
+  'c1': { descripcion: 'El restaurante con más historia de Chaitén. Especializado en mariscos frescos del fiordo y cocina chilena tradicional. Vista al volcán desde las mesas del fondo. Ambiente cálido con fotos de la erupción de 2008.', especialidades: ['Merluza austral al vapor', 'Centolla patagónica', 'Cazuela de vacuno', 'Empanadas de mariscos', 'Caldillo de congrio'], info: ['Reservas recomendadas en temporada alta', 'Menú del día $8–12 USD', 'Acepta tarjetas de crédito', 'Opción vegetariana disponible'], horario: 'Martes a Domingo · 12:00–22:00', contacto: '+56 9 7654 3210' },
+  'c2': { descripcion: 'El café de referencia en Chaitén. Conocido por desayunos generosos y pastelería casera. Punto de encuentro de viajeros y locales. WiFi gratuito y la mejor señal del pueblo.', especialidades: ['Desayuno patagónico completo', 'Café de especialidad', 'Tortas y pasteles caseros', 'Sándwich de ave local', 'Jugos naturales'], info: ['WiFi gratuito para clientes', 'Menú en español e inglés', 'Espacio para grupos', 'Ideal para planificar rutas'], horario: 'Todos los días · 08:00–20:00', contacto: '+56 9 6543 2109' },
+  'c3': { descripcion: 'Comida casera chilena sin pretensiones y sin igual en precio. La señora Carmen cocina lo mismo desde hace 20 años: sopa caliente, cazuela y guisos abundantes. Favorito de los lugareños.', especialidades: ['Sopa de ave casera', 'Cazuela de cordero', 'Guiso de lentejas', 'Sopaipillas con pebre', 'Postre casero del día'], info: ['Menú del día: $5–8 USD', 'Solo efectivo', 'Sin reservas · llegar temprano', 'Porciones muy abundantes'], horario: 'Lunes a Sábado · 11:00–21:00', contacto: '+56 9 5432 1098' },
+  'c4': { descripcion: 'La mejor marisquería de Chaitén con vista directa al mar y al muelle. Los mariscos llegan frescos cada mañana desde los propios botes. Ideal para el último almuerzo antes del ferry.', especialidades: ['Ostras frescas del fiordo', 'Congrio frito', 'Mariscal (ceviche caliente)', 'Centolla al pil-pil', 'Paila marina'], info: ['Mariscos frescos a diario', 'Vista al muelle y al mar', 'Reservas por WhatsApp', 'Menú del día incluye bebida'], horario: 'Todos los días · 12:00–23:00', contacto: '+56 9 4321 0987' },
+};
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function SectionHeader({ title, onSeeAll }: { title: string; onSeeAll?: () => void }) {
@@ -259,11 +273,11 @@ function AttractivoCard({ a, onClick }: { a: typeof ATRACTIVOS[0]; onClick: () =
 
 // ─── List Row ─────────────────────────────────────────────────────────────────
 
-function ListRow({ img, title, sub, rating, right, last = false }: {
-  img: string; title: string; sub: string; rating: number; right?: string; last?: boolean;
+function ListRow({ img, title, sub, rating, right, last = false, onClick }: {
+  img: string; title: string; sub: string; rating: number; right?: string; last?: boolean; onClick?: () => void;
 }) {
   return (
-    <div style={{ display:'flex', alignItems:'center', gap:14, background:T.white, padding:'14px', borderBottom:last?'none':`1px solid ${T.grayLight}`, cursor:'pointer' }}>
+    <div onClick={onClick} style={{ display:'flex', alignItems:'center', gap:14, background:T.white, padding:'14px', borderBottom:last?'none':`1px solid ${T.grayLight}`, cursor:'pointer' }}>
       <div style={{ width:74, height:74, borderRadius:12, overflow:'hidden', flexShrink:0 }}>
         <img src={img} alt={title} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
       </div>
@@ -485,6 +499,151 @@ function ItinerarioDetailPage({ id, onBack }: { id: string; onBack: () => void }
             <p style={{ fontSize:11, fontWeight:700, color:it.color }}>Presupuesto estimado</p>
           </div>
           <p style={{ fontSize:13, fontWeight:700, color:T.dark }}>{det.presupuesto}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AlojamientoDetailPage({ id, onBack }: { id: string; onBack: () => void }) {
+  const a = ALOJAMIENTOS.find(x => x.id === id)!;
+  const det = ALOJAMIENTO_DETAILS[id];
+  return (
+    <div style={{ height:'100dvh', overflowY:'auto', background:T.bg }} className="hide-scrollbar">
+      <div style={{ position:'relative', height:260 }}>
+        <img src={a.img.replace('/160/160','/430/280')} alt={a.nombre} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
+        <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom,rgba(0,0,0,0.2) 0%,transparent 35%,rgba(0,0,0,0.65) 100%)' }} />
+        <button onClick={onBack} style={{ position:'absolute', top:52, left:20, width:42, height:42, borderRadius:'50%', background:'rgba(0,0,0,0.4)', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', backdropFilter:'blur(6px)' }}>
+          <ArrowLeft size={20} color='#fff' />
+        </button>
+        <div style={{ position:'absolute', bottom:0, left:0, right:0, padding:'20px' }}>
+          <h1 style={{ fontSize:24, fontWeight:800, color:'#fff', lineHeight:1.2, marginBottom:3 }}>{a.nombre}</h1>
+          <p style={{ fontSize:12, color:'rgba(255,255,255,0.85)' }}>{a.tipo}</p>
+        </div>
+      </div>
+      <div style={{ background:T.white, margin:'0 16px', borderRadius:'0 0 20px 20px', padding:'14px', boxShadow:'0 6px 24px rgba(0,0,0,0.10)', marginBottom:20 }}>
+        <div style={{ display:'flex', gap:8 }}>
+          {[{ label:'Rating', val:`${a.rating} ★`, color:T.star }, { label:'Precio/noche', val:a.precio, color:T.teal }].map(s => (
+            <div key={s.label} style={{ flex:1, textAlign:'center', background:T.bg, borderRadius:12, padding:'10px 6px' }}>
+              <p style={{ fontSize:14, fontWeight:800, color:s.color }}>{s.val}</p>
+              <p style={{ fontSize:10, color:T.gray }}>{s.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{ padding:'0 20px 16px' }}>
+        <div style={{ background:T.white, borderRadius:16, padding:'16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)' }}>
+          <p style={{ fontSize:13, color:T.dark, lineHeight:1.8 }}>{det.descripcion}</p>
+        </div>
+      </div>
+      <div style={{ padding:'0 20px 16px' }}>
+        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Comodidades</p>
+        <div style={{ display:'flex', flexWrap:'wrap', gap:8 }}>
+          {det.comodidades.map((c, i) => (
+            <div key={i} style={{ display:'flex', alignItems:'center', gap:6, background:T.white, borderRadius:100, padding:'7px 14px', boxShadow:'0 2px 8px rgba(0,0,0,0.06)', border:`1px solid ${T.grayLight}` }}>
+              <div style={{ width:6, height:6, borderRadius:'50%', background:T.teal, flexShrink:0 }} />
+              <p style={{ fontSize:11, color:T.dark, fontWeight:600 }}>{c}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{ padding:'0 20px 16px' }}>
+        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Políticas</p>
+        <div style={{ background:T.white, borderRadius:16, overflow:'hidden', boxShadow:'0 2px 10px rgba(0,0,0,0.06)' }}>
+          {det.politicas.map((p, i) => (
+            <div key={i} style={{ display:'flex', alignItems:'center', gap:12, padding:'11px 14px', borderBottom: i < det.politicas.length - 1 ? `1px solid ${T.grayLight}` : 'none' }}>
+              <div style={{ width:6, height:6, borderRadius:'50%', background:T.teal, flexShrink:0 }} />
+              <p style={{ fontSize:12, color:T.dark }}>{p}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{ padding:'0 20px 40px' }}>
+        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Cómo llegar · Contacto</p>
+        <div style={{ background:T.white, borderRadius:16, padding:'16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', display:'flex', flexDirection:'column', gap:12 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+            <div style={{ width:36, height:36, borderRadius:10, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+              <MapPin size={18} color={T.teal} />
+            </div>
+            <p style={{ fontSize:13, color:T.dark }}>{det.direccion}</p>
+          </div>
+          <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+            <div style={{ width:36, height:36, borderRadius:10, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+              <Phone size={18} color={T.teal} />
+            </div>
+            <p style={{ fontSize:13, fontWeight:700, color:T.teal }}>{det.contacto}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function RestauranteDetailPage({ id, onBack }: { id: string; onBack: () => void }) {
+  const r = GASTRONOMIA.find(x => x.id === id)!;
+  const det = RESTAURANTE_DETAILS[id];
+  return (
+    <div style={{ height:'100dvh', overflowY:'auto', background:T.bg }} className="hide-scrollbar">
+      <div style={{ position:'relative', height:260 }}>
+        <img src={r.img.replace('/160/160','/430/280')} alt={r.nombre} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
+        <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom,rgba(0,0,0,0.2) 0%,transparent 35%,rgba(0,0,0,0.65) 100%)' }} />
+        <button onClick={onBack} style={{ position:'absolute', top:52, left:20, width:42, height:42, borderRadius:'50%', background:'rgba(0,0,0,0.4)', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', backdropFilter:'blur(6px)' }}>
+          <ArrowLeft size={20} color='#fff' />
+        </button>
+        <div style={{ position:'absolute', bottom:0, left:0, right:0, padding:'20px' }}>
+          <span style={{ background:'rgba(0,0,0,0.35)', color:'#fff', fontSize:10, fontWeight:700, padding:'4px 10px', borderRadius:100, backdropFilter:'blur(4px)', marginBottom:8, display:'inline-block' }}>{r.precio}</span>
+          <h1 style={{ fontSize:24, fontWeight:800, color:'#fff', lineHeight:1.2, marginBottom:3 }}>{r.nombre}</h1>
+          <p style={{ fontSize:12, color:'rgba(255,255,255,0.85)' }}>{r.tipo}</p>
+        </div>
+      </div>
+      <div style={{ background:T.white, margin:'0 16px', borderRadius:'0 0 20px 20px', padding:'14px', boxShadow:'0 6px 24px rgba(0,0,0,0.10)', marginBottom:20 }}>
+        <div style={{ display:'flex', gap:8 }}>
+          {[{ label:'Rating', val:`${r.rating} ★`, color:T.star }, { label:'Precio', val:r.precio, color:T.dark }, { label:'Horario', val:det.horario.split('·')[0].trim(), color:T.teal }].map(s => (
+            <div key={s.label} style={{ flex:1, textAlign:'center', background:T.bg, borderRadius:12, padding:'10px 4px' }}>
+              <p style={{ fontSize:12, fontWeight:800, color:s.color, lineHeight:1.2 }}>{s.val}</p>
+              <p style={{ fontSize:10, color:T.gray }}>{s.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{ padding:'0 20px 16px' }}>
+        <div style={{ background:T.white, borderRadius:16, padding:'16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)' }}>
+          <p style={{ fontSize:13, color:T.dark, lineHeight:1.8 }}>{det.descripcion}</p>
+        </div>
+      </div>
+      <div style={{ padding:'0 20px 16px' }}>
+        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Especialidades</p>
+        <div style={{ display:'flex', flexDirection:'column', gap:0, background:T.white, borderRadius:16, overflow:'hidden', boxShadow:'0 2px 10px rgba(0,0,0,0.06)' }}>
+          {det.especialidades.map((e, i) => (
+            <div key={i} style={{ display:'flex', alignItems:'center', gap:12, padding:'12px 16px', borderBottom: i < det.especialidades.length - 1 ? `1px solid ${T.grayLight}` : 'none' }}>
+              <Utensils size={14} color={T.teal} />
+              <p style={{ fontSize:12, color:T.dark }}>{e}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{ padding:'0 20px 16px' }}>
+        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Info útil</p>
+        <div style={{ display:'flex', flexWrap:'wrap', gap:8 }}>
+          {det.info.map((info, i) => (
+            <div key={i} style={{ background:T.white, border:`1px solid ${T.grayLight}`, color:T.dark, fontSize:11, fontWeight:600, padding:'7px 12px', borderRadius:100, boxShadow:'0 1px 4px rgba(0,0,0,0.06)' }}>{info}</div>
+          ))}
+        </div>
+      </div>
+      <div style={{ padding:'0 20px 40px' }}>
+        <div style={{ background:T.white, borderRadius:16, padding:'16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', display:'flex', flexDirection:'column', gap:12 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+            <div style={{ width:36, height:36, borderRadius:10, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+              <Clock size={18} color={T.teal} />
+            </div>
+            <p style={{ fontSize:13, color:T.dark }}>{det.horario}</p>
+          </div>
+          <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+            <div style={{ width:36, height:36, borderRadius:10, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+              <Phone size={18} color={T.teal} />
+            </div>
+            <p style={{ fontSize:13, fontWeight:700, color:T.teal }}>{det.contacto}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -740,7 +899,7 @@ function HomeTab({ wx, navigate, onTabChange }: { wx: ReturnType<typeof useWeath
         <div style={{ padding:'0 20px' }}>
           <ListCard first last>
             {ALOJAMIENTOS.map((d, i) => (
-              <ListRow key={d.id} img={d.img} title={d.nombre} sub={d.tipo} rating={d.rating} right={`${d.precio}/noche`} last={i === ALOJAMIENTOS.length - 1} />
+              <ListRow key={d.id} img={d.img} title={d.nombre} sub={d.tipo} rating={d.rating} right={`${d.precio}/noche`} last={i === ALOJAMIENTOS.length - 1} onClick={() => navigate({ type:'alojamiento', id:d.id })} />
             ))}
           </ListCard>
         </div>
@@ -752,7 +911,7 @@ function HomeTab({ wx, navigate, onTabChange }: { wx: ReturnType<typeof useWeath
         <div style={{ padding:'0 20px' }}>
           <ListCard first last>
             {GASTRONOMIA.map((c, i) => (
-              <div key={c.id} style={{ display:'flex', alignItems:'center', gap:14, background:T.white, padding:'14px', borderBottom:i < GASTRONOMIA.length-1 ? `1px solid ${T.grayLight}` : 'none', cursor:'pointer' }}>
+              <div key={c.id} onClick={() => navigate({ type:'restaurante', id:c.id })} style={{ display:'flex', alignItems:'center', gap:14, background:T.white, padding:'14px', borderBottom:i < GASTRONOMIA.length-1 ? `1px solid ${T.grayLight}` : 'none', cursor:'pointer' }}>
                 <div style={{ width:74, height:74, borderRadius:12, overflow:'hidden', flexShrink:0 }}>
                   <img src={c.img} alt={c.nombre} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
                 </div>
@@ -775,34 +934,32 @@ function HomeTab({ wx, navigate, onTabChange }: { wx: ReturnType<typeof useWeath
 
       {/* Pudi */}
       <div style={{ padding:'28px 20px 0' }}>
-        <div style={{ borderRadius:24, background:'linear-gradient(145deg,#0D1F17,#0A4030)', padding:'24px 20px', position:'relative', overflow:'hidden' }}>
-          <div style={{ position:'absolute', top:-30, right:-30, width:130, height:130, borderRadius:'50%', background:'rgba(200,241,53,0.08)' }} />
-          <div style={{ position:'absolute', bottom:-20, left:20, width:90, height:90, borderRadius:'50%', background:'rgba(13,165,160,0.15)' }} />
-          <div style={{ position:'relative', zIndex:1 }}>
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:18 }}>
-              <div style={{ display:'flex', alignItems:'center', gap:12 }}>
-                <div style={{ width:50, height:50, borderRadius:'50%', background:'#C8F135', display:'flex', alignItems:'center', justifyContent:'center', fontSize:26, flexShrink:0 }}>🦌</div>
-                <div>
-                  <p style={{ fontSize:17, fontWeight:800, color:T.white, marginBottom:3 }}>Asistente Pudi</p>
-                  <div style={{ display:'flex', alignItems:'center', gap:5 }}>
-                    <div style={{ width:7, height:7, borderRadius:'50%', background:'#C8F135' }} />
-                    <p style={{ fontSize:11, color:'rgba(255,255,255,0.65)' }}>En línea · Tu guía local</p>
-                  </div>
+        <div style={{ background:T.white, borderRadius:24, overflow:'hidden', boxShadow:'0 6px 24px rgba(0,0,0,0.10)' }}>
+          <div style={{ background:T.teal, padding:'20px 20px 18px', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+              <div style={{ width:50, height:50, borderRadius:'50%', background:'rgba(255,255,255,0.2)', border:'2px solid rgba(255,255,255,0.35)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:26, flexShrink:0 }}>🦌</div>
+              <div>
+                <p style={{ fontSize:17, fontWeight:800, color:T.white, marginBottom:2 }}>Asistente Pudi</p>
+                <div style={{ display:'flex', alignItems:'center', gap:5 }}>
+                  <div style={{ width:7, height:7, borderRadius:'50%', background:'#C8F135' }} />
+                  <p style={{ fontSize:11, color:'rgba(255,255,255,0.75)' }}>En línea · Tu guía local</p>
                 </div>
               </div>
-              <span style={{ background:'rgba(200,241,53,0.18)', color:'#C8F135', fontSize:10, fontWeight:700, padding:'5px 12px', borderRadius:100, border:'1px solid rgba(200,241,53,0.3)' }}>IA</span>
             </div>
-            <div style={{ background:'rgba(255,255,255,0.08)', borderRadius:16, padding:'14px 16px', marginBottom:16, border:'1px solid rgba(255,255,255,0.1)' }}>
-              <p style={{ fontSize:13, color:'rgba(255,255,255,0.9)', lineHeight:1.6 }}>
+            <span style={{ background:'rgba(255,255,255,0.2)', color:T.white, fontSize:10, fontWeight:700, padding:'5px 12px', borderRadius:100, border:'1px solid rgba(255,255,255,0.3)' }}>IA</span>
+          </div>
+          <div style={{ padding:'16px 20px 20px' }}>
+            <div style={{ background:T.bg, borderRadius:14, padding:'14px 16px', marginBottom:14 }}>
+              <p style={{ fontSize:13, color:T.dark, lineHeight:1.6 }}>
                 "¿Rutas para tu nivel? ¿Dónde comer bien? ¿Cómo llegar al Pumalín? Pregúntame lo que quieras sobre Chaitén 🌿"
               </p>
             </div>
-            <div style={{ display:'flex', gap:7, marginBottom:18, flexWrap:'wrap' }}>
+            <div style={{ display:'flex', gap:7, marginBottom:16, flexWrap:'wrap' }}>
               {['¿Cómo llegar?','¿Qué hacer hoy?','Rutas Pumalín','Emergencias'].map(q => (
-                <span key={q} style={{ background:'rgba(255,255,255,0.1)', color:'rgba(255,255,255,0.85)', fontSize:11, fontWeight:600, padding:'6px 12px', borderRadius:100, border:'1px solid rgba(255,255,255,0.15)', cursor:'pointer' }}>{q}</span>
+                <span key={q} style={{ background:T.tealBg, color:T.teal, fontSize:11, fontWeight:600, padding:'6px 12px', borderRadius:100, border:`1px solid ${T.teal}30`, cursor:'pointer' }}>{q}</span>
               ))}
             </div>
-            <button style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:10, width:'100%', background:'#C8F135', color:'#0D1F17', fontWeight:800, fontSize:14, padding:'14px 20px', borderRadius:100, border:'none', cursor:'pointer', fontFamily:'inherit' }}>
+            <button style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:10, width:'100%', background:T.teal, color:T.white, fontWeight:800, fontSize:14, padding:'14px 20px', borderRadius:100, border:'none', cursor:'pointer', fontFamily:'inherit' }}>
               <MessageCircle size={18} />Pregúntale a Pudi
             </button>
           </div>
@@ -810,8 +967,8 @@ function HomeTab({ wx, navigate, onTabChange }: { wx: ReturnType<typeof useWeath
       </div>
 
       {/* Footer */}
-      <div style={{ padding:'28px 20px 0' }}>
-        <div style={{ background:T.white, borderRadius:20, padding:'18px 20px', boxShadow:'0 2px 12px rgba(0,0,0,0.06)', borderTop:`3px solid ${T.teal}` }}>
+      <div style={{ marginTop:28 }}>
+        <div style={{ background:T.white, padding:'18px 20px', boxShadow:'0 -2px 12px rgba(0,0,0,0.06)', borderTop:`3px solid ${T.teal}` }}>
           <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14 }}>
             <div style={{ display:'flex', alignItems:'center', gap:8 }}>
               <TreePine size={16} color={T.teal} />
@@ -1355,9 +1512,11 @@ export default function ModernHome() {
   const wx = useWeather();
 
   if (page) {
-    if (page.type === 'lugar')       return <LugarDetailPage      id={page.id} onBack={() => setPage(null)} />;
-    if (page.type === 'ruta')        return <RutaDetailPage        id={page.id} onBack={() => setPage(null)} />;
-    if (page.type === 'itinerario')  return <ItinerarioDetailPage  id={page.id} onBack={() => setPage(null)} />;
+    if (page.type === 'lugar')        return <LugarDetailPage        id={page.id} onBack={() => setPage(null)} />;
+    if (page.type === 'ruta')         return <RutaDetailPage         id={page.id} onBack={() => setPage(null)} />;
+    if (page.type === 'itinerario')   return <ItinerarioDetailPage   id={page.id} onBack={() => setPage(null)} />;
+    if (page.type === 'alojamiento')  return <AlojamientoDetailPage  id={page.id} onBack={() => setPage(null)} />;
+    if (page.type === 'restaurante')  return <RestauranteDetailPage  id={page.id} onBack={() => setPage(null)} />;
   }
 
   const isPudi = tab === 'pudi';
