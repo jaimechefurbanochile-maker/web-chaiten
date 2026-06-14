@@ -22,6 +22,8 @@ const T = {
 
 type NavTab = 'home' | 'explorar' | 'pudi' | 'servicios' | 'info';
 
+
+
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const ATRACTIVOS = [
@@ -141,21 +143,42 @@ export default function ModernHome() {
             <span style={{ fontSize:14, color:'#BDBDBD' }}>¿A dónde vas?</span>
           </div>
 
-          {/* Plan your trip CTA */}
-          <div style={{ margin:'14px 20px 0', background:T.white, borderRadius:16, padding:'16px', display:'flex', alignItems:'center', gap:14 }}>
-            <div style={{ width:52, height:52, borderRadius:14, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', fontSize:28, flexShrink:0 }}>
-              🗺️
+          {/* Upcoming trip card */}
+          <div style={{ margin:'14px 20px 0', background:T.white, borderRadius:16 }}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'14px 16px 12px' }}>
+              <span style={{ fontSize:11, fontWeight:700, color:T.white, background:T.tealDark, padding:'4px 12px', borderRadius:100 }}>Próximo viaje</span>
+              <span style={{ fontSize:11, color:T.gray }}>14 Jun 2026</span>
             </div>
-            <div style={{ flex:1 }}>
-              <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:3 }}>Planifica tu viaje</p>
-              <p style={{ fontSize:11, color:T.gray }}>Descubre qué ver, dónde dormir y cómo llegar a Chaitén</p>
+            <div style={{ display:'flex', alignItems:'center', padding:'0 16px' }}>
+              <div style={{ minWidth:52 }}>
+                <div style={{ display:'flex', alignItems:'center', gap:4 }}>
+                  <span style={{ fontSize:22, fontWeight:800, color:T.dark }}>QCH</span>
+                  <Plane size={13} color={T.gray} />
+                </div>
+                <p style={{ fontSize:11, color:T.gray, marginTop:2 }}>09:00</p>
+              </div>
+              <div style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', gap:2, padding:'0 8px' }}>
+                <span style={{ fontSize:11, color:T.gray }}>4h 30m</span>
+                <div style={{ width:'100%', borderTop:'1.5px dashed #D0D0D0', position:'relative' }}>
+                  <span style={{ position:'absolute', right:-4, top:-8, fontSize:10, color:T.gray }}>›</span>
+                </div>
+              </div>
+              <div style={{ minWidth:52, textAlign:'right' }}>
+                <div style={{ display:'flex', alignItems:'center', justifyContent:'flex-end', gap:4 }}>
+                  <Ship size={13} color={T.gray} />
+                  <span style={{ fontSize:22, fontWeight:800, color:T.dark }}>CHT</span>
+                </div>
+                <p style={{ fontSize:11, color:T.gray, marginTop:2 }}>13:30</p>
+              </div>
             </div>
-            <div style={{ width:32, height:32, borderRadius:'50%', background:T.teal, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-              <ChevronRight size={16} color={T.white} />
+            <p style={{ fontSize:11, color:T.gray, padding:'8px 16px 0' }}>Navimag · Económico · Directo</p>
+            <div style={{ display:'flex', justifyContent:'space-between', borderTop:`1px solid ${T.grayLight}`, margin:'12px 16px 0', padding:'10px 0 14px' }}>
+              <span style={{ fontSize:12, color:T.gray }}>Booking ID</span>
+              <span style={{ fontSize:12, fontWeight:800, color:T.dark, letterSpacing:1 }}>NV2026</span>
             </div>
           </div>
 
-          {/* Category icons — sin Trenes, con Tours */}
+          {/* Category icons — Tours en vez de Trenes */}
           <div style={{ display:'flex', justifyContent:'space-between', padding:'20px 20px 0' }}>
             {[
               { label:'Vuelos',  Icon: Plane    },
