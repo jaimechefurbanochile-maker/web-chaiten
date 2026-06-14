@@ -43,6 +43,26 @@ const CATS = [
   { label:'Buses',   Icon: Bus       },
 ];
 
+interface Deal {
+  id: string; name: string; sub: string;
+  price: string; original: string; timer: string; gradient: string;
+}
+interface Activity {
+  id: string; name: string; duration: string; rating: number; price: string; emoji: string;
+}
+
+const DEALS: Deal[] = [
+  { id:'d1', name:'Ferry Quellón → Chaitén', sub:'Navimag · Ida y vuelta', price:'$55', original:'$90', timer:'03:42:18', gradient:`linear-gradient(135deg,${T.tealDark},#065f46)` },
+  { id:'d2', name:'Paquete 3 días Pumalín',  sub:'Incluye guía + camping',  price:'$89', original:'$140', timer:'05:20:00', gradient:`linear-gradient(135deg,#1a4a5a,#0d3040)` },
+];
+
+const ACTIVITIES: Activity[] = [
+  { id:'a1', name:'Trekking Volcán Corcovado', duration:'8h · Guiado', rating:4.9, price:'$45', emoji:'🌋' },
+  { id:'a2', name:'Kayak en los Fiordos',      duration:'4h · Grupal',  rating:4.8, price:'$30', emoji:'🛶' },
+  { id:'a3', name:'Avistamiento de Pudú',      duration:'3h · Guiado',  rating:4.7, price:'$25', emoji:'🦌' },
+  { id:'a4', name:'Baño en Termas Amarillo',   duration:'Todo el día',  rating:4.8, price:'$18', emoji:'♨️' },
+];
+
 // ─── Stars helper ─────────────────────────────────────────────────────────────
 function Stars({ v }: { v: number }) {
   return (
@@ -223,6 +243,78 @@ export default function ModernHome() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* ── Ofertas especiales ────────────────────────────────────────── */}
+        <div style={{ paddingTop:22 }}>
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'0 20px 14px' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+              <span style={{ fontSize:17, fontWeight:800, color:T.dark }}>Ofertas especiales</span>
+              <span style={{ fontSize:10, fontWeight:700, color:'#fff', background:'#EF4444', padding:'3px 8px', borderRadius:100 }}>🔥 HOY</span>
+            </div>
+            <button style={{ display:'flex', alignItems:'center', gap:2, fontSize:13, fontWeight:600, color:T.teal, background:'none', border:'none', cursor:'pointer' }}>
+              Ver más <ChevronRight size={14} />
+            </button>
+          </div>
+          <div style={{ display:'flex', flexDirection:'column', gap:10, padding:'0 20px' }}>
+            {DEALS.map(d => (
+              <div key={d.id} style={{ borderRadius:16, padding:'16px 18px', background:d.gradient, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                <div>
+                  <p style={{ fontSize:14, fontWeight:800, color:'#fff', marginBottom:3 }}>{d.name}</p>
+                  <p style={{ fontSize:11, color:'rgba(255,255,255,0.65)', marginBottom:8 }}>{d.sub}</p>
+                  <div style={{ display:'flex', alignItems:'baseline', gap:6 }}>
+                    <span style={{ fontSize:20, fontWeight:800, color:'#C8F135' }}>{d.price}</span>
+                    <span style={{ fontSize:12, color:'rgba(255,255,255,0.4)', textDecoration:'line-through' }}>{d.original}</span>
+                  </div>
+                </div>
+                <div style={{ display:'flex', flexDirection:'column', alignItems:'flex-end', gap:8 }}>
+                  <span style={{ fontSize:13, fontWeight:700, color:'#fff', fontVariantNumeric:'tabular-nums' }}>⏱ {d.timer}</span>
+                  <button style={{ background:'#C8F135', color:'#0a3030', fontSize:12, fontWeight:800, padding:'7px 16px', borderRadius:100, border:'none', cursor:'pointer' }}>
+                    Reservar
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Actividades populares ─────────────────────────────────────── */}
+        <div style={{ paddingTop:22 }}>
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'0 20px 14px' }}>
+            <span style={{ fontSize:17, fontWeight:800, color:T.dark }}>Actividades populares</span>
+            <button style={{ display:'flex', alignItems:'center', gap:2, fontSize:13, fontWeight:600, color:T.teal, background:'none', border:'none', cursor:'pointer' }}>
+              Ver todos <ChevronRight size={14} />
+            </button>
+          </div>
+          <div style={{ display:'flex', gap:12, overflowX:'auto', padding:'0 20px 4px' }} className="hide-scrollbar">
+            {ACTIVITIES.map(a => (
+              <div key={a.id} style={{ width:140, flexShrink:0, background:T.white, borderRadius:16, padding:'14px 14px 14px', boxShadow:'0 2px 10px rgba(0,0,0,0.07)', cursor:'pointer' }}>
+                <div style={{ width:44, height:44, borderRadius:12, background:T.grayLight, display:'flex', alignItems:'center', justifyContent:'center', fontSize:22, marginBottom:10 }}>
+                  {a.emoji}
+                </div>
+                <p style={{ fontSize:13, fontWeight:800, color:T.dark, lineHeight:1.25, marginBottom:5 }}>{a.name}</p>
+                <p style={{ fontSize:11, color:T.gray, marginBottom:8 }}>{a.duration}</p>
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                  <Stars v={a.rating} />
+                  <span style={{ fontSize:13, fontWeight:800, color:T.teal }}>{a.price}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Banner info ───────────────────────────────────────────────── */}
+        <div style={{ padding:'22px 20px 0' }}>
+          <div style={{ borderRadius:20, overflow:'hidden', background:`linear-gradient(135deg,${T.teal},${T.tealDark})`, padding:'20px 20px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+            <div>
+              <p style={{ fontSize:11, fontWeight:700, color:'rgba(255,255,255,0.7)', marginBottom:5, letterSpacing:'0.5px' }}>NUEVA RUTA</p>
+              <p style={{ fontSize:16, fontWeight:800, color:'#fff', lineHeight:1.3, marginBottom:12 }}>Trekking Costero<br />Chaitén · Pumalín</p>
+              <button style={{ background:'#fff', color:T.tealDark, fontSize:12, fontWeight:800, padding:'8px 18px', borderRadius:100, border:'none', cursor:'pointer' }}>
+                Explorar →
+              </button>
+            </div>
+            <span style={{ fontSize:56, lineHeight:1 }}>🗺️</span>
           </div>
         </div>
 
