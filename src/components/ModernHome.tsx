@@ -20,7 +20,7 @@ const T = {
   accent:    '#C8F135',
 };
 
-type NavTab = 'home' | 'orders' | 'deals' | 'account';
+type NavTab = 'home' | 'rutas' | 'pudi' | 'ofertas' | 'cuenta';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -405,16 +405,55 @@ export default function ModernHome() {
       </div>
 
       {/* ════ BOTTOM NAV ══════════════════════════════════════════════════ */}
-      <nav style={{ display:'flex', justifyContent:'space-around', alignItems:'center', background:T.white, paddingBottom:'env(safe-area-inset-bottom,8px)', paddingTop:8, borderTop:`1px solid ${T.grayLight}`, boxShadow:'0 -4px 20px rgba(0,0,0,0.06)', flexShrink:0 }}>
+      <nav style={{ display:'flex', justifyContent:'space-around', alignItems:'flex-end', background:T.white, paddingBottom:'env(safe-area-inset-bottom,8px)', paddingTop:8, borderTop:`1px solid ${T.grayLight}`, boxShadow:'0 -4px 20px rgba(0,0,0,0.06)', flexShrink:0, position:'relative' }}>
         {([
-          { id:'home'    as NavTab, Icon:Home,       label:'Inicio'  },
-          { id:'orders'  as NavTab, Icon:ShoppingBag, label:'Rutas'   },
-          { id:'deals'   as NavTab, Icon:Tag,         label:'Ofertas' },
-          { id:'account' as NavTab, Icon:User,        label:'Cuenta'  },
+          { id:'home'   as NavTab, Icon:Home,        label:'Inicio'  },
+          { id:'rutas'  as NavTab, Icon:ShoppingBag, label:'Rutas'   },
         ]).map(({ id, Icon, label }) => {
           const active = tab === id;
           return (
-            <button key={id} onClick={() => setTab(id)} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:3, padding:'6px 20px', background:'none', border:'none', cursor:'pointer' }}>
+            <button key={id} onClick={() => setTab(id)} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:3, padding:'6px 18px', background:'none', border:'none', cursor:'pointer' }}>
+              <Icon size={22} color={active ? T.teal : '#BDBDBD'} />
+              <span style={{ fontSize:10, fontWeight:active?700:400, color:active?T.teal:'#BDBDBD' }}>{label}</span>
+              {active && <div style={{ width:4, height:4, borderRadius:'50%', background:T.teal }} />}
+            </button>
+          );
+        })}
+
+        {/* ── PUDI centro elevado ── */}
+        <button
+          onClick={() => setTab('pudi')}
+          style={{
+            display:'flex', flexDirection:'column', alignItems:'center', gap:4,
+            background:'none', border:'none', cursor:'pointer',
+            position:'relative', marginBottom:4,
+          }}
+        >
+          <div style={{
+            width:58, height:58, borderRadius:'50%',
+            background: tab === 'pudi'
+              ? 'linear-gradient(135deg,#0D1F17,#0A7A75)'
+              : 'linear-gradient(135deg,#C8F135,#a8d020)',
+            display:'flex', alignItems:'center', justifyContent:'center',
+            fontSize:26,
+            boxShadow: tab === 'pudi'
+              ? '0 4px 18px rgba(13,165,160,0.45)'
+              : '0 4px 18px rgba(200,241,53,0.5)',
+            border:`3px solid ${T.white}`,
+            marginTop:-22,
+          }}>
+            🦌
+          </div>
+          <span style={{ fontSize:10, fontWeight:700, color: tab === 'pudi' ? T.teal : T.gray }}>Pudi</span>
+        </button>
+
+        {([
+          { id:'ofertas' as NavTab, Icon:Tag,  label:'Ofertas' },
+          { id:'cuenta'  as NavTab, Icon:User, label:'Cuenta'  },
+        ]).map(({ id, Icon, label }) => {
+          const active = tab === id;
+          return (
+            <button key={id} onClick={() => setTab(id)} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:3, padding:'6px 18px', background:'none', border:'none', cursor:'pointer' }}>
               <Icon size={22} color={active ? T.teal : '#BDBDBD'} />
               <span style={{ fontSize:10, fontWeight:active?700:400, color:active?T.teal:'#BDBDBD' }}>{label}</span>
               {active && <div style={{ width:4, height:4, borderRadius:'50%', background:T.teal }} />}
