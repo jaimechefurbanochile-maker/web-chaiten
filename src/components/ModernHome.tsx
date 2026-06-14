@@ -1,112 +1,150 @@
-import { useState, useRef } from 'react';
-import {
-  Bell, SlidersHorizontal, Heart, ChevronRight,
-  Home, Map, BookmarkCheck, User, Compass,
-  Wind, Droplets, Mountain, Utensils, Bed, Car, Info
-} from 'lucide-react';
+import { useState } from 'react';
+import { Search, SlidersHorizontal, Heart, ChevronRight, Home, Map, MessageCircle, Bookmark, User, Mic, Clock } from 'lucide-react';
 import { useWeather } from '../hooks/useWeather';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
-type Category = 'volcán' | 'rutas' | 'comer' | 'dormir' | 'moverse' | 'info';
-type NavTab = 'home' | 'mapa' | 'pudi' | 'guardados' | 'perfil';
+type Category = 'Volcán' | 'Rutas' | 'Camping';
+type NavTab = 'home' | 'buscar' | 'guardados' | 'chat' | 'perfil';
 
 interface Destination {
   id: string;
   name: string;
-  distance: string;
+  location: string;
+  price: string;
   rating: number;
   gradient: string;
-  emoji: string;
-  category: Category[];
-  path: string;
+  accentColor: string;
+}
+
+interface FlashDeal {
+  id: string;
+  name: string;
+  location: string;
+  price: string;
+  originalPrice: string;
+  gradient: string;
+  timeLeft: string;
 }
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
-const CATEGORIES: { id: Category; label: string; icon: React.ReactNode }[] = [
-  { id: 'volcán', label: 'Volcán', icon: <Mountain size={14} /> },
-  { id: 'rutas', label: 'Rutas', icon: <Compass size={14} /> },
-  { id: 'comer', label: 'Comer', icon: <Utensils size={14} /> },
-  { id: 'dormir', label: 'Dormir', icon: <Bed size={14} /> },
-  { id: 'moverse', label: 'Moverse', icon: <Car size={14} /> },
-  { id: 'info', label: 'Info', icon: <Info size={14} /> },
-];
+const CATEGORIES: Category[] = ['Volcán', 'Rutas', 'Camping'];
 
-const DESTINATIONS: Destination[] = [
-  {
-    id: 'volcan',
-    name: 'Volcán Corcovado',
-    distance: '42 km',
-    rating: 4.9,
-    gradient: 'linear-gradient(135deg, #1a3a2a 0%, #2d5a27 40%, #4a7c5e 100%)',
-    emoji: '🌋',
-    category: ['volcán'],
-    path: '/volcan',
-  },
-  {
-    id: 'fiordos',
-    name: 'Fiordos Patagónicos',
-    distance: '28 km',
-    rating: 4.8,
-    gradient: 'linear-gradient(135deg, #0a1628 0%, #1a3a5c 50%, #2d6a8f 100%)',
-    emoji: '🌊',
-    category: ['rutas'],
-    path: '/fiordos',
-  },
-  {
-    id: 'bosque',
-    name: 'Bosque Valdiviano',
-    distance: '15 km',
-    rating: 4.7,
-    gradient: 'linear-gradient(135deg, #0d2010 0%, #1e4d1a 50%, #2d7a27 100%)',
-    emoji: '🌿',
-    category: ['rutas'],
-    path: '/bosque',
-  },
-  {
-    id: 'pumalin',
-    name: 'Parque Pumalín',
-    distance: '35 km',
-    rating: 4.9,
-    gradient: 'linear-gradient(135deg, #1a2a0a 0%, #3d5a0d 50%, #5a7a1a 100%)',
-    emoji: '🦌',
-    category: ['rutas', 'volcán'],
-    path: '/pumalin',
-  },
-  {
-    id: 'chaiten-pueblo',
-    name: 'Chaitén Pueblo',
-    distance: '0 km',
-    rating: 4.6,
-    gradient: 'linear-gradient(135deg, #2a1a0a 0%, #5a3d0d 50%, #7a5a1a 100%)',
-    emoji: '🏘️',
-    category: ['comer', 'dormir', 'info'],
-    path: '/pueblo',
-  },
-  {
-    id: 'termas',
-    name: 'Termas El Amarillo',
-    distance: '52 km',
-    rating: 4.8,
-    gradient: 'linear-gradient(135deg, #2a0a1a 0%, #5a1a3d 50%, #7a2a5a 100%)',
-    emoji: '♨️',
-    category: ['rutas', 'dormir'],
-    path: '/termas',
-  },
-];
+const DESTINATIONS: Record<Category, Destination[]> = {
+  'Volcán': [
+    {
+      id: 'corcovado',
+      name: 'Volcán Corcovado',
+      location: 'Chaitén, Chile',
+      price: '$45',
+      rating: 4.9,
+      gradient: 'linear-gradient(160deg, #1a3d28 0%, #2d6b42 35%, #1e7a3e 65%, #0d4020 100%)',
+      accentColor: '#C8F135',
+    },
+    {
+      id: 'pumalin',
+      name: 'Parque Pumalín',
+      location: 'Chaitén, Chile',
+      price: 'Gratis',
+      rating: 4.8,
+      gradient: 'linear-gradient(160deg, #0a2810 0%, #1a5c28 40%, #2d8040 70%, #1a5030 100%)',
+      accentColor: '#C8F135',
+    },
+    {
+      id: 'fiordos',
+      name: 'Fiordos Patagónicos',
+      location: 'Palena, Chile',
+      price: '$30',
+      rating: 4.9,
+      gradient: 'linear-gradient(160deg, #0a1e2d 0%, #0d3d5c 40%, #1a6080 70%, #0d3040 100%)',
+      accentColor: '#64D9F8',
+    },
+  ],
+  'Rutas': [
+    {
+      id: 'carretera',
+      name: 'Carretera Austral',
+      location: 'Aysén, Chile',
+      price: '$0',
+      rating: 4.9,
+      gradient: 'linear-gradient(160deg, #1e2d0a 0%, #3d5c1a 40%, #5a8028 70%, #3a6015 100%)',
+      accentColor: '#C8F135',
+    },
+    {
+      id: 'bosque',
+      name: 'Bosque Valdiviano',
+      location: 'Chaitén, Chile',
+      price: '$12',
+      rating: 4.7,
+      gradient: 'linear-gradient(160deg, #0d1e0a 0%, #1e4015 40%, #2d6020 70%, #1a4010 100%)',
+      accentColor: '#C8F135',
+    },
+    {
+      id: 'termas',
+      name: 'Termas El Amarillo',
+      location: 'Chaitén, Chile',
+      price: '$18',
+      rating: 4.8,
+      gradient: 'linear-gradient(160deg, #2d1a0a 0%, #5c3a1a 40%, #805028 70%, #603820 100%)',
+      accentColor: '#F8C664',
+    },
+  ],
+  'Camping': [
+    {
+      id: 'camping1',
+      name: 'Camping Pumalín',
+      location: 'Chaitén, Chile',
+      price: '$8',
+      rating: 4.6,
+      gradient: 'linear-gradient(160deg, #0d2010 0%, #1a4020 40%, #2d6030 70%, #1a4020 100%)',
+      accentColor: '#C8F135',
+    },
+    {
+      id: 'camping2',
+      name: 'Camping El Volcán',
+      location: 'Chaitén, Chile',
+      price: '$10',
+      rating: 4.7,
+      gradient: 'linear-gradient(160deg, #200a0a 0%, #4a1a1a 40%, #6b2828 70%, #4a1515 100%)',
+      accentColor: '#FF8A65',
+    },
+    {
+      id: 'camping3',
+      name: 'Camping Río Yelcho',
+      location: 'Futaleufú, Chile',
+      price: '$6',
+      rating: 4.5,
+      gradient: 'linear-gradient(160deg, #0a1a2d 0%, #1a3a5c 40%, #286080 70%, #1a4060 100%)',
+      accentColor: '#64D9F8',
+    },
+  ],
+};
 
-const QUICK_INFO = [
-  { icon: '🚌', label: 'Buses', sub: 'Tur-Bus · Queilen' },
-  { icon: '⛴️', label: 'Ferry', sub: 'Navimag · TMC' },
-  { icon: '🏕️', label: 'Camping', sub: '6 sitios cercanos' },
-  { icon: '🏥', label: 'Hospital', sub: 'Av. Carretera 123' },
+const FLASH_DEALS: FlashDeal[] = [
+  {
+    id: 'ferry',
+    name: 'Ferry Quellón↔Chaitén',
+    location: 'Navimag · TMC',
+    price: '$35',
+    originalPrice: '$60',
+    gradient: 'linear-gradient(135deg, #0a1e2d 0%, #1a4060 60%, #0d3050 100%)',
+    timeLeft: '02:14:33',
+  },
+  {
+    id: 'paquete',
+    name: 'Paquete 3 días Pumalín',
+    location: 'Chaitén, Chile',
+    price: '$89',
+    originalPrice: '$140',
+    gradient: 'linear-gradient(135deg, #0d2010 0%, #1e4a28 60%, #2d6040 100%)',
+    timeLeft: '05:40:12',
+  },
 ];
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function ModernHome() {
-  const [activeCategory, setActiveCategory] = useState<Category>('volcán');
+  const [activeCategory, setActiveCategory] = useState<Category>('Volcán');
   const [activeTab, setActiveTab] = useState<NavTab>('home');
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
-  const scrollRef = useRef<HTMLDivElement>(null);
   const weather = useWeather();
 
   const toggleLike = (id: string) => {
@@ -117,226 +155,173 @@ export default function ModernHome() {
     });
   };
 
-  const filteredDestinations = DESTINATIONS.filter(d =>
-    d.category.includes(activeCategory)
-  );
-
-  const visibleDestinations = filteredDestinations.length > 0
-    ? filteredDestinations
-    : DESTINATIONS;
+  const visibleDestinations = DESTINATIONS[activeCategory];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', background: '#fff', overflow: 'hidden' }}>
+    <div style={s.root}>
 
-      {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section style={styles.hero}>
-        {/* Background layers */}
-        <div style={styles.heroBg} />
-        <div style={styles.heroGradient} />
+      {/* ── SCROLLABLE CONTENT ─────────────────────────────────────────── */}
+      <div style={s.scroll} className="hide-scrollbar">
 
-        {/* Weather badge */}
-        {!weather.loading && (
-          <div style={styles.weatherBadge}>
-            <span style={{ fontSize: 16 }}>{weather.icon}</span>
-            <span style={{ fontSize: 13, fontWeight: 700, color: '#fff' }}>{weather.temp}°</span>
-            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', marginLeft: 2 }}>Chaitén</span>
+        {/* ── TOP BAR ─────────────────────────────────────────────────── */}
+        <div style={s.topBar}>
+          <div style={s.userRow}>
+            <div style={s.avatar}>🧑‍🌿</div>
+            <div style={s.userInfo}>
+              <span style={s.greeting}>Hola, viajero</span>
+              <span style={s.subGreeting}>Elige tu próxima aventura</span>
+            </div>
           </div>
-        )}
-
-        {/* Top bar */}
-        <div style={styles.heroTopBar}>
-          <div style={styles.heroAvatar}>
-            <div style={styles.avatarCircle}>🧑‍🌿</div>
-            <span style={styles.heroGreeting}>Hola, viajero 👋</span>
-          </div>
-          <div style={styles.heroActions}>
-            <button style={styles.heroIconBtn} aria-label="Notificaciones">
-              <Bell size={18} color="#fff" />
-              <span style={styles.notifDot} />
+          <div style={s.topActions}>
+            {!weather.loading && (
+              <div style={s.weatherChip}>
+                <span style={{ fontSize: 14 }}>{weather.icon}</span>
+                <span style={s.weatherTemp}>{weather.temp}°C</span>
+              </div>
+            )}
+            <button style={s.iconBtn} aria-label="Buscar">
+              <Search size={18} color="#0D1F17" />
             </button>
-            <button style={styles.heroIconBtn} aria-label="Filtros">
-              <SlidersHorizontal size={18} color="#fff" />
+            <button style={s.iconBtn} aria-label="Filtros">
+              <SlidersHorizontal size={18} color="#0D1F17" />
             </button>
           </div>
         </div>
 
-        {/* Hero content */}
-        <div style={styles.heroContent}>
-          <p style={styles.heroEyebrow}>🌿 Patagonia Norte · Chile</p>
-          <h1 style={styles.heroTitle}>
-            <span style={{ display: 'block' }}>Descubre la</span>
-            <span style={styles.heroTitleAccent}>Patagonia</span>
+        {/* ── TITLE ───────────────────────────────────────────────────── */}
+        <div style={s.titleSection}>
+          <h1 style={s.title}>
+            Descubre la<br />
+            <span style={s.titleHighlight}>Patagonia</span>{' '}
+            <span style={s.titleNormal}>Norte</span>
           </h1>
-          <p style={styles.heroSubtitle}>Volcán · Fiordos · Bosque nativo</p>
-
-          {/* Weather detail strip */}
-          {!weather.loading && (
-            <div style={styles.weatherStrip}>
-              <div style={styles.weatherItem}>
-                <Wind size={12} color="rgba(255,255,255,0.7)" />
-                <span>{weather.windSpeed} km/h</span>
-              </div>
-              <div style={styles.weatherDivider} />
-              <div style={styles.weatherItem}>
-                <Droplets size={12} color="rgba(255,255,255,0.7)" />
-                <span>{weather.humidity}%</span>
-              </div>
-              <div style={styles.weatherDivider} />
-              <span style={styles.weatherDesc}>{weather.description}</span>
-            </div>
-          )}
-
-          {/* CTA buttons */}
-          <div style={styles.heroBtns}>
-            <button style={styles.btnPrimary}>
-              <span>✦</span> Armar mi viaje
-            </button>
-            <button style={styles.btnSecondary}>
-              🦌 Pudi
-            </button>
-          </div>
         </div>
-      </section>
 
-      {/* ── SCROLLABLE CONTENT ───────────────────────────────────────────── */}
-      <div ref={scrollRef} style={styles.scrollArea} className="hide-scrollbar">
+        {/* ── SEARCH BAR ──────────────────────────────────────────────── */}
+        <div style={s.searchBarWrap}>
+          <div style={s.searchBar}>
+            <Search size={16} color="#9E9E9E" />
+            <span style={s.searchPlaceholder}>Buscar destinos...</span>
+          </div>
+          <button style={s.micBtn} aria-label="Buscar por voz">
+            <Mic size={16} color="#fff" />
+          </button>
+        </div>
 
-        {/* ── CATEGORY CHIPS ───────────────────────────────────────────── */}
-        <div style={styles.chipsSection}>
-          <div style={styles.chipsRow} className="hide-scrollbar">
-            {CATEGORIES.map(cat => (
-              <button
-                key={cat.id}
-                style={{
-                  ...styles.chip,
-                  ...(activeCategory === cat.id ? styles.chipActive : styles.chipInactive),
-                }}
-                onClick={() => setActiveCategory(cat.id)}
-              >
-                {cat.icon}
-                <span>{cat.label}</span>
+        {/* ── CATEGORY PILLS ──────────────────────────────────────────── */}
+        <div style={s.categoryRow} className="hide-scrollbar">
+          {CATEGORIES.map(cat => (
+            <button
+              key={cat}
+              style={activeCategory === cat ? s.catActive : s.catInactive}
+              onClick={() => setActiveCategory(cat)}
+            >
+              {cat === 'Volcán' && '🌋 '}
+              {cat === 'Rutas' && '🗺️ '}
+              {cat === 'Camping' && '🏕️ '}
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* ── RECOMMENDED ─────────────────────────────────────────────── */}
+        <div style={s.sectionHeader}>
+          <span style={s.sectionTitle}>Recomendados</span>
+          <button style={s.seeAll}>Ver todos <ChevronRight size={13} /></button>
+        </div>
+
+        <div style={s.cardsRow} className="hide-scrollbar">
+          {visibleDestinations.map(dest => (
+            <div key={dest.id} style={{ ...s.card, background: dest.gradient }}>
+              {/* Landscape illustration layer */}
+              <div style={s.cardIllustration}>
+                <MountainIllustration color={dest.accentColor} />
+              </div>
+
+              {/* Rating badge */}
+              <div style={s.ratingBadge}>
+                <span style={{ fontSize: 10 }}>⭐</span>
+                <span style={{ fontSize: 11, fontWeight: 700 }}>{dest.rating}</span>
+              </div>
+
+              {/* Like */}
+              <button style={s.likeBtn} onClick={() => toggleLike(dest.id)}>
+                <Heart
+                  size={13}
+                  fill={likedIds.has(dest.id) ? '#FF4B6E' : 'none'}
+                  color={likedIds.has(dest.id) ? '#FF4B6E' : '#fff'}
+                  strokeWidth={2}
+                />
               </button>
-            ))}
-          </div>
+
+              {/* Bottom info */}
+              <div style={s.cardInfo}>
+                <div style={s.cardLocation}>
+                  <span style={{ fontSize: 10 }}>📍</span>
+                  <span style={s.cardLocationTxt}>{dest.location}</span>
+                </div>
+                <div style={s.cardNameRow}>
+                  <span style={s.cardName}>{dest.name}</span>
+                </div>
+                <span style={{ ...s.cardPrice, color: dest.accentColor }}>{dest.price} / persona</span>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* ── DESTINATION CARDS ────────────────────────────────────────── */}
-        <section style={styles.section}>
-          <div style={styles.sectionHeader}>
-            <span style={styles.sectionTitle}>Destinos</span>
-            <button style={styles.seeAllBtn}>
-              Ver todos <ChevronRight size={14} />
-            </button>
+        {/* ── FLASH DEALS ─────────────────────────────────────────────── */}
+        <div style={s.sectionHeader}>
+          <div style={s.flashTitleRow}>
+            <span style={s.sectionTitle}>Ofertas</span>
+            <span style={s.flashBadge}>🔥 LIMITADO</span>
           </div>
+          <button style={s.seeAll}>Ver más <ChevronRight size={13} /></button>
+        </div>
 
-          <div style={styles.cardsRow} className="hide-scrollbar">
-            {visibleDestinations.map(dest => (
-              <div key={dest.id} style={{ ...styles.card, background: dest.gradient }}>
-                {/* Emoji as visual placeholder */}
-                <div style={styles.cardEmoji}>{dest.emoji}</div>
-
-                {/* Dark overlay at bottom */}
-                <div style={styles.cardOverlay} />
-
-                {/* Rating badge */}
-                <div style={styles.ratingBadge}>
-                  <span style={{ fontSize: 10 }}>⭐</span>
-                  <span style={{ fontSize: 11, fontWeight: 700 }}>{dest.rating}</span>
-                </div>
-
-                {/* Like button */}
-                <button
-                  style={styles.likeBtn}
-                  onClick={() => toggleLike(dest.id)}
-                  aria-label="Guardar"
-                >
-                  <Heart
-                    size={14}
-                    fill={likedIds.has(dest.id) ? '#FF4B6E' : 'none'}
-                    color={likedIds.has(dest.id) ? '#FF4B6E' : '#fff'}
-                    strokeWidth={2}
-                  />
-                </button>
-
-                {/* Card info */}
-                <div style={styles.cardInfo}>
-                  <span style={styles.cardName}>{dest.name}</span>
-                  <span style={styles.cardDistance}>📍 {dest.distance}</span>
-                </div>
+        {FLASH_DEALS.map(deal => (
+          <div key={deal.id} style={{ ...s.dealCard, background: deal.gradient }}>
+            <div style={s.dealLeft}>
+              <span style={s.dealName}>{deal.name}</span>
+              <span style={s.dealLocation}>📍 {deal.location}</span>
+              <div style={s.dealPriceRow}>
+                <span style={s.dealPrice}>{deal.price}</span>
+                <span style={s.dealOriginal}>{deal.originalPrice}</span>
               </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ── QUICK INFO GRID ──────────────────────────────────────────── */}
-        <section style={styles.section}>
-          <div style={styles.sectionHeader}>
-            <span style={styles.sectionTitle}>Información útil</span>
-          </div>
-          <div style={styles.infoGrid}>
-            {QUICK_INFO.map(item => (
-              <div key={item.label} style={styles.infoCard}>
-                <span style={styles.infoEmoji}>{item.icon}</span>
-                <span style={styles.infoLabel}>{item.label}</span>
-                <span style={styles.infoSub}>{item.sub}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ── FEATURED BANNER ──────────────────────────────────────────── */}
-        <section style={{ padding: '0 20px 24px' }}>
-          <div style={styles.featureBanner}>
-            <div style={styles.featureBannerContent}>
-              <span style={styles.featureBannerTag}>Nueva ruta</span>
-              <p style={styles.featureBannerTitle}>Trekking Volcán Corcovado</p>
-              <p style={styles.featureBannerSub}>3 días · Nivel intermedio · Guiado</p>
             </div>
-            <span style={{ fontSize: 48, lineHeight: 1 }}>🌋</span>
+            <div style={s.dealRight}>
+              <Clock size={13} color="rgba(255,255,255,0.6)" />
+              <span style={s.dealTimer}>{deal.timeLeft}</span>
+              <button style={s.dealBtn}>Ver</button>
+            </div>
           </div>
-        </section>
+        ))}
 
-        {/* Bottom padding for nav */}
-        <div style={{ height: 80 }} />
+        <div style={{ height: 90 }} />
       </div>
 
       {/* ── BOTTOM NAV ───────────────────────────────────────────────────── */}
-      <nav style={styles.bottomNav}>
+      <nav style={s.bottomNav}>
         {([
-          { id: 'home', icon: <Home size={22} />, label: 'Inicio' },
-          { id: 'mapa', icon: <Map size={22} />, label: 'Mapa' },
-          { id: 'pudi', icon: null, label: 'Pudi' },
-          { id: 'guardados', icon: <BookmarkCheck size={22} />, label: 'Guardados' },
-          { id: 'perfil', icon: <User size={22} />, label: 'Perfil' },
-        ] as { id: NavTab; icon: React.ReactNode; label: string }[]).map(tab => {
+          { id: 'home' as NavTab, icon: <Home size={22} />, label: 'Inicio' },
+          { id: 'buscar' as NavTab, icon: <Search size={22} />, label: 'Buscar' },
+          { id: 'guardados' as NavTab, icon: <Bookmark size={22} />, label: 'Guardados' },
+          { id: 'chat' as NavTab, icon: <MessageCircle size={22} />, label: 'Info' },
+          { id: 'perfil' as NavTab, icon: <User size={22} />, label: 'Perfil' },
+        ]).map(tab => {
           const isActive = activeTab === tab.id;
-          const isPudi = tab.id === 'pudi';
           return (
-            <button
-              key={tab.id}
-              style={{ ...styles.navItem, ...(isPudi ? styles.navItemPudi : {}) }}
-              onClick={() => setActiveTab(tab.id)}
-              aria-label={tab.label}
-            >
-              {isPudi ? (
-                <div style={styles.pudiBtn}>
-                  <span style={{ fontSize: 22, lineHeight: 1 }}>🦌</span>
-                </div>
-              ) : (
-                <>
-                  <span style={{ color: isActive ? '#0D1F17' : '#9E9E9E', transition: 'color 0.2s' }}>
-                    {tab.icon}
-                  </span>
-                  <span style={{
-                    ...styles.navLabel,
-                    color: isActive ? '#0D1F17' : '#9E9E9E',
-                    fontWeight: isActive ? 700 : 400,
-                  }}>
-                    {tab.label}
-                  </span>
-                  {isActive && <div style={styles.navActiveDot} />}
-                </>
-              )}
+            <button key={tab.id} style={s.navItem} onClick={() => setActiveTab(tab.id)}>
+              <span style={{ color: isActive ? '#0D1F17' : '#BDBDBD', transition: 'color 0.2s' }}>
+                {tab.icon}
+              </span>
+              <span style={{
+                ...s.navLabel,
+                color: isActive ? '#0D1F17' : '#BDBDBD',
+                fontWeight: isActive ? 700 : 400,
+              }}>
+                {tab.label}
+              </span>
+              {isActive && <div style={s.navDot} />}
             </button>
           );
         })}
@@ -345,251 +330,224 @@ export default function ModernHome() {
   );
 }
 
+// ─── SVG Mountain Illustration ───────────────────────────────────────────────
+function MountainIllustration({ color }: { color: string }) {
+  return (
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%' }}>
+      {/* Sky glow */}
+      <circle cx="100" cy="20" r="35" fill={color} opacity="0.08" />
+      {/* Back mountains */}
+      <polygon points="0,130 60,40 120,130" fill="rgba(255,255,255,0.04)" />
+      <polygon points="40,130 100,30 160,130" fill="rgba(255,255,255,0.06)" />
+      <polygon points="80,130 140,45 200,130" fill="rgba(255,255,255,0.04)" />
+      {/* Front mountains */}
+      <polygon points="0,130 50,65 100,130" fill="rgba(255,255,255,0.07)" />
+      <polygon points="55,130 110,55 165,130" fill="rgba(255,255,255,0.09)" />
+      <polygon points="100,130 155,70 200,130" fill="rgba(255,255,255,0.07)" />
+      {/* Snow caps */}
+      <polygon points="95,55 110,55 102,38" fill={color} opacity="0.5" />
+      <polygon points="48,65 62,65 55,52" fill="rgba(255,255,255,0.4)" />
+      <polygon points="148,70 162,70 155,57" fill="rgba(255,255,255,0.3)" />
+      {/* Trees silhouette */}
+      <rect x="10" y="115" width="4" height="15" fill="rgba(255,255,255,0.08)" />
+      <polygon points="12,110 6,118 18,118" fill="rgba(255,255,255,0.1)" />
+      <rect x="175" y="118" width="4" height="12" fill="rgba(255,255,255,0.08)" />
+      <polygon points="177,113 171,120 183,120" fill="rgba(255,255,255,0.1)" />
+      {/* Accent dot (sun/moon) */}
+      <circle cx="155" cy="22" r="7" fill={color} opacity="0.7" />
+      <circle cx="155" cy="22" r="4" fill={color} />
+    </svg>
+  );
+}
+
 // ─── Styles ───────────────────────────────────────────────────────────────────
-const styles: Record<string, React.CSSProperties> = {
-  // Hero
-  hero: {
-    position: 'relative',
-    height: '52vh',
-    minHeight: 320,
-    maxHeight: 420,
-    flexShrink: 0,
-    overflow: 'hidden',
+const s: Record<string, React.CSSProperties> = {
+  root: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    height: '100dvh',
+    background: '#FFFFFF',
+    overflow: 'hidden',
   },
-  heroBg: {
-    position: 'absolute',
-    inset: 0,
-    background: 'linear-gradient(160deg, #0d2a18 0%, #1a4a2a 30%, #0d3d1f 60%, #0a2010 100%)',
-    zIndex: 0,
+  scroll: {
+    flex: 1,
+    overflowY: 'auto',
+    overflowX: 'hidden',
+    background: '#FFFFFF',
   },
-  heroGradient: {
-    position: 'absolute',
-    inset: 0,
-    background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.2) 50%, transparent 100%)',
-    zIndex: 1,
-  },
-  weatherBadge: {
-    position: 'absolute',
-    top: 56,
-    left: '50%',
-    transform: 'translateX(-50%)',
-    display: 'flex',
-    alignItems: 'center',
-    gap: 4,
-    background: 'rgba(255,255,255,0.15)',
-    backdropFilter: 'blur(8px)',
-    borderRadius: 100,
-    padding: '4px 12px',
-    zIndex: 3,
-  },
-  heroTopBar: {
-    position: 'relative',
-    zIndex: 3,
+
+  // Top bar
+  topBar: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '52px 20px 0',
   },
-  heroAvatar: {
+  userRow: {
     display: 'flex',
     alignItems: 'center',
     gap: 10,
   },
-  avatarCircle: {
-    width: 36,
-    height: 36,
+  avatar: {
+    width: 42,
+    height: 42,
     borderRadius: '50%',
-    background: 'rgba(200,241,53,0.2)',
-    border: '2px solid rgba(200,241,53,0.5)',
+    background: 'linear-gradient(135deg, #C8F135, #2D5A27)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: 18,
+    fontSize: 20,
+    flexShrink: 0,
   },
-  heroGreeting: {
-    fontSize: 13,
-    color: 'rgba(255,255,255,0.8)',
-    fontWeight: 500,
-  },
-  heroActions: {
+  userInfo: {
     display: 'flex',
-    gap: 8,
+    flexDirection: 'column',
+    gap: 2,
   },
-  heroIconBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: '50%',
-    background: 'rgba(255,255,255,0.15)',
-    backdropFilter: 'blur(8px)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-    cursor: 'pointer',
+  greeting: {
+    fontSize: 15,
+    fontWeight: 700,
+    color: '#0D1F17',
+    lineHeight: 1.2,
   },
-  notifDot: {
-    position: 'absolute',
-    top: 8,
-    right: 8,
-    width: 7,
-    height: 7,
-    borderRadius: '50%',
-    background: '#C8F135',
-    border: '1.5px solid rgba(0,0,0,0.3)',
-  },
-  heroContent: {
-    position: 'relative',
-    zIndex: 3,
-    padding: '0 20px 24px',
-  },
-  heroEyebrow: {
+  subGreeting: {
     fontSize: 12,
-    color: 'rgba(255,255,255,0.6)',
-    letterSpacing: '0.5px',
-    marginBottom: 8,
-    fontWeight: 500,
+    color: '#9E9E9E',
+    fontWeight: 400,
   },
-  heroTitle: {
-    fontSize: 42,
-    fontWeight: 800,
-    color: '#fff',
-    lineHeight: 1.1,
-    letterSpacing: '-1.5px',
-    marginBottom: 8,
-  },
-  heroTitleAccent: {
-    display: 'block',
-    color: '#C8F135',
-    fontStyle: 'italic',
-    textShadow: '0 0 40px rgba(200,241,53,0.4)',
-  },
-  heroSubtitle: {
-    fontSize: 13,
-    color: 'rgba(255,255,255,0.65)',
-    letterSpacing: '0.3px',
-    marginBottom: 12,
-  },
-  weatherStrip: {
+  topActions: {
     display: 'flex',
     alignItems: 'center',
     gap: 8,
-    marginBottom: 18,
   },
-  weatherItem: {
+  weatherChip: {
     display: 'flex',
     alignItems: 'center',
     gap: 4,
-    fontSize: 12,
-    color: 'rgba(255,255,255,0.7)',
-  },
-  weatherDivider: {
-    width: 1,
-    height: 12,
-    background: 'rgba(255,255,255,0.2)',
-  },
-  weatherDesc: {
-    fontSize: 12,
-    color: 'rgba(255,255,255,0.7)',
-  },
-  heroBtns: {
-    display: 'flex',
-    gap: 12,
-    flexWrap: 'wrap',
-  },
-  btnPrimary: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 8,
-    background: '#C8F135',
-    color: '#0D1F17',
-    fontWeight: 800,
-    fontSize: 14,
-    padding: '13px 22px',
+    background: '#F5F5F5',
     borderRadius: 100,
-    letterSpacing: '-0.3px',
-    boxShadow: '0 4px 20px rgba(200,241,53,0.4)',
-    transition: 'transform 0.15s, box-shadow 0.15s',
+    padding: '5px 10px',
   },
-  btnSecondary: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 8,
-    background: 'rgba(255,255,255,0.2)',
-    backdropFilter: 'blur(8px)',
-    color: '#fff',
+  weatherTemp: {
+    fontSize: 12,
     fontWeight: 700,
-    fontSize: 14,
-    padding: '13px 22px',
-    borderRadius: 100,
-    border: '1.5px solid rgba(255,255,255,0.3)',
+    color: '#0D1F17',
+  },
+  iconBtn: {
+    width: 38,
+    height: 38,
+    borderRadius: '50%',
+    background: '#F5F5F5',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    border: 'none',
   },
 
-  // Scrollable area
-  scrollArea: {
+  // Title
+  titleSection: {
+    padding: '20px 20px 4px',
+  },
+  title: {
+    fontSize: 36,
+    fontWeight: 800,
+    color: '#0D1F17',
+    lineHeight: 1.15,
+    letterSpacing: '-1px',
+  },
+  titleHighlight: {
+    background: '#C8F135',
+    color: '#0D1F17',
+    borderRadius: 6,
+    padding: '0 6px 2px',
+    display: 'inline-block',
+    lineHeight: 1.2,
+  },
+  titleNormal: {
+    color: '#0D1F17',
+  },
+
+  // Search bar
+  searchBarWrap: {
+    display: 'flex',
+    gap: 10,
+    padding: '16px 20px 0',
+    alignItems: 'center',
+  },
+  searchBar: {
     flex: 1,
-    overflowY: 'auto',
-    overflowX: 'hidden',
-    background: '#fff',
-    borderRadius: '24px 24px 0 0',
-    marginTop: -20,
-    position: 'relative',
-    zIndex: 10,
+    display: 'flex',
+    alignItems: 'center',
+    gap: 10,
+    background: '#F5F5F5',
+    borderRadius: 14,
+    padding: '13px 16px',
+    cursor: 'text',
+  },
+  searchPlaceholder: {
+    fontSize: 14,
+    color: '#BDBDBD',
+  },
+  micBtn: {
+    width: 46,
+    height: 46,
+    borderRadius: 14,
+    background: '#0D1F17',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+    cursor: 'pointer',
+    border: 'none',
   },
 
   // Categories
-  chipsSection: {
-    padding: '20px 0 4px',
-    background: '#fff',
-  },
-  chipsRow: {
+  categoryRow: {
     display: 'flex',
-    gap: 8,
+    gap: 10,
+    padding: '16px 20px 0',
     overflowX: 'auto',
-    padding: '0 20px',
   },
-  chip: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 6,
-    padding: '9px 16px',
+  catActive: {
+    padding: '9px 18px',
     borderRadius: 100,
+    background: '#0D1F17',
+    color: '#C8F135',
+    fontSize: 13,
+    fontWeight: 700,
+    whiteSpace: 'nowrap',
+    flexShrink: 0,
+    border: 'none',
+    cursor: 'pointer',
+  },
+  catInactive: {
+    padding: '9px 18px',
+    borderRadius: 100,
+    background: '#F5F5F5',
+    color: '#9E9E9E',
     fontSize: 13,
     fontWeight: 600,
     whiteSpace: 'nowrap',
     flexShrink: 0,
+    border: 'none',
     cursor: 'pointer',
-    transition: 'all 0.2s',
-  },
-  chipActive: {
-    background: '#0D1F17',
-    color: '#C8F135',
-  },
-  chipInactive: {
-    background: '#F5F5F5',
-    color: '#616161',
   },
 
-  // Section
-  section: {
-    padding: '20px 0 0',
-  },
+  // Section headers
   sectionHeader: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: '0 20px',
-    marginBottom: 14,
+    padding: '20px 20px 12px',
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 19,
     fontWeight: 800,
     color: '#0D1F17',
-    letterSpacing: '-0.5px',
+    letterSpacing: '-0.4px',
   },
-  seeAllBtn: {
+  seeAll: {
     display: 'flex',
     alignItems: 'center',
     gap: 2,
@@ -597,10 +555,24 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: 600,
     color: '#2D5A27',
     background: 'none',
+    border: 'none',
     cursor: 'pointer',
   },
+  flashTitleRow: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
+  },
+  flashBadge: {
+    fontSize: 10,
+    fontWeight: 700,
+    background: '#FF4B6E',
+    color: '#fff',
+    padding: '3px 8px',
+    borderRadius: 100,
+  },
 
-  // Cards
+  // Destination cards
   cardsRow: {
     display: 'flex',
     gap: 14,
@@ -608,33 +580,20 @@ const styles: Record<string, React.CSSProperties> = {
     padding: '0 20px 4px',
   },
   card: {
-    width: 160,
-    height: 210,
+    width: 165,
+    height: 220,
     borderRadius: 20,
     flexShrink: 0,
     position: 'relative',
     overflow: 'hidden',
     cursor: 'pointer',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
   },
-  cardEmoji: {
+  cardIllustration: {
     position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -65%)',
-    fontSize: 56,
-    lineHeight: 1,
-    filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.3))',
-  },
-  cardOverlay: {
-    position: 'absolute',
-    bottom: 0,
+    top: 0,
     left: 0,
     right: 0,
     height: '65%',
-    background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%)',
   },
   ratingBadge: {
     position: 'absolute',
@@ -646,7 +605,8 @@ const styles: Record<string, React.CSSProperties> = {
     background: '#fff',
     borderRadius: 100,
     padding: '4px 8px',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+    zIndex: 2,
   },
   likeBtn: {
     position: 'absolute',
@@ -656,112 +616,126 @@ const styles: Record<string, React.CSSProperties> = {
     height: 30,
     borderRadius: '50%',
     background: 'rgba(255,255,255,0.2)',
-    backdropFilter: 'blur(8px)',
+    backdropFilter: 'blur(6px)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     cursor: 'pointer',
-    transition: 'transform 0.15s',
+    border: 'none',
+    zIndex: 2,
   },
   cardInfo: {
-    position: 'relative',
-    zIndex: 2,
-    padding: '0 12px 14px',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: '12px 14px',
+    background: 'rgba(0,0,0,0.45)',
+    backdropFilter: 'blur(4px)',
     display: 'flex',
     flexDirection: 'column',
+    gap: 2,
+  },
+  cardLocation: {
+    display: 'flex',
+    alignItems: 'center',
     gap: 3,
   },
-  cardName: {
-    fontSize: 14,
-    fontWeight: 800,
-    color: '#fff',
-    lineHeight: 1.2,
-    letterSpacing: '-0.3px',
+  cardLocationTxt: {
+    fontSize: 10,
+    color: 'rgba(255,255,255,0.7)',
   },
-  cardDistance: {
-    fontSize: 11,
-    color: '#C8F135',
-    fontWeight: 600,
-  },
-
-  // Quick info grid
-  infoGrid: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gap: 12,
-    padding: '0 20px',
-  },
-  infoCard: {
-    background: '#F5F5F5',
-    borderRadius: 16,
-    padding: '14px 16px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 4,
-    cursor: 'pointer',
-  },
-  infoEmoji: {
-    fontSize: 22,
-    lineHeight: 1,
-    marginBottom: 4,
-  },
-  infoLabel: {
-    fontSize: 14,
-    fontWeight: 700,
-    color: '#0D1F17',
-  },
-  infoSub: {
-    fontSize: 11,
-    color: '#9E9E9E',
-  },
-
-  // Feature banner
-  featureBanner: {
-    background: 'linear-gradient(135deg, #0D1F17 0%, #1a4a2a 100%)',
-    borderRadius: 20,
-    padding: '20px 24px',
+  cardNameRow: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  featureBannerContent: {
+  cardName: {
+    fontSize: 13,
+    fontWeight: 800,
+    color: '#fff',
+    letterSpacing: '-0.2px',
+    lineHeight: 1.2,
+  },
+  cardPrice: {
+    fontSize: 12,
+    fontWeight: 700,
+  },
+
+  // Flash deals
+  dealCard: {
+    margin: '0 20px 12px',
+    borderRadius: 18,
+    padding: '16px 18px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  dealLeft: {
     display: 'flex',
     flexDirection: 'column',
-    gap: 6,
+    gap: 4,
+    flex: 1,
   },
-  featureBannerTag: {
-    display: 'inline-block',
-    background: '#C8F135',
-    color: '#0D1F17',
-    fontSize: 10,
-    fontWeight: 800,
-    padding: '3px 10px',
-    borderRadius: 100,
-    letterSpacing: '0.5px',
-    width: 'fit-content',
-  },
-  featureBannerTitle: {
-    fontSize: 16,
+  dealName: {
+    fontSize: 14,
     fontWeight: 800,
     color: '#fff',
     letterSpacing: '-0.3px',
   },
-  featureBannerSub: {
-    fontSize: 12,
+  dealLocation: {
+    fontSize: 11,
     color: 'rgba(255,255,255,0.6)',
+  },
+  dealPriceRow: {
+    display: 'flex',
+    alignItems: 'baseline',
+    gap: 6,
+    marginTop: 4,
+  },
+  dealPrice: {
+    fontSize: 18,
+    fontWeight: 800,
+    color: '#C8F135',
+  },
+  dealOriginal: {
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.4)',
+    textDecoration: 'line-through',
+  },
+  dealRight: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    gap: 6,
+  },
+  dealTimer: {
+    fontSize: 13,
+    fontWeight: 700,
+    color: '#fff',
+    fontVariantNumeric: 'tabular-nums',
+  },
+  dealBtn: {
+    background: '#C8F135',
+    color: '#0D1F17',
+    fontSize: 12,
+    fontWeight: 800,
+    padding: '6px 16px',
+    borderRadius: 100,
+    border: 'none',
+    cursor: 'pointer',
   },
 
   // Bottom nav
   bottomNav: {
-    position: 'relative',
     display: 'flex',
     justifyContent: 'space-around',
     alignItems: 'center',
     background: '#fff',
     paddingBottom: 'env(safe-area-inset-bottom, 8px)',
     paddingTop: 8,
-    borderTop: '1px solid rgba(0,0,0,0.06)',
-    boxShadow: '0 -4px 20px rgba(0,0,0,0.06)',
+    borderTop: '1px solid #F0F0F0',
+    boxShadow: '0 -4px 20px rgba(0,0,0,0.05)',
     flexShrink: 0,
     zIndex: 100,
   },
@@ -769,25 +743,19 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
     gap: 3,
-    padding: '6px 16px',
+    padding: '6px 14px',
     background: 'none',
+    border: 'none',
     cursor: 'pointer',
     position: 'relative',
-    minWidth: 56,
-  },
-  navItemPudi: {
-    padding: '0 16px',
-    marginTop: -20,
+    minWidth: 52,
   },
   navLabel: {
     fontSize: 10,
-    fontWeight: 500,
-    letterSpacing: '0.2px',
-    transition: 'color 0.2s',
+    letterSpacing: '0.1px',
   },
-  navActiveDot: {
+  navDot: {
     position: 'absolute',
     bottom: 0,
     left: '50%',
@@ -796,16 +764,5 @@ const styles: Record<string, React.CSSProperties> = {
     height: 4,
     borderRadius: '50%',
     background: '#0D1F17',
-  },
-  pudiBtn: {
-    width: 54,
-    height: 54,
-    borderRadius: '50%',
-    background: '#0D1F17',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    boxShadow: '0 4px 20px rgba(13,31,23,0.4)',
-    border: '3px solid #C8F135',
   },
 };
