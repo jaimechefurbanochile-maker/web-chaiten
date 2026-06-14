@@ -32,12 +32,12 @@ type Dificultad = 'Fácil' | 'Media' | 'Alta';
 // ─── Data ────────────────────────────────────────────────────────────────────
 
 const ATRACTIVOS = [
-  { id:'a1', nombre:'Volcán Corcovado',    sub:'Icono patagónico',          tipo:'Naturaleza', img:'https://picsum.photos/seed/volcan-co/400/240',  rating:4.9, precio:'Gratis',    dias:'1 día'    },
-  { id:'a2', nombre:'Parque Pumalín',      sub:'Bosque valdiviano virgen',  tipo:'Naturaleza', img:'https://picsum.photos/seed/pumalin-at/400/240', rating:4.9, precio:'Gratis',    dias:'1-3 días' },
-  { id:'a3', nombre:'Fiordos Patagónicos', sub:'Paisajes únicos en bote',   tipo:'Aventura',   img:'https://picsum.photos/seed/fiordos-at/400/240', rating:4.8, precio:'desde $45', dias:'4h'       },
-  { id:'a4', nombre:'Termas El Amarillo',  sub:'Aguas termales naturales',  tipo:'Naturaleza', img:'https://picsum.photos/seed/termas-at/400/240',  rating:4.7, precio:'desde $8',  dias:'Día'      },
-  { id:'a5', nombre:'Río Yelcho',          sub:'Pesca y rafting',           tipo:'Aventura',   img:'https://picsum.photos/seed/yelcho-at/400/240',  rating:4.6, precio:'desde $30', dias:'Medio día' },
-  { id:'a6', nombre:'Centro Histórico',    sub:'Patrimonio post-erupción',  tipo:'Cultura',    img:'https://picsum.photos/seed/centro-ch/400/240',  rating:4.4, precio:'Gratis',    dias:'2h'       },
+  { id:'a1', nombre:'Volcán Corcovado',    sub:'Icono patagónico',          tipo:'Naturaleza', img:'https://picsum.photos/id/29/400/240',  rating:4.9, precio:'Gratis',    dias:'1 día'    },
+  { id:'a2', nombre:'Parque Pumalín',      sub:'Bosque valdiviano virgen',  tipo:'Naturaleza', img:'https://picsum.photos/id/15/400/240',  rating:4.9, precio:'Gratis',    dias:'1-3 días' },
+  { id:'a3', nombre:'Fiordos Patagónicos', sub:'Paisajes únicos en bote',   tipo:'Aventura',   img:'https://picsum.photos/id/64/400/240',  rating:4.8, precio:'desde $45', dias:'4h'       },
+  { id:'a4', nombre:'Termas El Amarillo',  sub:'Aguas termales naturales',  tipo:'Naturaleza', img:'https://picsum.photos/id/76/400/240',  rating:4.7, precio:'desde $8',  dias:'Día'      },
+  { id:'a5', nombre:'Río Yelcho',          sub:'Pesca y rafting',           tipo:'Aventura',   img:'https://picsum.photos/id/10/400/240',  rating:4.6, precio:'desde $30', dias:'Medio día' },
+  { id:'a6', nombre:'Centro Histórico',    sub:'Patrimonio post-erupción',  tipo:'Cultura',    img:'https://picsum.photos/id/96/400/240',  rating:4.4, precio:'Gratis',    dias:'2h'       },
 ];
 
 const COMO_LLEGAR = [
@@ -47,17 +47,17 @@ const COMO_LLEGAR = [
 ];
 
 const ALOJAMIENTOS = [
-  { id:'d1', nombre:'Hospedaje Mi Casa',    tipo:'Hospedaje familiar',    rating:4.8, precio:'$35', img:'https://picsum.photos/seed/hospedaje-mc/160/160' },
-  { id:'d2', nombre:'Cabañas Bosque Verde', tipo:'Cabaña de montaña',     rating:4.9, precio:'$55', img:'https://picsum.photos/seed/cabana-bv/160/160'    },
-  { id:'d3', nombre:'Hotel Los Volcanes',   tipo:'Hotel céntrico',        rating:4.6, precio:'$48', img:'https://picsum.photos/seed/hotel-lv/160/160'     },
-  { id:'d4', nombre:'Camping Pumalín',      tipo:'Camping con servicios', rating:4.7, precio:'$8',  img:'https://picsum.photos/seed/camping-pm/160/160'   },
+  { id:'d1', nombre:'Hospedaje Mi Casa',    tipo:'Hospedaje familiar',    rating:4.8, precio:'$35', img:'https://picsum.photos/id/164/160/160' },
+  { id:'d2', nombre:'Cabañas Bosque Verde', tipo:'Cabaña de montaña',     rating:4.9, precio:'$55', img:'https://picsum.photos/id/119/160/160'  },
+  { id:'d3', nombre:'Hotel Los Volcanes',   tipo:'Hotel céntrico',        rating:4.6, precio:'$48', img:'https://picsum.photos/id/175/160/160'  },
+  { id:'d4', nombre:'Camping Pumalín',      tipo:'Camping con servicios', rating:4.7, precio:'$8',  img:'https://picsum.photos/id/325/160/160'  },
 ];
 
 const GASTRONOMIA = [
-  { id:'c1', nombre:'Restobar El Volcán',    tipo:'Mariscos · Cocina local', rating:4.7, precio:'$$', img:'https://picsum.photos/seed/resto-ev/160/160',  horario:'12:00–22:00' },
-  { id:'c2', nombre:'Café Patagonia',        tipo:'Café · Desayunos',        rating:4.8, precio:'$',  img:'https://picsum.photos/seed/cafe-pt/160/160',   horario:'08:00–20:00' },
-  { id:'c3', nombre:'Picada Don Jaime',      tipo:'Comida casera',            rating:4.6, precio:'$',  img:'https://picsum.photos/seed/picada-dj/160/160', horario:'11:00–21:00' },
-  { id:'c4', nombre:'Marisquería El Puerto', tipo:'Mariscos · Vista al mar',  rating:4.9, precio:'$$', img:'https://picsum.photos/seed/marisq-ep/160/160', horario:'12:00–23:00' },
+  { id:'c1', nombre:'Restobar El Volcán',    tipo:'Mariscos · Cocina local', rating:4.7, precio:'$$', img:'https://picsum.photos/id/292/160/160', horario:'12:00–22:00' },
+  { id:'c2', nombre:'Café Patagonia',        tipo:'Café · Desayunos',        rating:4.8, precio:'$',  img:'https://picsum.photos/id/431/160/160', horario:'08:00–20:00' },
+  { id:'c3', nombre:'Picada Don Jaime',      tipo:'Comida casera',            rating:4.6, precio:'$',  img:'https://picsum.photos/id/429/160/160', horario:'11:00–21:00' },
+  { id:'c4', nombre:'Marisquería El Puerto', tipo:'Mariscos · Vista al mar',  rating:4.9, precio:'$$', img:'https://picsum.photos/id/488/160/160', horario:'12:00–23:00' },
 ];
 
 const RUTAS = [
@@ -149,18 +149,18 @@ function TealHeader({ title, subtitle, showSearch = true, searchPlaceholder = '�
 
 function AttractivoCard({ a }: { a: typeof ATRACTIVOS[0] }) {
   return (
-    <div style={{ width:210, flexShrink:0, borderRadius:18, overflow:'hidden', background:T.white, boxShadow:'0 4px 20px rgba(0,0,0,0.10)', cursor:'pointer' }}>
-      <div style={{ height:130, overflow:'hidden', position:'relative' }}>
+    <div style={{ width:220, flexShrink:0, borderRadius:20, overflow:'hidden', background:T.white, boxShadow:'0 6px 24px rgba(0,0,0,0.12)', cursor:'pointer' }}>
+      <div style={{ height:150, overflow:'hidden', position:'relative' }}>
         <img src={a.img} alt={a.nombre} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
-        <div style={{ position:'absolute', inset:0, background:'linear-gradient(to top,rgba(0,0,0,0.35) 0%,transparent 55%)' }} />
-        <span style={{ position:'absolute', bottom:10, right:10, background:T.teal, color:'#fff', fontSize:10, fontWeight:700, padding:'4px 10px', borderRadius:100 }}>{a.dias}</span>
+        <span style={{ position:'absolute', top:10, left:10, background:'rgba(0,0,0,0.35)', color:'#fff', fontSize:10, fontWeight:700, padding:'4px 10px', borderRadius:100, backdropFilter:'blur(4px)' }}>{a.tipo}</span>
+        <span style={{ position:'absolute', bottom:10, right:10, background:'#16a34a', color:'#fff', fontSize:10, fontWeight:700, padding:'4px 10px', borderRadius:100 }}>{a.dias}</span>
       </div>
       <div style={{ padding:'12px 14px 14px' }}>
-        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:3 }}>{a.nombre}</p>
+        <p style={{ fontSize:14, fontWeight:800, color:T.teal, marginBottom:2 }}>{a.nombre}</p>
         <p style={{ fontSize:11, color:T.gray, marginBottom:10 }}>{a.sub}</p>
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
           <Stars v={a.rating} />
-          <span style={{ fontSize:11, color:T.gray }}>Desde <span style={{ fontWeight:800, color:T.teal }}>{a.precio}</span></span>
+          <span style={{ fontSize:11, color:T.gray }}>Desde <span style={{ fontWeight:800, color:T.dark }}>{a.precio}</span></span>
         </div>
       </div>
     </div>
