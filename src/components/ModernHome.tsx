@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import {
   Search, Home, Compass, Info, ShieldCheck as NavShield,
-  ChevronRight, Star, Building2,
+  ChevronRight, Star, Building2, Ship, Bus, Plane,
   AlertCircle, Fuel, Banknote, Stethoscope, ShieldCheck, Wifi, MessageCircle,
   Utensils, Car, Phone, Send, MapPin, TreePine, Clock,
+  Mountain, Waves, Droplets, Flame, Pill, HeartPulse,
+  Bike, Footprints, Truck, CloudRain, Thermometer, Sun, Sunrise, Route, DollarSign,
+  CalendarDays, Wind, Users,
 } from 'lucide-react';
 import { useWeather } from '../hooks/useWeather';
 
@@ -38,9 +41,9 @@ const ATRACTIVOS = [
 ];
 
 const COMO_LLEGAR = [
-  { id:'ferry', emoji:'⛴️', titulo:'Ferry',  sub:'Quellón → Chaitén',      detalle:'Navimag · TMC',         duracion:'4h 30m', precio:'desde $35',  color:'#0d4a7a' },
-  { id:'bus',   emoji:'🚌', titulo:'Bus',    sub:'Puerto Montt → Chaitén', detalle:'Tur-Bus · Queilen Bus', duracion:'8h',     precio:'desde $18',  color:'#1a4a2a' },
-  { id:'avion', emoji:'✈️', titulo:'Avión', sub:'Puerto Montt → Chaitén', detalle:'Aerocord · charter',    duracion:'45 min', precio:'desde $120', color:'#3a1a6a' },
+  { id:'ferry', Icon: Ship,  titulo:'Ferry',  sub:'Quellón → Chaitén',      detalle:'Navimag · TMC',         duracion:'4h 30m', precio:'desde $35',  color:'#0d4a7a' },
+  { id:'bus',   Icon: Bus,   titulo:'Bus',    sub:'Puerto Montt → Chaitén', detalle:'Tur-Bus · Queilen Bus', duracion:'8h',     precio:'desde $18',  color:'#1a4a2a' },
+  { id:'avion', Icon: Plane, titulo:'Avión',  sub:'Puerto Montt → Chaitén', detalle:'Aerocord · charter',    duracion:'45 min', precio:'desde $120', color:'#3a1a6a' },
 ];
 
 const ALOJAMIENTOS = [
@@ -58,38 +61,38 @@ const GASTRONOMIA = [
 ];
 
 const RUTAS = [
-  { id:'r1', nombre:'Sendero Volcán Corcovado', distancia:'18 km', tiempo:'8h',        dificultad:'Alta'  as Dificultad, emoji:'🌋', color:'#7a1a1a' },
-  { id:'r2', nombre:'Trekking Pumalín Cascadas', distancia:'6 km',  tiempo:'3h',        dificultad:'Fácil' as Dificultad, emoji:'🌿', color:'#1a5a2a' },
-  { id:'r3', nombre:'Ruta Costera Chaitén',     distancia:'12 km', tiempo:'5h',        dificultad:'Media' as Dificultad, emoji:'🌊', color:'#0a3a6a' },
-  { id:'r4', nombre:'Sendero Río Blanco',       distancia:'8 km',  tiempo:'4h',        dificultad:'Media' as Dificultad, emoji:'🏞️', color:'#2a4a1a' },
-  { id:'r5', nombre:'Termas El Amarillo',       distancia:'52 km', tiempo:'1h (auto)', dificultad:'Fácil' as Dificultad, emoji:'♨️', color:'#5a3a0a' },
+  { id:'r1', nombre:'Sendero Volcán Corcovado',  distancia:'18 km', tiempo:'8h',        dificultad:'Alta'  as Dificultad, Icon: Flame,    color:'#7a1a1a' },
+  { id:'r2', nombre:'Trekking Pumalín Cascadas', distancia:'6 km',  tiempo:'3h',        dificultad:'Fácil' as Dificultad, Icon: TreePine, color:'#1a5a2a' },
+  { id:'r3', nombre:'Ruta Costera Chaitén',      distancia:'12 km', tiempo:'5h',        dificultad:'Media' as Dificultad, Icon: Waves,    color:'#0a3a6a' },
+  { id:'r4', nombre:'Sendero Río Blanco',        distancia:'8 km',  tiempo:'4h',        dificultad:'Media' as Dificultad, Icon: Mountain, color:'#2a4a1a' },
+  { id:'r5', nombre:'Termas El Amarillo',        distancia:'52 km', tiempo:'1h (auto)', dificultad:'Fácil' as Dificultad, Icon: Droplets, color:'#5a3a0a' },
 ];
 
 const SERVICIOS_ESENCIALES = [
-  { id:'s1', emoji:'🏥', titulo:'Hospital de Chaitén', sub:'Av. Carretera 123',        tel:'(65) 2 731 244', Icon: Stethoscope },
-  { id:'s2', emoji:'💊', titulo:'Farmacia Cruz Verde',  sub:'Calle O\'Higgins 44',      tel:'(65) 2 730 521', Icon: AlertCircle },
-  { id:'s3', emoji:'🚔', titulo:'Carabineros',          sub:'Comisaría central',         tel:'133',            Icon: ShieldCheck  },
-  { id:'s4', emoji:'🔥', titulo:'Bomberos',             sub:'Cuerpo de Bomberos',        tel:'132',            Icon: AlertCircle  },
-  { id:'s5', emoji:'🏦', titulo:'BancoEstado / ATM',    sub:'Av. Corcovado s/n',         tel: null,            Icon: Banknote    },
-  { id:'s6', emoji:'⛽', titulo:'Copec',                sub:'Ruta 7 km 1',               tel: null,            Icon: Fuel        },
-  { id:'s7', emoji:'⛽', titulo:'ENAP',                 sub:'Acceso Norte',              tel: null,            Icon: Fuel        },
-  { id:'s8', emoji:'📶', titulo:'WiFi Municipal',       sub:'Plaza de Armas y Centro',   tel: null,            Icon: Wifi        },
+  { id:'s1', titulo:'Hospital de Chaitén', sub:'Av. Carretera 123',       tel:'(65) 2 731 244', Icon: Stethoscope },
+  { id:'s2', titulo:'Farmacia Cruz Verde', sub:"Calle O'Higgins 44",      tel:'(65) 2 730 521', Icon: Pill        },
+  { id:'s3', titulo:'Carabineros',         sub:'Comisaría central',        tel:'133',            Icon: ShieldCheck },
+  { id:'s4', titulo:'Bomberos',            sub:'Cuerpo de Bomberos',       tel:'132',            Icon: Flame       },
+  { id:'s5', titulo:'BancoEstado / ATM',   sub:'Av. Corcovado s/n',        tel: null,            Icon: Banknote    },
+  { id:'s6', titulo:'Copec',               sub:'Ruta 7 km 1',              tel: null,            Icon: Fuel        },
+  { id:'s7', titulo:'ENAP',                sub:'Acceso Norte',             tel: null,            Icon: Fuel        },
+  { id:'s8', titulo:'WiFi Municipal',      sub:'Plaza de Armas y Centro',  tel: null,            Icon: Wifi        },
 ];
 
 const TIPS = [
-  { emoji:'🌧️', titulo:'Lleva capas', texto:'El clima cambia rápido. Siempre lleva ropa impermeable y de abrigo.' },
-  { emoji:'💵', titulo:'Lleva efectivo', texto:'Los cajeros son limitados. BancoEstado es el más confiable.' },
-  { emoji:'⛽', titulo:'Carga combustible', texto:'En la Carretera Austral las estaciones son escasas. Carga en Chaitén.' },
-  { emoji:'📶', titulo:'Señal limitada', texto:'Claro y Entel tienen cobertura básica. El WiFi municipal es gratuito.' },
-  { emoji:'🗓️', titulo:'Mejor época', texto:'Nov–Mar para senderismo. Abr–Oct para tranquilidad y precios bajos.' },
-  { emoji:'🚗', titulo:'Arriendo 4x4', texto:'Para rutas fuera del pueblo se recomienda vehículo de doble tracción.' },
+  { Icon: CloudRain,    titulo:'Lleva capas',       texto:'El clima cambia rápido. Siempre lleva ropa impermeable y de abrigo.' },
+  { Icon: Banknote,     titulo:'Lleva efectivo',    texto:'Los cajeros son limitados. BancoEstado es el más confiable.' },
+  { Icon: Fuel,         titulo:'Carga combustible', texto:'En la Carretera Austral las estaciones son escasas. Carga en Chaitén.' },
+  { Icon: Wifi,         titulo:'Señal limitada',    texto:'Claro y Entel tienen cobertura básica. El WiFi municipal es gratuito.' },
+  { Icon: CalendarDays, titulo:'Mejor época',       texto:'Nov–Mar para senderismo. Abr–Oct para tranquilidad y precios bajos.' },
+  { Icon: Car,          titulo:'Arriendo 4x4',      texto:'Para rutas fuera del pueblo se recomienda vehículo de doble tracción.' },
 ];
 
 const TEMPORADAS = [
-  { mes:'Verano', periodo:'Dic–Mar', emoji:'☀️', desc:'Ideal para trekking y actividades al aire libre. Días largos.', color:'#f59e0b' },
-  { mes:'Otoño',  periodo:'Abr–May', emoji:'🍂', desc:'Colores del bosque, menos visitantes. Buen clima en general.',  color:'#d97706' },
-  { mes:'Invierno', periodo:'Jun–Ago', emoji:'🌧️', desc:'Lluvia y frío. Algunos senderos cerrados. Poca concurrencia.', color:'#0a3a6a' },
-  { mes:'Primavera', periodo:'Sep–Nov', emoji:'🌸', desc:'Flora renace. Aguas abundantes. Prepárate para lluvia también.', color:T.teal },
+  { mes:'Verano',    periodo:'Dic–Mar', Icon: Sun,       desc:'Ideal para trekking y actividades al aire libre. Días largos.', color:'#f59e0b' },
+  { mes:'Otoño',     periodo:'Abr–May', Icon: Wind,      desc:'Colores del bosque, menos visitantes. Buen clima en general.',  color:'#d97706' },
+  { mes:'Invierno',  periodo:'Jun–Ago', Icon: CloudRain, desc:'Lluvia y frío. Algunos senderos cerrados. Poca concurrencia.', color:'#0a3a6a' },
+  { mes:'Primavera', periodo:'Sep–Nov', Icon: TreePine,  desc:'Flora renace. Aguas abundantes. Prepárate para lluvia también.', color:T.teal   },
 ];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -142,7 +145,7 @@ function TealHeader({ title, subtitle, showSearch = true, searchPlaceholder = '�
   );
 }
 
-// ─── Attraction Card (landscape, estilo "Journey together" Travelin) ──────────
+// ─── Attraction Card ──────────────────────────────────────────────────────────
 
 function AttractivoCard({ a }: { a: typeof ATRACTIVOS[0] }) {
   return (
@@ -164,7 +167,7 @@ function AttractivoCard({ a }: { a: typeof ATRACTIVOS[0] }) {
   );
 }
 
-// ─── List Row (estilo "Hotels recommendation" Travelin) ───────────────────────
+// ─── List Row ─────────────────────────────────────────────────────────────────
 
 function ListRow({ img, title, sub, rating, right, last = false }: {
   img: string; title: string; sub: string; rating: number; right?: string; last?: boolean;
@@ -210,14 +213,14 @@ function HomeTab({ wx }: { wx: ReturnType<typeof useWeather> }) {
           <div>
             <h1 style={{ fontSize:34, fontWeight:800, color:T.white, letterSpacing:'-0.5px', lineHeight:1.1, margin:0 }}>Hola, viajero</h1>
             <div style={{ display:'flex', alignItems:'center', gap:5, marginTop:5 }}>
-              <span style={{ color:'#FBBF24', fontSize:16 }}>⊙</span>
+              <Sun size={14} color="#FBBF24" />
               <span style={{ fontSize:13, color:'rgba(255,255,255,0.9)', fontWeight:500 }}>
                 {wx.loading ? '...' : `${wx.temp}°C · ${wx.description}`}
               </span>
             </div>
           </div>
-          <div style={{ width:50, height:50, borderRadius:'50%', background:'rgba(255,255,255,0.25)', border:'2px solid rgba(255,255,255,0.5)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:26, flexShrink:0 }}>
-            🧑‍🌿
+          <div style={{ width:50, height:50, borderRadius:'50%', background:'rgba(255,255,255,0.25)', border:'2px solid rgba(255,255,255,0.5)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+            <Users size={24} color="rgba(255,255,255,0.9)" />
           </div>
         </div>
         <div style={{ margin:'18px 20px 0', display:'flex', alignItems:'center', gap:10, background:T.white, borderRadius:14, padding:'14px 18px' }}>
@@ -226,7 +229,7 @@ function HomeTab({ wx }: { wx: ReturnType<typeof useWeather> }) {
         </div>
       </div>
 
-      {/* Tarjeta "Chaitén hoy" (condiciones del destino) */}
+      {/* Tarjeta "Chaitén hoy" */}
       <div style={{ margin:'-22px 16px 0', background:T.white, borderRadius:20, padding:'16px 18px 18px', boxShadow:'0 6px 32px rgba(0,0,0,0.12)', position:'relative', zIndex:2 }}>
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 }}>
           <span style={{ fontSize:11, fontWeight:700, color:T.white, background:T.teal, padding:'4px 14px', borderRadius:100 }}>Chaitén hoy</span>
@@ -234,13 +237,15 @@ function HomeTab({ wx }: { wx: ReturnType<typeof useWeather> }) {
         </div>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
           {[
-            { emoji:'🌡️', label:'Temperatura', value: wx.loading ? '...' : `${wx.temp}°C · ${wx.description}`, color: T.dark },
-            { emoji:'🛣️', label:'Carretera Austral', value:'Transitable', color: T.green },
-            { emoji:'⛴️', label:'Ferry Navimag', value:'Operativo', color: T.green },
-            { emoji:'🌅', label:'Amanecer · Puesta', value:'07:42 · 17:18', color: T.dark },
+            { Icon: Thermometer, label:'Temperatura',     value: wx.loading ? '...' : `${wx.temp}°C · ${wx.description}`, color: T.dark  },
+            { Icon: Route,       label:'Carretera Austral', value:'Transitable',  color: T.green },
+            { Icon: Ship,        label:'Ferry Navimag',   value:'Operativo',     color: T.green },
+            { Icon: Sunrise,     label:'Amanecer · Puesta', value:'07:42 · 17:18', color: T.dark },
           ].map(item => (
             <div key={item.label} style={{ display:'flex', alignItems:'center', gap:8 }}>
-              <span style={{ fontSize:22, flexShrink:0 }}>{item.emoji}</span>
+              <div style={{ width:34, height:34, borderRadius:8, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <item.Icon size={18} color={T.teal} />
+              </div>
               <div>
                 <p style={{ fontSize:10, color:T.gray, marginBottom:1 }}>{item.label}</p>
                 <p style={{ fontSize:12, fontWeight:700, color:item.color, lineHeight:1.3 }}>{item.value}</p>
@@ -254,11 +259,11 @@ function HomeTab({ wx }: { wx: ReturnType<typeof useWeather> }) {
       <div style={{ padding:'26px 20px 0' }}>
         <div style={{ display:'flex', justifyContent:'space-between' }}>
           {[
-            { label:'Qué hacer', Icon:Compass  },
-            { label:'Dormir',    Icon:Building2 },
-            { label:'Comer',     Icon:Utensils  },
-            { label:'Naturaleza',Icon:TreePine  },
-            { label:'Moverse',   Icon:Car       },
+            { label:'Qué hacer', Icon:Compass   },
+            { label:'Dormir',    Icon:Building2  },
+            { label:'Comer',     Icon:Utensils   },
+            { label:'Naturaleza',Icon:TreePine   },
+            { label:'Moverse',   Icon:Car        },
           ].map(({ label, Icon }) => (
             <button key={label} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:7, background:'none', border:'none', cursor:'pointer' }}>
               <div style={{ width:54, height:54, borderRadius:'50%', border:`1.5px solid ${T.teal}`, background:'rgba(13,165,160,0.07)', display:'flex', alignItems:'center', justifyContent:'center' }}>
@@ -280,17 +285,21 @@ function HomeTab({ wx }: { wx: ReturnType<typeof useWeather> }) {
 
       {/* Cómo llegar */}
       <div style={{ paddingTop:28 }}>
-        <SectionHeader title="🗺️ Cómo llegar" />
+        <SectionHeader title="Cómo llegar" />
         <div style={{ display:'flex', gap:12, overflowX:'auto', padding:'0 20px 4px' }} className="hide-scrollbar">
           {COMO_LLEGAR.map(c => (
             <div key={c.id} style={{ width:168, flexShrink:0, borderRadius:18, overflow:'hidden', background:T.white, boxShadow:'0 4px 16px rgba(0,0,0,0.08)', cursor:'pointer' }}>
-              <div style={{ height:72, background:`linear-gradient(135deg,${c.color},${c.color}cc)`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:34 }}>{c.emoji}</div>
+              <div style={{ height:72, background:`linear-gradient(135deg,${c.color},${c.color}cc)`, display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <c.Icon size={34} color="rgba(255,255,255,0.9)" />
+              </div>
               <div style={{ padding:'12px 14px 14px' }}>
                 <p style={{ fontSize:15, fontWeight:800, color:T.dark, marginBottom:3 }}>{c.titulo}</p>
                 <p style={{ fontSize:11, color:T.teal, fontWeight:600, marginBottom:4 }}>{c.sub}</p>
                 <p style={{ fontSize:10, color:T.gray, marginBottom:8 }}>{c.detalle}</p>
                 <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                  <span style={{ fontSize:10, color:T.gray }}>⏱ {c.duracion}</span>
+                  <span style={{ display:'flex', alignItems:'center', gap:3, fontSize:10, color:T.gray }}>
+                    <Clock size={10} color={T.gray} /> {c.duracion}
+                  </span>
                   <span style={{ fontSize:12, fontWeight:800, color:T.teal }}>{c.precio}</span>
                 </div>
               </div>
@@ -340,16 +349,18 @@ function HomeTab({ wx }: { wx: ReturnType<typeof useWeather> }) {
 
       {/* Rutas y senderos */}
       <div style={{ paddingTop:28 }}>
-        <SectionHeader title="🥾 Rutas y senderos" onSeeAll={() => {}} />
+        <SectionHeader title="Rutas y senderos" onSeeAll={() => {}} />
         <div style={{ display:'flex', flexDirection:'column', gap:10, padding:'0 20px' }}>
           {RUTAS.map(r => (
             <div key={r.id} style={{ display:'flex', alignItems:'center', gap:12, background:T.white, borderRadius:16, padding:'12px 14px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', cursor:'pointer' }}>
-              <div style={{ width:48, height:48, borderRadius:12, background:`${r.color}22`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:24, flexShrink:0 }}>{r.emoji}</div>
+              <div style={{ width:48, height:48, borderRadius:12, background:`${r.color}22`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <r.Icon size={24} color={r.color} />
+              </div>
               <div style={{ flex:1, minWidth:0 }}>
                 <p style={{ fontSize:13, fontWeight:700, color:T.dark, marginBottom:4, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{r.nombre}</p>
                 <div style={{ display:'flex', gap:8, alignItems:'center' }}>
-                  <span style={{ fontSize:10, color:T.gray }}>📍 {r.distancia}</span>
-                  <span style={{ fontSize:10, color:T.gray }}>⏱ {r.tiempo}</span>
+                  <span style={{ display:'flex', alignItems:'center', gap:3, fontSize:10, color:T.gray }}><MapPin size={10} color={T.gray} /> {r.distancia}</span>
+                  <span style={{ display:'flex', alignItems:'center', gap:3, fontSize:10, color:T.gray }}><Clock size={10} color={T.gray} /> {r.tiempo}</span>
                 </div>
               </div>
               <DiffBadge d={r.dificultad} />
@@ -387,16 +398,26 @@ function HomeTab({ wx }: { wx: ReturnType<typeof useWeather> }) {
       <div style={{ padding:'28px 20px 0' }}>
         <div style={{ background:'#0D1F17', borderRadius:20, padding:'24px 20px' }}>
           <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:16 }}>
-            <span style={{ fontSize:28 }}>🌿</span>
+            <div style={{ width:44, height:44, borderRadius:12, background:'rgba(255,255,255,0.1)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+              <TreePine size={22} color={T.accent} />
+            </div>
             <div>
               <p style={{ fontSize:16, fontWeight:800, color:T.white }}>Chaitén Patagonia</p>
               <p style={{ fontSize:11, color:'rgba(255,255,255,0.5)' }}>Puerta a la Patagonia Norte</p>
             </div>
           </div>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8, marginBottom:16 }}>
-            {[['📞','Emergencias','131 · 133'],['🏥','Hospital','(65) 2 731 244'],['⛴️','Ferry Navimag','(65) 2 270 430'],['✈️','Aerocord','(65) 2 254 411']].map(([emoji, label, val]) => (
-              <div key={label as string} style={{ background:'rgba(255,255,255,0.07)', borderRadius:10, padding:'10px 12px' }}>
-                <p style={{ fontSize:11, color:'rgba(255,255,255,0.5)', marginBottom:2 }}>{emoji} {label}</p>
+            {[
+              { Icon: Phone,       label:'Emergencias',   val:'131 · 133'      },
+              { Icon: Stethoscope, label:'Hospital',      val:'(65) 2 731 244' },
+              { Icon: Ship,        label:'Ferry Navimag', val:'(65) 2 270 430' },
+              { Icon: Plane,       label:'Aerocord',      val:'(65) 2 254 411' },
+            ].map(({ Icon, label, val }) => (
+              <div key={label} style={{ background:'rgba(255,255,255,0.07)', borderRadius:10, padding:'10px 12px' }}>
+                <div style={{ display:'flex', alignItems:'center', gap:4, marginBottom:2 }}>
+                  <Icon size={10} color='rgba(255,255,255,0.5)' />
+                  <p style={{ fontSize:11, color:'rgba(255,255,255,0.5)' }}>{label}</p>
+                </div>
                 <p style={{ fontSize:12, fontWeight:700, color:T.white }}>{val}</p>
               </div>
             ))}
@@ -471,7 +492,9 @@ function ExplorarTab() {
         ))}
         {filtrados.length === 0 && filtro !== 'Gastronomía' && (
           <div style={{ textAlign:'center', padding:'40px 20px', color:T.gray }}>
-            <p style={{ fontSize:32, marginBottom:8 }}>🔍</p>
+            <div style={{ width:56, height:56, borderRadius:16, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 12px' }}>
+              <Search size={28} color={T.gray} />
+            </div>
             <p style={{ fontSize:14 }}>No hay resultados para este filtro</p>
           </div>
         )}
@@ -480,16 +503,18 @@ function ExplorarTab() {
       {/* Rutas section */}
       {(filtro === 'Todo' || filtro === 'Aventura') && (
         <div style={{ paddingTop:24 }}>
-          <SectionHeader title="🥾 Rutas y senderos" />
+          <SectionHeader title="Rutas y senderos" />
           <div style={{ display:'flex', flexDirection:'column', gap:10, padding:'0 20px' }}>
             {RUTAS.map(r => (
               <div key={r.id} style={{ display:'flex', alignItems:'center', gap:12, background:T.white, borderRadius:16, padding:'12px 14px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', cursor:'pointer' }}>
-                <div style={{ width:48, height:48, borderRadius:12, background:`${r.color}22`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:24, flexShrink:0 }}>{r.emoji}</div>
+                <div style={{ width:48, height:48, borderRadius:12, background:`${r.color}22`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                  <r.Icon size={24} color={r.color} />
+                </div>
                 <div style={{ flex:1, minWidth:0 }}>
                   <p style={{ fontSize:13, fontWeight:700, color:T.dark, marginBottom:4, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{r.nombre}</p>
                   <div style={{ display:'flex', gap:8 }}>
-                    <span style={{ fontSize:10, color:T.gray }}>📍 {r.distancia}</span>
-                    <span style={{ fontSize:10, color:T.gray }}>⏱ {r.tiempo}</span>
+                    <span style={{ display:'flex', alignItems:'center', gap:3, fontSize:10, color:T.gray }}><MapPin size={10} color={T.gray} /> {r.distancia}</span>
+                    <span style={{ display:'flex', alignItems:'center', gap:3, fontSize:10, color:T.gray }}><Clock size={10} color={T.gray} /> {r.tiempo}</span>
                   </div>
                 </div>
                 <DiffBadge d={r.dificultad} />
@@ -599,16 +624,25 @@ function ServiciosTab() {
       {/* Emergencias banner */}
       <div style={{ margin:'20px 20px 0', background:'#FEF2F2', borderRadius:16, padding:'16px', border:`1.5px solid #FECACA` }}>
         <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:12 }}>
-          <span style={{ fontSize:24 }}>🚨</span>
+          <div style={{ width:36, height:36, borderRadius:10, background:'#FECACA', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+            <AlertCircle size={20} color={T.red} />
+          </div>
           <p style={{ fontSize:15, fontWeight:800, color:T.red }}>Números de emergencia</p>
         </div>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
-          {[['🚑','Ambulancia','131'],['🚒','Bomberos','132'],['👮','Carabineros','133'],['⚕️','Urgencia','(65) 2 731 244']].map(([e, l, n]) => (
-            <button key={l as string} style={{ display:'flex', alignItems:'center', gap:8, background:T.white, borderRadius:10, padding:'10px 12px', border:`1px solid #FECACA`, cursor:'pointer' }}>
-              <span style={{ fontSize:18 }}>{e}</span>
+          {[
+            { Icon: HeartPulse,  label:'Ambulancia',  num:'131'             },
+            { Icon: Flame,       label:'Bomberos',    num:'132'             },
+            { Icon: ShieldCheck, label:'Carabineros', num:'133'             },
+            { Icon: Stethoscope, label:'Urgencia',    num:'(65) 2 731 244'  },
+          ].map(({ Icon, label, num }) => (
+            <button key={label} style={{ display:'flex', alignItems:'center', gap:8, background:T.white, borderRadius:10, padding:'10px 12px', border:`1px solid #FECACA`, cursor:'pointer' }}>
+              <div style={{ width:32, height:32, borderRadius:8, background:'#FEF2F2', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <Icon size={16} color={T.red} />
+              </div>
               <div style={{ textAlign:'left' }}>
-                <p style={{ fontSize:10, color:T.gray }}>{l}</p>
-                <p style={{ fontSize:14, fontWeight:800, color:T.red }}>{n}</p>
+                <p style={{ fontSize:10, color:T.gray }}>{label}</p>
+                <p style={{ fontSize:14, fontWeight:800, color:T.red }}>{num}</p>
               </div>
             </button>
           ))}
@@ -622,7 +656,9 @@ function ServiciosTab() {
           <ListCard first last>
             {SERVICIOS_ESENCIALES.map((s, i) => (
               <div key={s.id} style={{ display:'flex', alignItems:'center', gap:14, padding:'14px', borderBottom: i < SERVICIOS_ESENCIALES.length-1 ? `1px solid ${T.grayLight}` : 'none', cursor:'pointer' }}>
-                <div style={{ width:48, height:48, borderRadius:12, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', fontSize:24, flexShrink:0 }}>{s.emoji}</div>
+                <div style={{ width:48, height:48, borderRadius:12, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                  <s.Icon size={22} color={T.teal} />
+                </div>
                 <div style={{ flex:1 }}>
                   <p style={{ fontSize:13, fontWeight:700, color:T.dark, marginBottom:2 }}>{s.titulo}</p>
                   <div style={{ display:'flex', alignItems:'center', gap:4 }}>
@@ -644,17 +680,19 @@ function ServiciosTab() {
 
       {/* Cómo moverse */}
       <div style={{ paddingTop:24 }}>
-        <SectionHeader title="🚗 Cómo moverse" />
+        <SectionHeader title="Cómo moverse" />
         <div style={{ display:'flex', gap:10, overflowX:'auto', padding:'0 20px 4px' }} className="hide-scrollbar">
           {[
-            { emoji:'🚕', titulo:'Remis / Taxi', sub:'Servicio local 24h'    },
-            { emoji:'🚲', titulo:'Bicicleta',    sub:'Arriendo en el centro' },
-            { emoji:'🚗', titulo:'Auto arriendo',sub:'Desde $45/día'         },
-            { emoji:'🥾', titulo:'A pie',        sub:'Centro compacto'       },
-            { emoji:'🛻', titulo:'Transfer',     sub:'Al Pumalín y rutas'    },
+            { Icon: Car,        titulo:'Remis / Taxi', sub:'Servicio local 24h'    },
+            { Icon: Bike,       titulo:'Bicicleta',    sub:'Arriendo en el centro' },
+            { Icon: Car,        titulo:'Auto arriendo',sub:'Desde $45/día'         },
+            { Icon: Footprints, titulo:'A pie',        sub:'Centro compacto'       },
+            { Icon: Truck,      titulo:'Transfer',     sub:'Al Pumalín y rutas'    },
           ].map(m => (
             <div key={m.titulo} style={{ flexShrink:0, background:T.white, borderRadius:16, padding:'14px 16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', cursor:'pointer', minWidth:118, textAlign:'center' }}>
-              <div style={{ fontSize:28, marginBottom:8 }}>{m.emoji}</div>
+              <div style={{ width:48, height:48, borderRadius:12, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 8px' }}>
+                <m.Icon size={22} color={T.teal} />
+              </div>
               <p style={{ fontSize:12, fontWeight:700, color:T.dark, marginBottom:3 }}>{m.titulo}</p>
               <p style={{ fontSize:10, color:T.gray }}>{m.sub}</p>
             </div>
@@ -664,17 +702,19 @@ function ServiciosTab() {
 
       {/* Transporte desde/hacia */}
       <div style={{ paddingTop:24 }}>
-        <SectionHeader title="🗺️ Transporte al destino" />
+        <SectionHeader title="Transporte al destino" />
         <div style={{ padding:'0 20px' }}>
           <ListCard first last>
             {[
-              { emoji:'⛴️', titulo:'Ferry Navimag',     sub:'Quellón–Chaitén',         tel:'(65) 2 270 430' },
-              { emoji:'⛴️', titulo:'TMC Ferry',          sub:'Puerto Montt–Chaitén',    tel:'(65) 2 253 318' },
-              { emoji:'🚌', titulo:'Tur-Bus',            sub:'Puerto Montt → Carretera', tel:'600 660 6600'   },
-              { emoji:'✈️', titulo:'Aerocord',           sub:'Puerto Montt–Chaitén',    tel:'(65) 2 254 411' },
+              { Icon: Ship,  titulo:'Ferry Navimag', sub:'Quellón–Chaitén',          tel:'(65) 2 270 430' },
+              { Icon: Ship,  titulo:'TMC Ferry',     sub:'Puerto Montt–Chaitén',      tel:'(65) 2 253 318' },
+              { Icon: Bus,   titulo:'Tur-Bus',       sub:'Puerto Montt → Carretera',  tel:'600 660 6600'   },
+              { Icon: Plane, titulo:'Aerocord',      sub:'Puerto Montt–Chaitén',      tel:'(65) 2 254 411' },
             ].map((t, i, arr) => (
               <div key={t.titulo} style={{ display:'flex', alignItems:'center', gap:14, padding:'14px', borderBottom: i < arr.length-1 ? `1px solid ${T.grayLight}` : 'none', cursor:'pointer' }}>
-                <div style={{ width:44, height:44, borderRadius:12, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', fontSize:22, flexShrink:0 }}>{t.emoji}</div>
+                <div style={{ width:44, height:44, borderRadius:12, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                  <t.Icon size={20} color={T.teal} />
+                </div>
                 <div style={{ flex:1 }}>
                   <p style={{ fontSize:13, fontWeight:700, color:T.dark, marginBottom:2 }}>{t.titulo}</p>
                   <p style={{ fontSize:11, color:T.gray }}>{t.sub}</p>
@@ -703,12 +743,14 @@ function InfoTab() {
       <div style={{ margin:'-22px 16px 0', background:T.white, borderRadius:20, padding:'16px 18px', boxShadow:'0 6px 32px rgba(0,0,0,0.12)', position:'relative', zIndex:2 }}>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:12, textAlign:'center' }}>
           {[
-            { emoji:'👥', value:'~8.000', label:'Habitantes' },
-            { emoji:'🌊', value:'42°55\'S', label:'Latitud' },
-            { emoji:'🏔️', value:'2.300 m', label:'Corcovado' },
+            { Icon: Users,    value:'~8.000',  label:'Habitantes' },
+            { Icon: Waves,    value:"42°55'S", label:'Latitud'    },
+            { Icon: Mountain, value:'2.300 m', label:'Corcovado'  },
           ].map(s => (
             <div key={s.label}>
-              <p style={{ fontSize:24, marginBottom:4 }}>{s.emoji}</p>
+              <div style={{ width:48, height:48, borderRadius:12, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 8px' }}>
+                <s.Icon size={22} color={T.teal} />
+              </div>
               <p style={{ fontSize:14, fontWeight:800, color:T.dark }}>{s.value}</p>
               <p style={{ fontSize:10, color:T.gray }}>{s.label}</p>
             </div>
@@ -731,11 +773,13 @@ function InfoTab() {
 
       {/* Temporadas */}
       <div style={{ paddingTop:24 }}>
-        <SectionHeader title="📅 Cuándo visitar" />
+        <SectionHeader title="Cuándo visitar" />
         <div style={{ display:'flex', flexDirection:'column', gap:10, padding:'0 20px' }}>
           {TEMPORADAS.map(t => (
             <div key={t.mes} style={{ display:'flex', alignItems:'center', gap:14, background:T.white, borderRadius:16, padding:'14px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', cursor:'pointer' }}>
-              <div style={{ width:52, height:52, borderRadius:12, background:`${t.color}22`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:26, flexShrink:0 }}>{t.emoji}</div>
+              <div style={{ width:52, height:52, borderRadius:12, background:`${t.color}22`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <t.Icon size={26} color={t.color} />
+              </div>
               <div style={{ flex:1 }}>
                 <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:4 }}>
                   <p style={{ fontSize:14, fontWeight:800, color:T.dark }}>{t.mes}</p>
@@ -750,11 +794,13 @@ function InfoTab() {
 
       {/* Tips */}
       <div style={{ paddingTop:24 }}>
-        <SectionHeader title="💡 Tips del viajero" />
+        <SectionHeader title="Tips del viajero" />
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, padding:'0 20px' }}>
           {TIPS.map(t => (
             <div key={t.titulo} style={{ background:T.white, borderRadius:16, padding:'14px 12px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', cursor:'pointer' }}>
-              <p style={{ fontSize:24, marginBottom:8 }}>{t.emoji}</p>
+              <div style={{ width:40, height:40, borderRadius:10, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:10 }}>
+                <t.Icon size={20} color={T.teal} />
+              </div>
               <p style={{ fontSize:12, fontWeight:700, color:T.dark, marginBottom:4 }}>{t.titulo}</p>
               <p style={{ fontSize:11, color:T.gray, lineHeight:1.4 }}>{t.texto}</p>
             </div>
@@ -764,19 +810,21 @@ function InfoTab() {
 
       {/* Datos del destino */}
       <div style={{ paddingTop:24 }}>
-        <SectionHeader title="🌍 Datos del destino" />
+        <SectionHeader title="Datos del destino" />
         <div style={{ padding:'0 20px' }}>
           <ListCard first last>
             {[
-              { emoji:'📍', label:'Ubicación', value:'Patagonia Norte, Los Lagos, Chile' },
-              { emoji:'🏔️', label:'Volcán Corcovado', value:'2.300 m · Estratovolcán activo' },
-              { emoji:'🛣️', label:'Carretera Austral', value:'Ruta 7 · 1.240 km total' },
-              { emoji:'🌡️', label:'Temperatura promedio', value:'5°C (invierno) · 18°C (verano)' },
-              { emoji:'🌧️', label:'Precipitaciones', value:'~2.500 mm/año · Lluvia frecuente' },
-              { emoji:'💱', label:'Moneda', value:'Peso chileno (CLP) · USD aceptado' },
+              { Icon: MapPin,      label:'Ubicación',           value:'Patagonia Norte, Los Lagos, Chile'    },
+              { Icon: Mountain,    label:'Volcán Corcovado',    value:'2.300 m · Estratovolcán activo'       },
+              { Icon: Route,       label:'Carretera Austral',   value:'Ruta 7 · 1.240 km total'             },
+              { Icon: Thermometer, label:'Temperatura promedio',value:'5°C (invierno) · 18°C (verano)'      },
+              { Icon: CloudRain,   label:'Precipitaciones',     value:'~2.500 mm/año · Lluvia frecuente'    },
+              { Icon: DollarSign,  label:'Moneda',              value:'Peso chileno (CLP) · USD aceptado'   },
             ].map((d, i, arr) => (
               <div key={d.label} style={{ display:'flex', alignItems:'center', gap:14, padding:'13px 14px', borderBottom: i < arr.length-1 ? `1px solid ${T.grayLight}` : 'none' }}>
-                <span style={{ fontSize:22, flexShrink:0 }}>{d.emoji}</span>
+                <div style={{ width:36, height:36, borderRadius:10, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                  <d.Icon size={18} color={T.teal} />
+                </div>
                 <div style={{ flex:1 }}>
                   <p style={{ fontSize:11, color:T.gray }}>{d.label}</p>
                   <p style={{ fontSize:13, fontWeight:600, color:T.dark }}>{d.value}</p>
