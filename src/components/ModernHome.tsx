@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
   Search, Home, ShoppingBag, Tag, User,
-  Plane, Building2, Train, Ship, Bus, ChevronRight, Star, MapPin,
+  Plane, Building2, Train, Ship, Bus, ChevronRight, Star,
   AlertCircle,
   Fuel, Banknote, Stethoscope, ShieldCheck, Wifi, MessageCircle
 } from 'lucide-react';
@@ -116,79 +116,67 @@ export default function ModernHome() {
       {/* ════ SCROLL ══════════════════════════════════════════════════════ */}
       <div style={{ flex:1, overflowY:'auto', overflowX:'hidden' }} className="hide-scrollbar">
 
-        {/* ══ HEADER TEAL (fiel al Travelin) ══════════════════════════════ */}
-        <div style={{ background:'linear-gradient(170deg,#0D2F25 0%,#0A7A75 100%)', paddingBottom:24 }}>
+        {/* ══ HEADER TEAL ══════════════════════════════════════════════════ */}
+        <div style={{ background:T.teal, paddingBottom:28 }}>
 
-          {/* ── Greeting row ── */}
-          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'52px 20px 0' }}>
+          {/* Greeting */}
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', padding:'52px 20px 0' }}>
             <div>
-              <p style={{ fontSize:13, color:'rgba(255,255,255,0.65)', fontWeight:500, marginBottom:3 }}>
-                {wx.loading ? '' : `${wx.icon ?? '🌤️'} ${wx.temp}°C · Chaitén`}
-              </p>
-              <h1 style={{ fontSize:26, fontWeight:800, color:T.white, lineHeight:1.15, letterSpacing:'-0.3px', margin:0 }}>
-                ¿A dónde quieres ir?
-              </h1>
+              <h1 style={{ fontSize:30, fontWeight:800, color:T.white, letterSpacing:'-0.5px', lineHeight:1.1, margin:0 }}>Hola, viajero</h1>
+              <div style={{ display:'flex', alignItems:'center', gap:5, marginTop:5 }}>
+                <span style={{ width:18, height:18, borderRadius:'50%', background:'#FBBF24', display:'flex', alignItems:'center', justifyContent:'center', fontSize:11 }}>✦</span>
+                <span style={{ fontSize:13, color:'rgba(255,255,255,0.9)', fontWeight:600 }}>
+                  {wx.loading ? '...' : `${wx.temp}°C · ${wx.description} · Chaitén`}
+                </span>
+              </div>
             </div>
-            <div style={{ width:46, height:46, borderRadius:'50%', background:'rgba(255,255,255,0.18)', border:'2px solid rgba(255,255,255,0.35)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:22, flexShrink:0 }}>
+            <div style={{ width:48, height:48, borderRadius:'50%', background:'rgba(255,255,255,0.25)', border:'2px solid rgba(255,255,255,0.5)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:24, flexShrink:0 }}>
               🧑‍🌿
             </div>
           </div>
 
-          {/* ── Search bar ── */}
-          <div style={{ margin:'16px 20px 0', display:'flex', alignItems:'center', gap:10, background:T.white, borderRadius:14, padding:'13px 16px', boxShadow:'0 4px 20px rgba(0,0,0,0.15)' }}>
-            <Search size={17} color={T.teal} />
-            <span style={{ fontSize:14, color:'#BDBDBD', flex:1 }}>Buscar destinos, rutas…</span>
-            <div style={{ width:32, height:32, borderRadius:8, background:T.teal, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-              <MapPin size={15} color={T.white} />
+          {/* Search */}
+          <div style={{ margin:'16px 20px 0', display:'flex', alignItems:'center', gap:10, background:T.white, borderRadius:12, padding:'13px 16px' }}>
+            <Search size={18} color='#BDBDBD' />
+            <span style={{ fontSize:14, color:'#BDBDBD' }}>¿A dónde vas?</span>
+          </div>
+
+          {/* Upcoming card */}
+          <div style={{ margin:'14px 20px 0', background:T.white, borderRadius:16 }}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'14px 16px 12px' }}>
+              <span style={{ fontSize:11, fontWeight:700, color:T.white, background:T.tealDark, padding:'4px 12px', borderRadius:100 }}>Próximo viaje</span>
+              <span style={{ fontSize:11, color:T.gray }}>14 Jun 2026</span>
+            </div>
+            <div style={{ display:'flex', alignItems:'center', padding:'0 16px' }}>
+              <div style={{ minWidth:52 }}>
+                <div style={{ display:'flex', alignItems:'center', gap:4 }}>
+                  <span style={{ fontSize:22, fontWeight:800, color:T.dark }}>QCH</span>
+                  <Plane size={13} color={T.gray} />
+                </div>
+                <p style={{ fontSize:11, color:T.gray, marginTop:2 }}>09:00</p>
+              </div>
+              <div style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', gap:2, padding:'0 8px' }}>
+                <span style={{ fontSize:11, color:T.gray }}>4h 30m</span>
+                <div style={{ width:'100%', borderTop:'1.5px dashed #D0D0D0', position:'relative' }}>
+                  <span style={{ position:'absolute', right:-4, top:-8, fontSize:10, color:T.gray }}>›</span>
+                </div>
+              </div>
+              <div style={{ minWidth:52, textAlign:'right' }}>
+                <div style={{ display:'flex', alignItems:'center', justifyContent:'flex-end', gap:4 }}>
+                  <Ship size={13} color={T.gray} />
+                  <span style={{ fontSize:22, fontWeight:800, color:T.dark }}>CHT</span>
+                </div>
+                <p style={{ fontSize:11, color:T.gray, marginTop:2 }}>13:30</p>
+              </div>
+            </div>
+            <p style={{ fontSize:11, color:T.gray, padding:'8px 16px 0' }}>Navimag · Económico · Directo</p>
+            <div style={{ display:'flex', justifyContent:'space-between', borderTop:`1px solid ${T.grayLight}`, margin:'12px 16px 0', padding:'10px 0 14px' }}>
+              <span style={{ fontSize:12, color:T.gray }}>Booking ID</span>
+              <span style={{ fontSize:12, fontWeight:800, color:T.dark, letterSpacing:1 }}>NV2026</span>
             </div>
           </div>
 
-          {/* ── Upcoming trip card ── */}
-          <div style={{ margin:'16px 20px 0', background:T.white, borderRadius:20, overflow:'hidden', boxShadow:'0 8px 32px rgba(0,0,0,0.18)' }}>
-            {/* Photo */}
-            <div style={{ position:'relative', height:130 }}>
-              <img
-                src="https://picsum.photos/seed/chaiten-trip/390/130"
-                alt="Chaitén"
-                style={{ width:'100%', height:'100%', objectFit:'cover' }}
-              />
-              <div style={{ position:'absolute', inset:0, background:'linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 55%)' }} />
-              <span style={{ position:'absolute', top:12, left:14, fontSize:10, fontWeight:700, color:T.white, background:T.teal, padding:'4px 10px', borderRadius:100 }}>
-                Próximo viaje
-              </span>
-              <span style={{ position:'absolute', top:12, right:14, fontSize:10, fontWeight:600, color:T.white }}>
-                14 Jun 2026
-              </span>
-            </div>
-            {/* Route info */}
-            <div style={{ padding:'14px 16px' }}>
-              <div style={{ display:'flex', alignItems:'center' }}>
-                <div>
-                  <p style={{ fontSize:22, fontWeight:900, color:T.dark, letterSpacing:'-0.5px' }}>QCH</p>
-                  <p style={{ fontSize:11, color:T.gray, marginTop:1 }}>09:00</p>
-                </div>
-                <div style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', padding:'0 12px' }}>
-                  <p style={{ fontSize:10, color:T.gray, marginBottom:4 }}>4h 30m</p>
-                  <div style={{ width:'100%', display:'flex', alignItems:'center', gap:0 }}>
-                    <div style={{ flex:1, borderTop:'1.5px dashed #D0D5DD' }} />
-                    <Ship size={14} color={T.teal} style={{ margin:'0 4px' }} />
-                    <div style={{ flex:1, borderTop:'1.5px dashed #D0D5DD' }} />
-                  </div>
-                  <p style={{ fontSize:9, color:T.gray, marginTop:4 }}>Navimag · Directo</p>
-                </div>
-                <div style={{ textAlign:'right' }}>
-                  <p style={{ fontSize:22, fontWeight:900, color:T.dark, letterSpacing:'-0.5px' }}>CHT</p>
-                  <p style={{ fontSize:11, color:T.gray, marginTop:1 }}>13:30</p>
-                </div>
-              </div>
-              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', borderTop:`1px solid ${T.grayLight}`, marginTop:12, paddingTop:10 }}>
-                <span style={{ fontSize:11, color:T.gray }}>Booking ID</span>
-                <span style={{ fontSize:11, fontWeight:800, color:T.dark, letterSpacing:1 }}>NV-2026</span>
-              </div>
-            </div>
-          </div>
-
-          {/* ── Category icons ── */}
+          {/* Category icons */}
           <div style={{ display:'flex', justifyContent:'space-between', padding:'20px 20px 0' }}>
             {[
               { label:'Vuelos',  Icon: Plane     },
@@ -198,10 +186,10 @@ export default function ModernHome() {
               { label:'Buses',   Icon: Bus       },
             ].map(({ label, Icon }) => (
               <button key={label} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer' }}>
-                <div style={{ width:52, height:52, borderRadius:'50%', background:'rgba(255,255,255,0.18)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <div style={{ width:52, height:52, borderRadius:'50%', background:'rgba(255,255,255,0.2)', display:'flex', alignItems:'center', justifyContent:'center' }}>
                   <Icon size={22} color={T.white} />
                 </div>
-                <span style={{ fontSize:10, fontWeight:600, color:'rgba(255,255,255,0.9)' }}>{label}</span>
+                <span style={{ fontSize:11, fontWeight:600, color:'rgba(255,255,255,0.95)' }}>{label}</span>
               </button>
             ))}
           </div>
