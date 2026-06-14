@@ -6,7 +6,7 @@ import {
   Utensils, Car, Phone, Send, MapPin, TreePine, Clock,
   Mountain, Waves, Droplets, Flame, Pill, HeartPulse,
   Bike, Footprints, Truck, CloudRain, Thermometer, Sun, Sunrise, Route, DollarSign,
-  CalendarDays, Wind, Users,
+  CalendarDays, Wind, Users, ShoppingCart, Landmark, Navigation,
 } from 'lucide-react';
 import { useWeather } from '../hooks/useWeather';
 
@@ -65,7 +65,9 @@ const RUTAS = [
   { id:'r2', nombre:'Trekking Pumalín Cascadas', distancia:'6 km',  tiempo:'3h',        dificultad:'Fácil' as Dificultad, Icon: TreePine, color:'#1a5a2a' },
   { id:'r3', nombre:'Ruta Costera Chaitén',      distancia:'12 km', tiempo:'5h',        dificultad:'Media' as Dificultad, Icon: Waves,    color:'#0a3a6a' },
   { id:'r4', nombre:'Sendero Río Blanco',        distancia:'8 km',  tiempo:'4h',        dificultad:'Media' as Dificultad, Icon: Mountain, color:'#2a4a1a' },
-  { id:'r5', nombre:'Termas El Amarillo',        distancia:'52 km', tiempo:'1h (auto)', dificultad:'Fácil' as Dificultad, Icon: Droplets, color:'#5a3a0a' },
+  { id:'r5', nombre:'Sendero Los Alerces',       distancia:'5 km',  tiempo:'3h',        dificultad:'Fácil' as Dificultad, Icon: TreePine, color:'#1a4a1a' },
+  { id:'r6', nombre:'Cascadas Escondidas',       distancia:'4 km',  tiempo:'2h',        dificultad:'Fácil' as Dificultad, Icon: Droplets, color:'#0a2a5a' },
+  { id:'r7', nombre:'Termas El Amarillo',        distancia:'52 km', tiempo:'1h (auto)', dificultad:'Fácil' as Dificultad, Icon: Droplets, color:'#5a3a0a' },
 ];
 
 const SERVICIOS_ESENCIALES = [
@@ -79,6 +81,50 @@ const SERVICIOS_ESENCIALES = [
   { id:'s8', titulo:'WiFi Municipal',      sub:'Plaza de Armas y Centro',  tel: null,            Icon: Wifi        },
 ];
 
+const DONDE_COMPRAR = [
+  { titulo:'Supermercado Belén',   sub:'Av. Norte · mejor surtido del pueblo',  horario:'9–21h',   Icon: ShoppingCart },
+  { titulo:'Supermercado Norte',   sub:'Centro · buen surtido',                 horario:'9–20h',   Icon: ShoppingCart },
+  { titulo:'Feria Municipal',      sub:'Plaza de Armas · sábado y domingo',     horario:'Fin sem', Icon: Landmark     },
+  { titulo:'Artesanías Patagonia', sub:'Av. Costanera 34 · productos locales',  horario:'10–19h',  Icon: ShoppingCart },
+  { titulo:'Farmacia Cruz Verde',  sub:"O'Higgins 44 · medicamentos y más",     horario:'9–21h',   Icon: Pill         },
+];
+
+const EN_PUEBLO = [
+  { titulo:'Borde Costero',      desc:'Paseo frente al mar · ideal al atardecer', Icon: Waves        },
+  { titulo:'Plaza de Armas',     desc:'Centro del pueblo · mercado y artesanías', Icon: Landmark     },
+  { titulo:'Zona Exclusión',     desc:'Historia viva de la erupción del 2008',    Icon: Flame        },
+  { titulo:'Mirador Volcán',     desc:'Vista del Corcovado desde el pueblo',      Icon: Mountain     },
+  { titulo:'Feria Artesanos',    desc:'Productos locales · recuerdos auténticos', Icon: ShoppingCart },
+  { titulo:'Museo Histórico',    desc:'Fotos y relatos del pueblo renacido',       Icon: Landmark     },
+];
+
+const DESTINOS_CERCANOS = [
+  { nombre:'Caleta Gonzalo',     desc:'Entrada Pumalín',   Icon: TreePine,  color:T.teal,    distancia:'60 km',  tiempo:'1h'   },
+  { nombre:'Lago Yelcho',        desc:'Pesca · Kayak',     Icon: Waves,     color:'#0a3a6a', distancia:'32 km',  tiempo:'40m'  },
+  { nombre:'Termas El Amarillo', desc:'Aguas termales',    Icon: Droplets,  color:'#5a3a0a', distancia:'52 km',  tiempo:'1h'   },
+  { nombre:'Futaleufú',          desc:'Rafting clase V',   Icon: Mountain,  color:'#7a1a1a', distancia:'155 km', tiempo:'3h'   },
+  { nombre:'Villa S. Lucía',     desc:'Conexión sur',      Icon: Route,     color:T.tealDark,distancia:'90 km',  tiempo:'1.5h' },
+  { nombre:'La Junta',           desc:'Lago Rosselot',     Icon: Car,       color:'#3a2a6a', distancia:'150 km', tiempo:'2.5h' },
+];
+
+const HISTORIA_ITEMS = [
+  { año:'Antes 2008',  texto:'Chaitén era un tranquilo pueblo pesquero de 7.000 habitantes, puerta natural a la Patagonia.' },
+  { año:'Mayo 2008',   texto:'El volcán Chaitén entró en erupción por primera vez en 9.500 años. Columna de ceniza de 30 km de altura. Evacuación total en 24 horas.' },
+  { año:'2009–2011',   texto:'La lahar del río Blanco destruyó el Barrio Nuevo. El río cambió su cauce y atravesó el centro histórico. Gran parte quedó sepultada.' },
+  { año:'2012–hoy',    texto:'Los habitantes regresaron poco a poco. La ciudad renació con resiliencia. Hoy es un símbolo de la Patagonia viva y en reconstrucción.' },
+];
+
+const DISTANCIAS = [
+  { destino:'Caleta Gonzalo (Pumalín)', via:'Ruta 7 Norte',         Icon: TreePine,  distancia:'60 km',   tiempo:'~1h'    },
+  { destino:'Lago Yelcho',              via:'Ruta 7 Sur',            Icon: Waves,     distancia:'32 km',   tiempo:'~40 min'},
+  { destino:'Termas El Amarillo',       via:'Ruta 7 Sur',            Icon: Droplets,  distancia:'52 km',   tiempo:'~1h'   },
+  { destino:'Futaleufú',                via:'Ruta 7 + 235',          Icon: Mountain,  distancia:'155 km',  tiempo:'~3h'   },
+  { destino:'Villa Santa Lucía',        via:'Ruta 7 Sur',            Icon: Route,     distancia:'90 km',   tiempo:'~1.5h' },
+  { destino:'La Junta',                 via:'Ruta 7 Sur',            Icon: Car,       distancia:'150 km',  tiempo:'~2.5h' },
+  { destino:'Puyuhuapi',                via:'Ruta 7 Sur',            Icon: Car,       distancia:'180 km',  tiempo:'~3h'   },
+  { destino:'Puerto Montt (ferry)',     via:'Ferry + Quellón',       Icon: Ship,      distancia:'~500 km', tiempo:'12h+'  },
+];
+
 const TIPS = [
   { Icon: CloudRain,    titulo:'Lleva capas',       texto:'El clima cambia rápido. Siempre lleva ropa impermeable y de abrigo.' },
   { Icon: Banknote,     titulo:'Lleva efectivo',    texto:'Los cajeros son limitados. BancoEstado es el más confiable.' },
@@ -86,13 +132,24 @@ const TIPS = [
   { Icon: Wifi,         titulo:'Señal limitada',    texto:'Claro y Entel tienen cobertura básica. El WiFi municipal es gratuito.' },
   { Icon: CalendarDays, titulo:'Mejor época',       texto:'Nov–Mar para senderismo. Abr–Oct para tranquilidad y precios bajos.' },
   { Icon: Car,          titulo:'Arriendo 4x4',      texto:'Para rutas fuera del pueblo se recomienda vehículo de doble tracción.' },
+  { Icon: Navigation,   titulo:'Sin señal GPS',     texto:'Descarga mapas offline (Maps.me) antes de salir del pueblo. La cobertura móvil es escasa.' },
+  { Icon: Footprints,   titulo:'Permisos Pumalín',  texto:'Algunos senderos requieren registro en CONAF. Consulta en la entrada de Caleta Gonzalo.' },
+];
+
+const ITINERARIOS = [
+  { id:'i1', tipo:'Viajero solo',      dias:'2–3 días',   Icon: Footprints, color:'#2a4a7a', desc:'Aventura independiente',   pasos:['Zona Exclusión volcán','Sendero Los Alerces','Termas El Amarillo','Borde Costero al atardecer'] },
+  { id:'i2', tipo:'En familia',        dias:'2 días',     Icon: Users,      color:'#1a5a2a', desc:'Cómodo y accesible',       pasos:['Cascadas Escondidas','Plaza de Armas · Feria','Lago Yelcho (picnic)','Museo Histórico'] },
+  { id:'i3', tipo:'Poco tiempo',       dias:'1 día',      Icon: CalendarDays, color:'#0DA5A0', desc:'Lo esencial en Chaitén', pasos:['Zona Exclusión mañana','Borde Costero · almuerzo','Feria de artesanos','Café Patagonia'] },
+  { id:'i4', tipo:'Solo en el pueblo', dias:'Medio día',  Icon: Landmark,   color:'#5a3a0a', desc:'Sin auto necesario',       pasos:['Plaza de Armas','Museo Histórico','Borde Costero','Feria artesanal'] },
+  { id:'i5', tipo:'Trekker extremo',   dias:'3–5 días',   Icon: Mountain,   color:'#7a1a1a', desc:'Volcán y glaciares',       pasos:['Volcán Corcovado (8h)','Sendero Río Blanco (4h)','Alerces milenarios','Cascadas Escondidas'] },
+  { id:'i6', tipo:'Pumalín completo',  dias:'2–3 días',   Icon: TreePine,   color:'#0a3a1a', desc:'Bosque y cascadas',        pasos:['Caleta Gonzalo (60 km)','Sendero Los Alerces (4h)','Cascadas Escondidas (2h)','Termas El Amarillo'] },
 ];
 
 const TEMPORADAS = [
-  { mes:'Verano',    periodo:'Dic–Mar', Icon: Sun,       desc:'Ideal para trekking y actividades al aire libre. Días largos.', color:'#f59e0b' },
-  { mes:'Otoño',     periodo:'Abr–May', Icon: Wind,      desc:'Colores del bosque, menos visitantes. Buen clima en general.',  color:'#d97706' },
-  { mes:'Invierno',  periodo:'Jun–Ago', Icon: CloudRain, desc:'Lluvia y frío. Algunos senderos cerrados. Poca concurrencia.', color:'#0a3a6a' },
-  { mes:'Primavera', periodo:'Sep–Nov', Icon: TreePine,  desc:'Flora renace. Aguas abundantes. Prepárate para lluvia también.', color:T.teal   },
+  { mes:'Verano',    periodo:'Dic–Mar', Icon: Sun,       desc:'Ideal para trekking y actividades al aire libre. Días largos (hasta 17h de luz).', color:'#f59e0b' },
+  { mes:'Otoño',     periodo:'Abr–May', Icon: Wind,      desc:'Colores del bosque, menos visitantes. Buen clima en general.',                      color:'#d97706' },
+  { mes:'Invierno',  periodo:'Jun–Ago', Icon: CloudRain, desc:'Lluvia y frío. Algunos senderos cerrados. Poca concurrencia y precios bajos.',      color:'#0a3a6a' },
+  { mes:'Primavera', periodo:'Sep–Nov', Icon: TreePine,  desc:'Flora renace. Aguas abundantes. Prepárate para lluvia también.',                    color:T.teal   },
 ];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -237,10 +294,10 @@ function HomeTab({ wx }: { wx: ReturnType<typeof useWeather> }) {
         </div>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
           {[
-            { Icon: Thermometer, label:'Temperatura',     value: wx.loading ? '...' : `${wx.temp}°C · ${wx.description}`, color: T.dark  },
+            { Icon: Thermometer, label:'Temperatura',      value: wx.loading ? '...' : `${wx.temp}°C · ${wx.description}`, color: T.dark  },
             { Icon: Route,       label:'Carretera Austral', value:'Transitable',  color: T.green },
-            { Icon: Ship,        label:'Ferry Navimag',   value:'Operativo',     color: T.green },
-            { Icon: Sunrise,     label:'Amanecer · Puesta', value:'07:42 · 17:18', color: T.dark },
+            { Icon: Ship,        label:'Ferry Navimag',    value:'Operativo',     color: T.green },
+            { Icon: Sunrise,     label:'Amanecer · Puesta',value:'07:42 · 17:18', color: T.dark },
           ].map(item => (
             <div key={item.label} style={{ display:'flex', alignItems:'center', gap:8 }}>
               <div style={{ width:34, height:34, borderRadius:8, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
@@ -255,11 +312,11 @@ function HomeTab({ wx }: { wx: ReturnType<typeof useWeather> }) {
         </div>
       </div>
 
-      {/* Categorías del destino */}
+      {/* Categorías */}
       <div style={{ padding:'26px 20px 0' }}>
         <div style={{ display:'flex', justifyContent:'space-between' }}>
           {[
-            { label:'Qué hacer', Icon:Compass   },
+            { label:'Qué hacer', Icon:Compass    },
             { label:'Dormir',    Icon:Building2  },
             { label:'Comer',     Icon:Utensils   },
             { label:'Naturaleza',Icon:TreePine   },
@@ -280,6 +337,138 @@ function HomeTab({ wx }: { wx: ReturnType<typeof useWeather> }) {
         <SectionHeader title="Principales atractivos" onSeeAll={() => {}} />
         <div style={{ display:'flex', gap:14, overflowX:'auto', padding:'0 20px 4px' }} className="hide-scrollbar">
           {ATRACTIVOS.map(a => <AttractivoCard key={a.id} a={a} />)}
+        </div>
+      </div>
+
+      {/* Itinerarios recomendados */}
+      <div style={{ paddingTop:28 }}>
+        <SectionHeader title="Itinerarios recomendados" />
+        <div style={{ display:'flex', gap:14, overflowX:'auto', padding:'0 20px 4px' }} className="hide-scrollbar">
+          {ITINERARIOS.map(it => (
+            <div key={it.id} style={{ width:200, flexShrink:0, borderRadius:20, overflow:'hidden', background:T.white, boxShadow:'0 6px 24px rgba(0,0,0,0.10)', cursor:'pointer' }}>
+              <div style={{ background:`linear-gradient(135deg,${it.color},${it.color}cc)`, padding:'16px 16px 14px' }}>
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:10 }}>
+                  <div style={{ width:40, height:40, borderRadius:10, background:'rgba(255,255,255,0.2)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                    <it.Icon size={20} color='#fff' />
+                  </div>
+                  <span style={{ background:'rgba(255,255,255,0.25)', color:'#fff', fontSize:10, fontWeight:700, padding:'4px 10px', borderRadius:100 }}>{it.dias}</span>
+                </div>
+                <p style={{ fontSize:14, fontWeight:800, color:'#fff', lineHeight:1.2, marginBottom:2 }}>{it.tipo}</p>
+                <p style={{ fontSize:10, color:'rgba(255,255,255,0.75)' }}>{it.desc}</p>
+              </div>
+              <div style={{ padding:'12px 14px 14px' }}>
+                {it.pasos.map((paso, idx) => (
+                  <div key={idx} style={{ display:'flex', alignItems:'flex-start', gap:7, marginBottom: idx < it.pasos.length-1 ? 7 : 0 }}>
+                    <div style={{ width:16, height:16, borderRadius:'50%', background:`${it.color}22`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginTop:1 }}>
+                      <span style={{ fontSize:8, fontWeight:800, color:it.color }}>{idx+1}</span>
+                    </div>
+                    <p style={{ fontSize:11, color:T.dark, lineHeight:1.35 }}>{paso}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* PARQUE PUMALÍN — hero section */}
+      <div style={{ padding:'28px 20px 0' }}>
+        <div style={{ borderRadius:20, background:'linear-gradient(145deg,#0D3020,#1a5a35)', overflow:'hidden', position:'relative' }}>
+          <img src="https://picsum.photos/id/15/420/200" alt="Pumalín" style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover', opacity:0.3 }} />
+          <div style={{ position:'relative', zIndex:1, padding:'22px 20px' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:12 }}>
+              <span style={{ background:'#C8F135', borderRadius:6, padding:'3px 10px', fontSize:10, fontWeight:700, color:'#0D3020' }}>PARQUE NACIONAL</span>
+            </div>
+            <p style={{ fontSize:24, fontWeight:800, color:'#fff', marginBottom:6, lineHeight:1.2 }}>Parque Pumalín</p>
+            <p style={{ fontSize:12, color:'rgba(255,255,255,0.8)', lineHeight:1.6, marginBottom:18 }}>
+              Una de las reservas de bosque templado más grandes del mundo. Alerzales milenarios de 4.000 años, cascadas y senderos vírgenes. Antes privado (fundado por Doug Tompkins), hoy Parque Nacional administrado por CONAF.
+            </p>
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8, marginBottom:16 }}>
+              {[
+                { Icon: TreePine,  label:'Caleta Gonzalo',      sub:'Entrada principal · 60 km norte' },
+                { Icon: Droplets,  label:'Cascadas Escondidas',  sub:'Sendero 2h · fácil'              },
+                { Icon: TreePine,  label:'Sendero Los Alerces',  sub:'Alerce 4.000 años · 4h'         },
+                { Icon: Droplets,  label:'Termas El Amarillo',   sub:'Aguas termales · 52 km sur'     },
+              ].map(({ Icon, label, sub }) => (
+                <div key={label} style={{ background:'rgba(255,255,255,0.1)', borderRadius:12, padding:'10px 12px', display:'flex', alignItems:'center', gap:8 }}>
+                  <div style={{ width:32, height:32, borderRadius:8, background:'rgba(200,241,53,0.2)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                    <Icon size={16} color='#C8F135' />
+                  </div>
+                  <div>
+                    <p style={{ fontSize:11, fontWeight:700, color:'#fff' }}>{label}</p>
+                    <p style={{ fontSize:9, color:'rgba(255,255,255,0.6)' }}>{sub}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div style={{ display:'flex', gap:8 }}>
+              {[['Entrada','Gratuita'],['Horario','8:00–20:00'],['CONAF','Caleta Gonzalo']].map(([l,v]) => (
+                <div key={l} style={{ background:'rgba(255,255,255,0.1)', borderRadius:10, padding:'8px 12px', flexShrink:0 }}>
+                  <p style={{ fontSize:9, color:'rgba(255,255,255,0.6)' }}>{l}</p>
+                  <p style={{ fontSize:12, fontWeight:700, color:'#fff' }}>{v}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Destinos cercanos */}
+      <div style={{ paddingTop:28 }}>
+        <SectionHeader title="Destinos cercanos" />
+        <div style={{ display:'flex', gap:12, overflowX:'auto', padding:'0 20px 4px' }} className="hide-scrollbar">
+          {DESTINOS_CERCANOS.map(d => (
+            <div key={d.nombre} style={{ width:144, flexShrink:0, background:T.white, borderRadius:16, padding:'14px 12px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', cursor:'pointer' }}>
+              <div style={{ width:44, height:44, borderRadius:12, background:`${d.color}22`, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:10 }}>
+                <d.Icon size={22} color={d.color} />
+              </div>
+              <p style={{ fontSize:12, fontWeight:800, color:T.dark, marginBottom:2, lineHeight:1.3 }}>{d.nombre}</p>
+              <p style={{ fontSize:10, color:T.gray, marginBottom:8 }}>{d.desc}</p>
+              <div style={{ display:'flex', alignItems:'center', gap:4 }}>
+                <Route size={10} color={T.teal} />
+                <span style={{ fontSize:11, fontWeight:700, color:T.teal }}>{d.distancia}</span>
+              </div>
+              <p style={{ fontSize:10, color:T.gray }}>{d.tiempo}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Qué hacer en el pueblo */}
+      <div style={{ paddingTop:28 }}>
+        <SectionHeader title="Qué hacer en el pueblo" />
+        <div style={{ display:'flex', gap:10, overflowX:'auto', padding:'0 20px 4px' }} className="hide-scrollbar">
+          {EN_PUEBLO.map(item => (
+            <div key={item.titulo} style={{ width:138, flexShrink:0, background:T.white, borderRadius:16, padding:'14px 12px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', cursor:'pointer' }}>
+              <div style={{ width:44, height:44, borderRadius:12, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:10 }}>
+                <item.Icon size={22} color={T.teal} />
+              </div>
+              <p style={{ fontSize:12, fontWeight:700, color:T.dark, marginBottom:4, lineHeight:1.3 }}>{item.titulo}</p>
+              <p style={{ fontSize:10, color:T.gray, lineHeight:1.4 }}>{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Rutas y senderos */}
+      <div style={{ paddingTop:28 }}>
+        <SectionHeader title="Rutas y senderos" onSeeAll={() => {}} />
+        <div style={{ display:'flex', flexDirection:'column', gap:10, padding:'0 20px' }}>
+          {RUTAS.map(r => (
+            <div key={r.id} style={{ display:'flex', alignItems:'center', gap:12, background:T.white, borderRadius:16, padding:'12px 14px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', cursor:'pointer' }}>
+              <div style={{ width:48, height:48, borderRadius:12, background:`${r.color}22`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <r.Icon size={24} color={r.color} />
+              </div>
+              <div style={{ flex:1, minWidth:0 }}>
+                <p style={{ fontSize:13, fontWeight:700, color:T.dark, marginBottom:4, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{r.nombre}</p>
+                <div style={{ display:'flex', gap:8, alignItems:'center' }}>
+                  <span style={{ display:'flex', alignItems:'center', gap:3, fontSize:10, color:T.gray }}><MapPin size={10} color={T.gray} /> {r.distancia}</span>
+                  <span style={{ display:'flex', alignItems:'center', gap:3, fontSize:10, color:T.gray }}><Clock size={10} color={T.gray} /> {r.tiempo}</span>
+                </div>
+              </div>
+              <DiffBadge d={r.dificultad} />
+            </div>
+          ))}
         </div>
       </div>
 
@@ -344,28 +533,6 @@ function HomeTab({ wx }: { wx: ReturnType<typeof useWeather> }) {
               </div>
             ))}
           </ListCard>
-        </div>
-      </div>
-
-      {/* Rutas y senderos */}
-      <div style={{ paddingTop:28 }}>
-        <SectionHeader title="Rutas y senderos" onSeeAll={() => {}} />
-        <div style={{ display:'flex', flexDirection:'column', gap:10, padding:'0 20px' }}>
-          {RUTAS.map(r => (
-            <div key={r.id} style={{ display:'flex', alignItems:'center', gap:12, background:T.white, borderRadius:16, padding:'12px 14px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', cursor:'pointer' }}>
-              <div style={{ width:48, height:48, borderRadius:12, background:`${r.color}22`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                <r.Icon size={24} color={r.color} />
-              </div>
-              <div style={{ flex:1, minWidth:0 }}>
-                <p style={{ fontSize:13, fontWeight:700, color:T.dark, marginBottom:4, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{r.nombre}</p>
-                <div style={{ display:'flex', gap:8, alignItems:'center' }}>
-                  <span style={{ display:'flex', alignItems:'center', gap:3, fontSize:10, color:T.gray }}><MapPin size={10} color={T.gray} /> {r.distancia}</span>
-                  <span style={{ display:'flex', alignItems:'center', gap:3, fontSize:10, color:T.gray }}><Clock size={10} color={T.gray} /> {r.tiempo}</span>
-                </div>
-              </div>
-              <DiffBadge d={r.dificultad} />
-            </div>
-          ))}
         </div>
       </div>
 
@@ -450,7 +617,6 @@ function ExplorarTab() {
     <>
       <TealHeader title="Explorar Chaitén" subtitle="Descubre todo lo que ofrece la Patagonia" searchPlaceholder="Busca lugares, rutas, comida…" />
 
-      {/* Filter pills */}
       <div style={{ padding:'20px 20px 0', display:'flex', gap:8, overflowX:'auto' }} className="hide-scrollbar">
         {filtros.map(f => (
           <button
@@ -468,7 +634,6 @@ function ExplorarTab() {
         ))}
       </div>
 
-      {/* Atractivos grid */}
       <div style={{ padding:'20px 20px 0', display:'flex', flexDirection:'column', gap:10 }}>
         {(filtro === 'Gastronomía' ? GASTRONOMIA : filtrados).map(a => (
           <div key={a.id} style={{ borderRadius:18, overflow:'hidden', background:T.white, boxShadow:'0 4px 16px rgba(0,0,0,0.08)', cursor:'pointer' }}>
@@ -500,7 +665,6 @@ function ExplorarTab() {
         )}
       </div>
 
-      {/* Rutas section */}
       {(filtro === 'Todo' || filtro === 'Aventura') && (
         <div style={{ paddingTop:24 }}>
           <SectionHeader title="Rutas y senderos" />
@@ -532,10 +696,10 @@ function ExplorarTab() {
 
 const PUDI_MSGS = [
   { from:'pudi', text:'¡Hola! Soy Pudi 🦌, tu guía local en Chaitén. ¿En qué puedo ayudarte hoy?' },
-  { from:'pudi', text:'Puedo orientarte sobre rutas, alojamiento, gastronomía, transporte o servicios de emergencia.' },
+  { from:'pudi', text:'Puedo orientarte sobre rutas, alojamiento, gastronomía, transporte, servicios de emergencia o historia del pueblo.' },
 ];
 
-const QUICK_Q = ['¿Cómo llegar?','¿Qué hacer hoy?','Mejor ruta para mañana','Restaurantes cerca','Número de emergencias'];
+const QUICK_Q = ['¿Cómo llegar?','¿Qué hacer hoy?','Rutas Pumalín','Restaurantes cerca','Destinos cercanos','Emergencias'];
 
 function PudiTab() {
   const [msgs, setMsgs] = useState(PUDI_MSGS);
@@ -552,7 +716,6 @@ function PudiTab() {
 
   return (
     <div style={{ display:'flex', flexDirection:'column', height:'100%' }}>
-      {/* Header */}
       <div style={{ background:`linear-gradient(135deg,#0D1F17,${T.tealDark})`, padding:'52px 20px 20px', flexShrink:0 }}>
         <div style={{ display:'flex', alignItems:'center', gap:12 }}>
           <div style={{ width:52, height:52, borderRadius:'50%', background:'#C8F135', display:'flex', alignItems:'center', justifyContent:'center', fontSize:28 }}>🦌</div>
@@ -566,7 +729,6 @@ function PudiTab() {
         </div>
       </div>
 
-      {/* Messages */}
       <div style={{ flex:1, overflowY:'auto', padding:'16px 16px 0', display:'flex', flexDirection:'column', gap:10 }} className="hide-scrollbar">
         {msgs.map((m, i) => (
           <div key={i} style={{ display:'flex', justifyContent: m.from === 'user' ? 'flex-end' : 'flex-start', gap:8, alignItems:'flex-end' }}>
@@ -587,7 +749,6 @@ function PudiTab() {
         <div style={{ height:8 }} />
       </div>
 
-      {/* Quick questions */}
       <div style={{ padding:'12px 16px 0', flexShrink:0 }}>
         <div style={{ display:'flex', gap:8, overflowX:'auto', paddingBottom:8 }} className="hide-scrollbar">
           {QUICK_Q.map(q => (
@@ -596,7 +757,6 @@ function PudiTab() {
         </div>
       </div>
 
-      {/* Input */}
       <div style={{ padding:'8px 16px 12px', display:'flex', gap:10, alignItems:'center', background:T.white, borderTop:`1px solid ${T.grayLight}`, flexShrink:0 }}>
         <input
           className="app-input"
@@ -631,10 +791,10 @@ function ServiciosTab() {
         </div>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
           {[
-            { Icon: HeartPulse,  label:'Ambulancia',  num:'131'             },
-            { Icon: Flame,       label:'Bomberos',    num:'132'             },
-            { Icon: ShieldCheck, label:'Carabineros', num:'133'             },
-            { Icon: Stethoscope, label:'Urgencia',    num:'(65) 2 731 244'  },
+            { Icon: HeartPulse,  label:'Ambulancia',  num:'131'            },
+            { Icon: Flame,       label:'Bomberos',    num:'132'            },
+            { Icon: ShieldCheck, label:'Carabineros', num:'133'            },
+            { Icon: Stethoscope, label:'Urgencia',    num:'(65) 2 731 244' },
           ].map(({ Icon, label, num }) => (
             <button key={label} style={{ display:'flex', alignItems:'center', gap:8, background:T.white, borderRadius:10, padding:'10px 12px', border:`1px solid #FECACA`, cursor:'pointer' }}>
               <div style={{ width:32, height:32, borderRadius:8, background:'#FEF2F2', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
@@ -649,7 +809,7 @@ function ServiciosTab() {
         </div>
       </div>
 
-      {/* Servicios grid */}
+      {/* Servicios locales */}
       <div style={{ paddingTop:24 }}>
         <SectionHeader title="Servicios locales" />
         <div style={{ padding:'0 20px' }}>
@@ -678,6 +838,30 @@ function ServiciosTab() {
         </div>
       </div>
 
+      {/* Dónde comprar */}
+      <div style={{ paddingTop:24 }}>
+        <SectionHeader title="Dónde comprar" />
+        <div style={{ padding:'0 20px' }}>
+          <ListCard first last>
+            {DONDE_COMPRAR.map((c, i) => (
+              <div key={c.titulo} style={{ display:'flex', alignItems:'center', gap:14, padding:'14px', borderBottom: i < DONDE_COMPRAR.length-1 ? `1px solid ${T.grayLight}` : 'none', cursor:'pointer' }}>
+                <div style={{ width:48, height:48, borderRadius:12, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                  <c.Icon size={22} color={T.teal} />
+                </div>
+                <div style={{ flex:1 }}>
+                  <p style={{ fontSize:13, fontWeight:700, color:T.dark, marginBottom:2 }}>{c.titulo}</p>
+                  <div style={{ display:'flex', alignItems:'center', gap:4 }}>
+                    <MapPin size={10} color={T.gray} />
+                    <p style={{ fontSize:11, color:T.gray }}>{c.sub}</p>
+                  </div>
+                </div>
+                <span style={{ fontSize:10, color:T.gray, background:T.grayLight, padding:'4px 8px', borderRadius:100, flexShrink:0 }}>{c.horario}</span>
+              </div>
+            ))}
+          </ListCard>
+        </div>
+      </div>
+
       {/* Cómo moverse */}
       <div style={{ paddingTop:24 }}>
         <SectionHeader title="Cómo moverse" />
@@ -700,7 +884,7 @@ function ServiciosTab() {
         </div>
       </div>
 
-      {/* Transporte desde/hacia */}
+      {/* Transporte al destino */}
       <div style={{ paddingTop:24 }}>
         <SectionHeader title="Transporte al destino" />
         <div style={{ padding:'0 20px' }}>
@@ -739,7 +923,7 @@ function InfoTab() {
     <>
       <TealHeader title="Sobre Chaitén" subtitle="Patagonia Norte · Los Lagos, Chile" showSearch={false} />
 
-      {/* Hero info card */}
+      {/* Hero stats */}
       <div style={{ margin:'-22px 16px 0', background:T.white, borderRadius:20, padding:'16px 18px', boxShadow:'0 6px 32px rgba(0,0,0,0.12)', position:'relative', zIndex:2 }}>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:12, textAlign:'center' }}>
           {[
@@ -758,20 +942,100 @@ function InfoTab() {
         </div>
       </div>
 
-      {/* Descripción */}
+      {/* ¿Qué es Chaitén? */}
       <div style={{ padding:'28px 20px 0' }}>
         <SectionHeader title="¿Qué es Chaitén?" />
         <div style={{ padding:'0 20px' }}>
           <div style={{ background:T.white, borderRadius:16, padding:'16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)' }}>
-            <p style={{ fontSize:13, color:T.dark, lineHeight:1.7 }}>
-              Chaitén es una pequeña ciudad en la Región de Los Lagos, al norte de la Patagonia chilena. Es la puerta de entrada a la mítica <strong>Carretera Austral</strong> y al <strong>Parque Pumalín</strong>, uno de los parques privados más grandes del mundo.{'\n\n'}
-              En 2008, el volcán Chaitén hizo erupción, destruyendo gran parte del pueblo. Hoy renace como un destino auténtico, sostenible y de naturaleza prístina.
+            <p style={{ fontSize:13, color:T.dark, lineHeight:1.8 }}>
+              Chaitén es una pequeña ciudad en la Región de Los Lagos, al norte de la Patagonia chilena. Es la puerta de entrada a la mítica <strong>Carretera Austral</strong> y al <strong>Parque Pumalín</strong>, una de las reservas de bosque templado más grande del mundo.
+            </p>
+            <p style={{ fontSize:13, color:T.dark, lineHeight:1.8, marginTop:10 }}>
+              En 2008 el volcán Chaitén hizo erupción, destruyendo gran parte del pueblo. Hoy renace como un destino auténtico, sostenible y de naturaleza prístina — un símbolo de resiliencia patagónica.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Temporadas */}
+      {/* Historia del volcán */}
+      <div style={{ paddingTop:24 }}>
+        <SectionHeader title="Historia del volcán" />
+        <div style={{ padding:'0 20px' }}>
+          <div style={{ borderRadius:20, background:'linear-gradient(145deg,#1a0808,#5a1a1a)', overflow:'hidden' }}>
+            <div style={{ padding:'20px' }}>
+              <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:18 }}>
+                <div style={{ width:40, height:40, borderRadius:10, background:'rgba(255,100,50,0.25)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                  <Flame size={22} color='#ff6432' />
+                </div>
+                <div>
+                  <p style={{ fontSize:16, fontWeight:800, color:'#fff' }}>Erupción 2008</p>
+                  <p style={{ fontSize:11, color:'rgba(255,255,255,0.55)' }}>Un evento que cambió la historia</p>
+                </div>
+              </div>
+              {HISTORIA_ITEMS.map((item, i) => (
+                <div key={i} style={{ display:'flex', gap:14, marginBottom: i < HISTORIA_ITEMS.length-1 ? 16 : 0 }}>
+                  <div style={{ display:'flex', flexDirection:'column', alignItems:'center', flexShrink:0 }}>
+                    <div style={{ width:10, height:10, borderRadius:'50%', background:'#ff6432', flexShrink:0 }} />
+                    {i < HISTORIA_ITEMS.length-1 && <div style={{ width:2, flex:1, background:'rgba(255,100,50,0.3)', marginTop:4 }} />}
+                  </div>
+                  <div style={{ paddingBottom: i < HISTORIA_ITEMS.length-1 ? 0 : 0 }}>
+                    <p style={{ fontSize:11, fontWeight:700, color:'#ff9472', marginBottom:4 }}>{item.año}</p>
+                    <p style={{ fontSize:12, color:'rgba(255,255,255,0.8)', lineHeight:1.6 }}>{item.texto}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mapa del pueblo */}
+      <div style={{ paddingTop:24 }}>
+        <SectionHeader title="Mapa de Chaitén" />
+        <div style={{ padding:'0 20px' }}>
+          <div style={{ borderRadius:16, overflow:'hidden', boxShadow:'0 4px 16px rgba(0,0,0,0.10)', height:240 }}>
+            <iframe
+              src="https://www.openstreetmap.org/export/embed.html?bbox=-72.7620%2C-42.9280%2C-72.6980%2C-42.9060&layer=mapnik&marker=-42.9167%2C-72.7167"
+              style={{ width:'100%', height:'100%', border:'none' }}
+              title="Mapa de Chaitén"
+            />
+          </div>
+          <a
+            href="https://www.openstreetmap.org/?mlat=-42.9167&mlon=-72.7167#map=14/-42.9167/-72.7167"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display:'block', textAlign:'center', padding:'10px', fontSize:12, color:T.teal, fontWeight:600 }}
+          >
+            Ver mapa completo →
+          </a>
+        </div>
+      </div>
+
+      {/* Distancias desde Chaitén */}
+      <div style={{ paddingTop:24 }}>
+        <SectionHeader title="Distancias desde Chaitén" />
+        <div style={{ padding:'0 20px' }}>
+          <ListCard first last>
+            {DISTANCIAS.map((d, i, arr) => (
+              <div key={d.destino} style={{ display:'flex', alignItems:'center', gap:14, padding:'12px 14px', borderBottom: i < arr.length-1 ? `1px solid ${T.grayLight}` : 'none' }}>
+                <div style={{ width:36, height:36, borderRadius:10, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                  <d.Icon size={18} color={T.teal} />
+                </div>
+                <div style={{ flex:1 }}>
+                  <p style={{ fontSize:13, fontWeight:700, color:T.dark }}>{d.destino}</p>
+                  <p style={{ fontSize:10, color:T.gray }}>{d.via}</p>
+                </div>
+                <div style={{ textAlign:'right', flexShrink:0 }}>
+                  <p style={{ fontSize:13, fontWeight:800, color:T.teal }}>{d.distancia}</p>
+                  <p style={{ fontSize:10, color:T.gray }}>{d.tiempo}</p>
+                </div>
+              </div>
+            ))}
+          </ListCard>
+        </div>
+      </div>
+
+      {/* Cuándo visitar */}
       <div style={{ paddingTop:24 }}>
         <SectionHeader title="Cuándo visitar" />
         <div style={{ display:'flex', flexDirection:'column', gap:10, padding:'0 20px' }}>
@@ -792,7 +1056,7 @@ function InfoTab() {
         </div>
       </div>
 
-      {/* Tips */}
+      {/* Tips del viajero */}
       <div style={{ paddingTop:24 }}>
         <SectionHeader title="Tips del viajero" />
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, padding:'0 20px' }}>
