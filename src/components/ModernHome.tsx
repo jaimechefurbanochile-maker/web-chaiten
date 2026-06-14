@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, SlidersHorizontal, Heart, ChevronRight, Home, Map, MessageCircle, Bookmark, User, Mic, Clock } from 'lucide-react';
+import { Search, SlidersHorizontal, Heart, ChevronRight, Home, MessageCircle, Bookmark, User, Mic, Clock } from 'lucide-react';
 import { useWeather } from '../hooks/useWeather';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
