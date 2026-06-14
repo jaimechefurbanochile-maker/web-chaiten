@@ -811,45 +811,36 @@ function HomeTab({ wx, navigate, onTabChange }: { wx: ReturnType<typeof useWeath
 
       {/* Footer */}
       <div style={{ padding:'28px 20px 0' }}>
-        <div style={{ background:'#0D1F17', borderRadius:24, padding:'24px 20px' }}>
-          <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:20 }}>
-            <div style={{ width:46, height:46, borderRadius:14, background:'rgba(200,241,53,0.15)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-              <TreePine size={24} color='#C8F135' />
-            </div>
-            <div>
-              <p style={{ fontSize:17, fontWeight:800, color:T.white }}>Chaitén Patagonia</p>
-              <p style={{ fontSize:11, color:'rgba(255,255,255,0.4)' }}>Patagonia Norte · Los Lagos · Chile</p>
-            </div>
-          </div>
-          <div style={{ height:1, background:'rgba(255,255,255,0.08)', marginBottom:18 }} />
-          <p style={{ fontSize:10, fontWeight:700, color:'rgba(255,255,255,0.35)', letterSpacing:'0.1em', textTransform:'uppercase', marginBottom:12 }}>Contactos de emergencia</p>
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8, marginBottom:20 }}>
-            {[
-              { Icon: Phone,       label:'Emergencias',   val:'131 · 133'      },
-              { Icon: Stethoscope, label:'Hospital',      val:'(65) 2 731 244' },
-              { Icon: Ship,        label:'Ferry Navimag', val:'(65) 2 270 430' },
-              { Icon: Plane,       label:'Aerocord',      val:'(65) 2 254 411' },
-            ].map(({ Icon, label, val }) => (
-              <div key={label} style={{ background:'rgba(255,255,255,0.05)', borderRadius:12, padding:'11px 12px', border:'1px solid rgba(255,255,255,0.07)' }}>
-                <div style={{ display:'flex', alignItems:'center', gap:4, marginBottom:4 }}>
-                  <Icon size={10} color='rgba(255,255,255,0.4)' />
-                  <p style={{ fontSize:10, color:'rgba(255,255,255,0.4)' }}>{label}</p>
-                </div>
-                <p style={{ fontSize:12, fontWeight:700, color:T.white }}>{val}</p>
+        <div style={{ background:T.white, borderRadius:20, padding:'18px 20px', boxShadow:'0 2px 12px rgba(0,0,0,0.06)', borderTop:`3px solid ${T.teal}` }}>
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14 }}>
+            <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+              <TreePine size={16} color={T.teal} />
+              <div>
+                <p style={{ fontSize:13, fontWeight:800, color:T.dark }}>Chaitén Patagonia</p>
+                <p style={{ fontSize:10, color:T.gray }}>Patagonia Norte · Chile</p>
               </div>
-            ))}
-          </div>
-          <div style={{ height:1, background:'rgba(255,255,255,0.08)', marginBottom:16 }} />
-          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-            <p style={{ fontSize:10, color:'rgba(255,255,255,0.3)' }}>© 2026 Chaitén Patagonia</p>
-            <div style={{ display:'flex', gap:8 }}>
+            </div>
+            <div style={{ display:'flex', gap:6 }}>
               {([Globe, Share2, Mail] as const).map((Icon, i) => (
-                <button key={i} style={{ width:36, height:36, borderRadius:'50%', background:'rgba(255,255,255,0.08)', border:'1px solid rgba(255,255,255,0.12)', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                  <Icon size={16} color='rgba(255,255,255,0.6)' />
+                <button key={i} style={{ width:30, height:30, borderRadius:'50%', background:T.tealBg, border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                  <Icon size={13} color={T.teal} />
                 </button>
               ))}
             </div>
           </div>
+          <div style={{ display:'flex', gap:6, flexWrap:'wrap', marginBottom:14 }}>
+            {[
+              { label:'Emergencias', val:'131 · 133'      },
+              { label:'Hospital',    val:'(65) 2 731 244' },
+              { label:'Ferry',       val:'(65) 2 270 430' },
+            ].map(({ label, val }) => (
+              <div key={label} style={{ background:T.bg, borderRadius:100, padding:'5px 12px', display:'flex', alignItems:'center', gap:4 }}>
+                <span style={{ fontSize:10, color:T.gray }}>{label}</span>
+                <span style={{ fontSize:10, fontWeight:700, color:T.dark }}>· {val}</span>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize:10, color:T.grayLight, textAlign:'center' }}>© 2026 Chaitén Patagonia</p>
         </div>
       </div>
       <div style={{ height:16 }} />
