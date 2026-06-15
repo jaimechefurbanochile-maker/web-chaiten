@@ -29,7 +29,7 @@ const T = {
 
 type NavTab = 'home' | 'explorar' | 'pudi' | 'servicios' | 'info';
 type Dificultad = 'Fácil' | 'Media' | 'Alta';
-type Page = { type: 'lugar'; id: string } | { type: 'ruta'; id: string } | { type: 'itinerario'; id: string } | { type: 'alojamiento'; id: string } | { type: 'restaurante'; id: string } | { type: 'destino'; id: string } | { type: 'comollegar'; id: string } | null;
+type Page = { type: 'lugar'; id: string } | { type: 'ruta'; id: string } | { type: 'itinerario'; id: string } | { type: 'alojamiento'; id: string } | { type: 'restaurante'; id: string } | { type: 'destino'; id: string } | { type: 'comollegar'; id: string } | { type: 'historia' } | null;
 type Navigate = (page: Page) => void;
 
 // ─── Data ────────────────────────────────────────────────────────────────────
@@ -810,6 +810,147 @@ function ComoLlegarDetailPage({ id, onBack }: { id: string; onBack: () => void }
   );
 }
 
+function HistoriaPage({ onBack }: { onBack: () => void }) {
+  return (
+    <div style={{ height:'100dvh', overflowY:'auto', background:T.bg }} className="hide-scrollbar">
+      {/* Hero dramático */}
+      <div style={{ position:'relative', height:320, flexShrink:0 }}>
+        <img src="https://picsum.photos/id/96/430/320" alt="Chaitén" style={{ width:'100%', height:'100%', objectFit:'cover' }} />
+        <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom,rgba(20,4,4,0.55) 0%,rgba(60,12,12,0.4) 40%,rgba(10,4,4,0.88) 100%)' }} />
+        <button onClick={onBack} style={{ position:'absolute', top:52, left:20, width:42, height:42, borderRadius:'50%', background:'rgba(0,0,0,0.4)', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', backdropFilter:'blur(6px)' }}>
+          <ArrowLeft size={20} color='#fff' />
+        </button>
+        <div style={{ position:'absolute', bottom:0, left:0, right:0, padding:'24px 20px' }}>
+          <span style={{ background:'rgba(255,100,50,0.35)', color:'#ff9472', fontSize:10, fontWeight:700, padding:'4px 12px', borderRadius:100, border:'1px solid rgba(255,100,50,0.5)', backdropFilter:'blur(4px)', marginBottom:10, display:'inline-block' }}>HISTORIA DEL PUEBLO</span>
+          <h1 style={{ fontSize:30, fontWeight:800, color:'#fff', lineHeight:1.15, marginBottom:6 }}>Chaitén:<br/>Un pueblo que renació</h1>
+          <p style={{ fontSize:13, color:'rgba(255,255,255,0.8)' }}>Patagonia Norte · Los Lagos · Chile</p>
+        </div>
+      </div>
+
+      {/* Stats rápidos */}
+      <div style={{ background:T.white, margin:'0 16px', borderRadius:'0 0 20px 20px', padding:'16px 14px', boxShadow:'0 6px 24px rgba(0,0,0,0.10)', marginBottom:24 }}>
+        <div style={{ display:'flex', gap:8 }}>
+          {[
+            { val:'2008',     label:'Año erupción',   color:'#dc2626' },
+            { val:'9.500',    label:'Años dormido',   color:T.orange  },
+            { val:'~7.000',   label:'Evacuados',      color:T.dark    },
+            { val:'~8.000',   label:'Hoy viven aquí', color:T.green   },
+          ].map(s => (
+            <div key={s.label} style={{ flex:1, textAlign:'center', background:T.bg, borderRadius:12, padding:'10px 4px' }}>
+              <p style={{ fontSize:14, fontWeight:800, color:s.color, lineHeight:1.1 }}>{s.val}</p>
+              <p style={{ fontSize:9, color:T.gray, lineHeight:1.3, marginTop:2 }}>{s.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ padding:'0 20px' }}>
+        {/* ¿Dónde estás? */}
+        <div style={{ background:T.white, borderRadius:16, padding:'18px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', marginBottom:24 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:12 }}>
+            <div style={{ width:34, height:34, borderRadius:10, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+              <MapPin size={18} color={T.teal} />
+            </div>
+            <p style={{ fontSize:15, fontWeight:800, color:T.dark }}>¿Dónde estás?</p>
+          </div>
+          <p style={{ fontSize:13, color:T.dark, lineHeight:1.8 }}>
+            Estás en <strong>Chaitén</strong>, una pequeña ciudad en la <strong>Región de Los Lagos</strong>, al norte de la Patagonia chilena. Es la puerta de entrada a la mítica <strong>Carretera Austral</strong> y al <strong>Parque Nacional Pumalín</strong>, una de las mayores reservas de bosque templado del mundo.
+          </p>
+          <p style={{ fontSize:13, color:T.dark, lineHeight:1.8, marginTop:10 }}>
+            En mayo de 2008, el volcán Chaitén hizo erupción después de <strong>9.500 años de silencio</strong>. La ciudad fue evacuada en 24 horas y gran parte quedó sepultada por lahares volcánicos. Hoy, Chaitén renació como un destino auténtico — un símbolo de la resiliencia patagónica.
+          </p>
+        </div>
+
+        {/* Línea de tiempo */}
+        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:16 }}>Línea de tiempo</p>
+        <div style={{ borderRadius:20, background:'linear-gradient(145deg,#1a0808,#5a1a1a)', overflow:'hidden', marginBottom:24 }}>
+          <div style={{ padding:'20px' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:20 }}>
+              <div style={{ width:40, height:40, borderRadius:10, background:'rgba(255,100,50,0.25)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <Flame size={22} color='#ff6432' />
+              </div>
+              <div>
+                <p style={{ fontSize:16, fontWeight:800, color:'#fff' }}>La erupción de 2008</p>
+                <p style={{ fontSize:11, color:'rgba(255,255,255,0.55)' }}>Un evento que cambió la historia del pueblo</p>
+              </div>
+            </div>
+            {HISTORIA_ITEMS.map((item, i) => (
+              <div key={i} style={{ display:'flex', gap:14, marginBottom: i < HISTORIA_ITEMS.length - 1 ? 20 : 0 }}>
+                <div style={{ display:'flex', flexDirection:'column', alignItems:'center', flexShrink:0 }}>
+                  <div style={{ width:12, height:12, borderRadius:'50%', background:'#ff6432', flexShrink:0 }} />
+                  {i < HISTORIA_ITEMS.length - 1 && <div style={{ width:2, flex:1, background:'rgba(255,100,50,0.3)', marginTop:4 }} />}
+                </div>
+                <div style={{ paddingBottom: i < HISTORIA_ITEMS.length - 1 ? 0 : 0 }}>
+                  <p style={{ fontSize:12, fontWeight:700, color:'#ff9472', marginBottom:5 }}>{item.año}</p>
+                  <p style={{ fontSize:12, color:'rgba(255,255,255,0.85)', lineHeight:1.7 }}>{item.texto}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Chaitén hoy */}
+        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:16 }}>Chaitén hoy</p>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:24 }}>
+          {[
+            { Icon: Users,    titulo:'Comunidad viva',   desc:'~8.000 habitantes que volvieron a reconstruir su pueblo' },
+            { Icon: TreePine, titulo:'Naturaleza intacta', desc:'Puerta al Parque Pumalín y la Carretera Austral' },
+            { Icon: Mountain, titulo:'Volcán Corcovado',  desc:'2.300 m · Icono visual de Chaitén en días despejados' },
+            { Icon: Route,    titulo:'Carretera Austral', desc:'Ruta 7 · Inicio del camino mítico de la Patagonia' },
+          ].map(item => (
+            <div key={item.titulo} style={{ background:T.white, borderRadius:16, padding:'14px 12px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)' }}>
+              <div style={{ width:38, height:38, borderRadius:10, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:10 }}>
+                <item.Icon size={20} color={T.teal} />
+              </div>
+              <p style={{ fontSize:12, fontWeight:700, color:T.dark, marginBottom:4, lineHeight:1.3 }}>{item.titulo}</p>
+              <p style={{ fontSize:10, color:T.gray, lineHeight:1.5 }}>{item.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Zona de exclusión */}
+        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>La zona que no olvidarás</p>
+        <div style={{ background:T.white, borderRadius:16, padding:'16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', marginBottom:24 }}>
+          <div style={{ display:'flex', gap:12, marginBottom:14 }}>
+            <div style={{ width:36, height:36, borderRadius:10, background:'#FEF2F2', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+              <Flame size={18} color='#dc2626' />
+            </div>
+            <div>
+              <p style={{ fontSize:13, fontWeight:700, color:T.dark, marginBottom:3 }}>Zona de Exclusión histórica</p>
+              <p style={{ fontSize:12, color:T.gray }}>El Barrio Nuevo destruido por la lahar</p>
+            </div>
+          </div>
+          <p style={{ fontSize:13, color:T.dark, lineHeight:1.7 }}>
+            A 500 metros del centro puedes caminar por el antiguo barrio sepultado por la lahar del río Blanco. Casas a medias enterradas, el cauce que atravesó la ciudad, y el silencio absoluto. Es uno de los sitios de memoria volcánica más impresionantes del mundo y la entrada es completamente libre.
+          </p>
+        </div>
+
+        {/* Datos del destino */}
+        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Datos del destino</p>
+        <div style={{ background:T.white, borderRadius:16, overflow:'hidden', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', marginBottom:40 }}>
+          {[
+            { Icon: MapPin,      label:'Ubicación',           value:'Región de Los Lagos · 42°55\'S 72°43\'W' },
+            { Icon: Mountain,    label:'Volcán Corcovado',    value:'2.300 m s.n.m. · Estratovolcán activo'  },
+            { Icon: Route,       label:'Carretera Austral',   value:'Ruta 7 · inicio del trayecto mítico'    },
+            { Icon: Thermometer, label:'Clima',               value:'5°C (invierno) · 18°C (verano) · Lluvia todo el año' },
+            { Icon: DollarSign,  label:'Moneda',              value:'Peso chileno (CLP) · USD ampliamente aceptado' },
+          ].map((d, i, arr) => (
+            <div key={d.label} style={{ display:'flex', alignItems:'center', gap:14, padding:'13px 16px', borderBottom: i < arr.length - 1 ? `1px solid ${T.grayLight}` : 'none' }}>
+              <div style={{ width:36, height:36, borderRadius:10, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <d.Icon size={18} color={T.teal} />
+              </div>
+              <div style={{ flex:1 }}>
+                <p style={{ fontSize:11, color:T.gray }}>{d.label}</p>
+                <p style={{ fontSize:13, fontWeight:600, color:T.dark }}>{d.value}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── HOME TAB ─────────────────────────────────────────────────────────────────
 
 function HomeTab({ wx, navigate, onTabChange }: { wx: ReturnType<typeof useWeather>; navigate: Navigate; onTabChange: (tab: NavTab) => void }) {
@@ -880,6 +1021,29 @@ function HomeTab({ wx, navigate, onTabChange }: { wx: ReturnType<typeof useWeath
               <span style={{ fontSize:10, fontWeight:600, color:T.dark, textAlign:'center', lineHeight:1.2 }}>{label}</span>
             </button>
           ))}
+        </div>
+      </div>
+
+      {/* Historia banner */}
+      <div style={{ padding:'28px 20px 0' }}>
+        <div onClick={() => navigate({ type:'historia' })} style={{ borderRadius:20, background:'linear-gradient(145deg,#1a0808,#5a1414)', overflow:'hidden', position:'relative', cursor:'pointer' }}>
+          <img src="https://picsum.photos/id/96/420/160" alt="Historia Chaitén" style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover', opacity:0.22 }} />
+          <div style={{ position:'relative', zIndex:1, padding:'20px' }}>
+            <span style={{ background:'rgba(255,100,50,0.3)', color:'#ff9472', fontSize:10, fontWeight:700, padding:'4px 10px', borderRadius:100, border:'1px solid rgba(255,100,50,0.4)', display:'inline-block', marginBottom:10 }}>HISTORIA DEL PUEBLO</span>
+            <p style={{ fontSize:20, fontWeight:800, color:'#fff', lineHeight:1.2, marginBottom:6 }}>¿Dónde estás?</p>
+            <p style={{ fontSize:12, color:'rgba(255,255,255,0.72)', lineHeight:1.5, marginBottom:16 }}>Chaitén renació de sus cenizas. La historia del volcán de 2008 y el símbolo de resiliencia de la Patagonia.</p>
+            <div style={{ display:'flex', gap:8 }}>
+              {[['2008','Erupción'],['9.500 años','Dormido'],['~7.000','Evacuados']].map(([v,l]) => (
+                <div key={l} style={{ background:'rgba(255,255,255,0.1)', borderRadius:10, padding:'7px 10px', flex:1 }}>
+                  <p style={{ fontSize:12, fontWeight:800, color:'#ff9472' }}>{v}</p>
+                  <p style={{ fontSize:9, color:'rgba(255,255,255,0.55)' }}>{l}</p>
+                </div>
+              ))}
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'center', width:32, flexShrink:0 }}>
+                <ChevronRight size={18} color='rgba(255,255,255,0.5)' />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1687,6 +1851,7 @@ export default function ModernHome() {
     if (page.type === 'restaurante')  return <RestauranteDetailPage  id={page.id} onBack={() => setPage(null)} />;
     if (page.type === 'destino')      return <DestinoDetailPage      id={page.id} onBack={() => setPage(null)} />;
     if (page.type === 'comollegar')   return <ComoLlegarDetailPage   id={page.id} onBack={() => setPage(null)} />;
+    if (page.type === 'historia')     return <HistoriaPage            onBack={() => setPage(null)} />;
   }
 
   const isPudi = tab === 'pudi';
