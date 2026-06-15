@@ -1460,10 +1460,10 @@ function HomeTab({ wx, navigate, onTabChange }: { wx: ReturnType<typeof useWeath
             </div>
             <div style={{ display:'flex', gap:7, marginBottom:16, flexWrap:'wrap' }}>
               {['¿Cómo llegar?','¿Qué hacer hoy?','Rutas Pumalín','Emergencias'].map(q => (
-                <span key={q} style={{ background:T.tealBg, color:T.teal, fontSize:11, fontWeight:600, padding:'6px 12px', borderRadius:100, border:`1px solid ${T.teal}30`, cursor:'pointer' }}>{q}</span>
+                <span key={q} onClick={() => onTabChange('pudi')} style={{ background:T.tealBg, color:T.teal, fontSize:11, fontWeight:600, padding:'6px 12px', borderRadius:100, border:`1px solid ${T.teal}30`, cursor:'pointer' }}>{q}</span>
               ))}
             </div>
-            <button style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:10, width:'100%', background:T.teal, color:T.white, fontWeight:800, fontSize:14, padding:'14px 20px', borderRadius:100, border:'none', cursor:'pointer', fontFamily:'inherit' }}>
+            <button onClick={() => onTabChange('pudi')} style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:10, width:'100%', background:T.teal, color:T.white, fontWeight:800, fontSize:14, padding:'14px 20px', borderRadius:100, border:'none', cursor:'pointer', fontFamily:'inherit' }}>
               <MessageCircle size={18} />Pregúntale a Pudi
             </button>
           </div>
@@ -1483,9 +1483,9 @@ function HomeTab({ wx, navigate, onTabChange }: { wx: ReturnType<typeof useWeath
             </div>
             <div style={{ display:'flex', gap:6 }}>
               {([Globe, Share2, Mail] as const).map((Icon, i) => (
-                <button key={i} style={{ width:30, height:30, borderRadius:'50%', background:T.tealBg, border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <div key={i} style={{ width:30, height:30, borderRadius:'50%', background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center' }}>
                   <Icon size={13} color={T.teal} />
-                </button>
+                </div>
               ))}
             </div>
           </div>
@@ -1587,6 +1587,26 @@ function ExplorarTab({ navigate }: { navigate: Navigate }) {
                   </div>
                 </div>
                 <DiffBadge d={r.dificultad} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {filtro === 'Todo' && (
+        <div style={{ paddingTop:24 }}>
+          <SectionHeader title="Itinerarios sugeridos" />
+          <div style={{ display:'flex', flexDirection:'column', gap:10, padding:'0 20px' }}>
+            {ITINERARIOS.map(it => (
+              <div key={it.id} onClick={() => navigate({ type:'itinerario', id:it.id })} style={{ display:'flex', alignItems:'center', gap:12, background:T.white, borderRadius:16, padding:'14px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', cursor:'pointer' }}>
+                <div style={{ width:48, height:48, borderRadius:12, background:`${it.color}22`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                  <it.Icon size={24} color={it.color} />
+                </div>
+                <div style={{ flex:1, minWidth:0 }}>
+                  <p style={{ fontSize:13, fontWeight:700, color:T.dark, marginBottom:3, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{it.tipo}</p>
+                  <p style={{ fontSize:11, color:T.gray }}>{it.desc}</p>
+                </div>
+                <span style={{ fontSize:11, fontWeight:700, color:'#fff', background:it.color, padding:'4px 10px', borderRadius:100, flexShrink:0 }}>{it.dias}</span>
               </div>
             ))}
           </div>
@@ -1823,7 +1843,7 @@ function ServiciosTab() {
 
 // ─── INFO TAB ────────────────────────────────────────────────────────────────
 
-function InfoTab() {
+function InfoTab({ navigate }: { navigate: Navigate }) {
   return (
     <>
       <TealHeader title="Sobre Chaitén" subtitle="Patagonia Norte · Los Lagos, Chile" showSearch={false} />
@@ -1866,29 +1886,34 @@ function InfoTab() {
       <div style={{ paddingTop:24 }}>
         <SectionHeader title="Historia del volcán" />
         <div style={{ padding:'0 20px' }}>
-          <div style={{ borderRadius:20, background:'linear-gradient(145deg,#1a0808,#5a1a1a)', overflow:'hidden' }}>
+          <div onClick={() => navigate({ type:'historia' })} style={{ borderRadius:20, background:'linear-gradient(145deg,#1a0808,#5a1a1a)', overflow:'hidden', cursor:'pointer' }}>
             <div style={{ padding:'20px' }}>
               <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:18 }}>
                 <div style={{ width:40, height:40, borderRadius:10, background:'rgba(255,100,50,0.25)', display:'flex', alignItems:'center', justifyContent:'center' }}>
                   <Flame size={22} color='#ff6432' />
                 </div>
-                <div>
+                <div style={{ flex:1 }}>
                   <p style={{ fontSize:16, fontWeight:800, color:'#fff' }}>Erupción 2008</p>
                   <p style={{ fontSize:11, color:'rgba(255,255,255,0.55)' }}>Un evento que cambió la historia</p>
                 </div>
+                <ChevronRight size={20} color='rgba(255,100,50,0.7)' />
               </div>
-              {HISTORIA_ITEMS.map((item, i) => (
-                <div key={i} style={{ display:'flex', gap:14, marginBottom: i < HISTORIA_ITEMS.length-1 ? 16 : 0 }}>
+              {HISTORIA_ITEMS.slice(0, 2).map((item, i) => (
+                <div key={i} style={{ display:'flex', gap:14, marginBottom: i < 1 ? 16 : 0 }}>
                   <div style={{ display:'flex', flexDirection:'column', alignItems:'center', flexShrink:0 }}>
                     <div style={{ width:10, height:10, borderRadius:'50%', background:'#ff6432', flexShrink:0 }} />
-                    {i < HISTORIA_ITEMS.length-1 && <div style={{ width:2, flex:1, background:'rgba(255,100,50,0.3)', marginTop:4 }} />}
+                    {i < 1 && <div style={{ width:2, flex:1, background:'rgba(255,100,50,0.3)', marginTop:4 }} />}
                   </div>
-                  <div style={{ paddingBottom: i < HISTORIA_ITEMS.length-1 ? 0 : 0 }}>
+                  <div>
                     <p style={{ fontSize:11, fontWeight:700, color:'#ff9472', marginBottom:4 }}>{item.año}</p>
                     <p style={{ fontSize:12, color:'rgba(255,255,255,0.8)', lineHeight:1.6 }}>{item.texto}</p>
                   </div>
                 </div>
               ))}
+              <div style={{ marginTop:14, display:'flex', alignItems:'center', justifyContent:'center', gap:6, background:'rgba(255,100,50,0.15)', borderRadius:10, padding:'10px' }}>
+                <p style={{ fontSize:12, fontWeight:700, color:'#ff9472' }}>Ver historia completa</p>
+                <ChevronRight size={14} color='#ff9472' />
+              </div>
             </div>
           </div>
         </div>
@@ -2035,7 +2060,7 @@ export default function ModernHome() {
         {tab === 'explorar'  && <ExplorarTab navigate={setPage} />}
         {tab === 'pudi'      && <PudiTab />}
         {tab === 'servicios' && <ServiciosTab />}
-        {tab === 'info'      && <InfoTab />}
+        {tab === 'info'      && <InfoTab navigate={setPage} />}
       </div>
 
       {/* Bottom Nav */}
