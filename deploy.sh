@@ -20,7 +20,8 @@ git checkout gh-pages
 git rm -f assets/index-*.js  2>/dev/null || true
 git rm -f assets/index-*.css 2>/dev/null || true
 
-# Copia los nuevos assets
+# Copia los nuevos assets (mkdir por si assets/ quedó vacío)
+mkdir -p assets
 cp /tmp/web-chaiten-deploy/assets/$JS_FILE  assets/
 cp /tmp/web-chaiten-deploy/assets/$CSS_FILE assets/
 
