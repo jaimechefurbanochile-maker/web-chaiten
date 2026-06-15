@@ -7,7 +7,7 @@ import {
   Mountain, Waves, Droplets, Flame, Pill, HeartPulse,
   Bike, Footprints, Truck, CloudRain, Thermometer, Sun, Sunrise, Route, DollarSign,
   CalendarDays, Wind, Users, ShoppingCart, Landmark, Navigation,
-  ArrowLeft, Globe, Share2, Mail,
+  ArrowLeft, Globe, Share2, Mail, Check,
 } from 'lucide-react';
 import { useWeather } from '../hooks/useWeather';
 
@@ -328,9 +328,10 @@ function LugarDetailPage({ id, onBack }: { id: string; onBack: () => void }) {
   const det = LUGAR_DETAILS[id];
   return (
     <div style={{ height:'100dvh', overflowY:'auto', background:T.bg }} className="hide-scrollbar">
+      {/* Photo hero 300px */}
       <div style={{ position:'relative', height:300, flexShrink:0 }}>
         <img src={lugar.img.replace('/400/240','/430/300')} alt={lugar.nombre} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
-        <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom,rgba(0,0,0,0.22) 0%,transparent 40%,rgba(0,0,0,0.72) 100%)' }} />
+        <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom,rgba(0,0,0,0.22) 0%,transparent 40%,rgba(0,0,0,0.75) 100%)' }} />
         <button onClick={onBack} style={{ position:'absolute', top:52, left:20, width:42, height:42, borderRadius:'50%', background:'rgba(0,0,0,0.4)', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', backdropFilter:'blur(6px)' }}>
           <ArrowLeft size={20} color='#fff' />
         </button>
@@ -340,50 +341,79 @@ function LugarDetailPage({ id, onBack }: { id: string; onBack: () => void }) {
           <p style={{ fontSize:13, color:'rgba(255,255,255,0.85)' }}>{lugar.sub}</p>
         </div>
       </div>
-      <div style={{ background:T.white, margin:'0 16px', borderRadius:'0 0 20px 20px', padding:'16px', boxShadow:'0 6px 24px rgba(0,0,0,0.10)', marginBottom:20 }}>
+
+      {/* Stats strip — large numbers in T.bg pill cards */}
+      <div style={{ background:T.white, margin:'0 16px', borderRadius:'0 0 20px 20px', padding:'18px 16px', boxShadow:'0 6px 24px rgba(0,0,0,0.10)', marginBottom:20 }}>
         <div style={{ display:'flex', gap:8 }}>
-          {[{ label:'Rating', val:`${lugar.rating} ★`, color:T.star }, { label:'Precio', val:lugar.precio, color:T.teal }, { label:'Duración', val:lugar.dias, color:T.dark }].map(s => (
-            <div key={s.label} style={{ flex:1, textAlign:'center', background:T.bg, borderRadius:12, padding:'10px 6px' }}>
-              <p style={{ fontSize:13, fontWeight:800, color:s.color }}>{s.val}</p>
-              <p style={{ fontSize:10, color:T.gray }}>{s.label}</p>
-            </div>
-          ))}
+          <div style={{ flex:1, textAlign:'center', background:T.bg, borderRadius:14, padding:'14px 6px' }}>
+            <p style={{ fontSize:26, fontWeight:900, color:T.star, lineHeight:1 }}>{lugar.rating}<span style={{ fontSize:14 }}>★</span></p>
+            <p style={{ fontSize:10, color:T.gray, marginTop:5 }}>Rating</p>
+          </div>
+          <div style={{ flex:1, textAlign:'center', background:T.bg, borderRadius:14, padding:'14px 6px' }}>
+            <p style={{ fontSize:lugar.precio.length > 7 ? 14 : 22, fontWeight:900, color:T.teal, lineHeight:1 }}>{lugar.precio}</p>
+            <p style={{ fontSize:10, color:T.gray, marginTop:5 }}>Precio</p>
+          </div>
+          <div style={{ flex:1, textAlign:'center', background:T.bg, borderRadius:14, padding:'14px 6px' }}>
+            <p style={{ fontSize:lugar.dias.length > 7 ? 13 : 20, fontWeight:900, color:T.dark, lineHeight:1 }}>{lugar.dias}</p>
+            <p style={{ fontSize:10, color:T.gray, marginTop:5 }}>Duración</p>
+          </div>
         </div>
       </div>
-      <div style={{ padding:'0 20px 16px' }}>
+
+      {/* Descripción — section heading with teal left accent bar */}
+      <div style={{ padding:'0 20px 20px' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:10 }}>
+          <div style={{ width:3, height:20, background:T.teal, borderRadius:2 }} />
+          <p style={{ fontSize:15, fontWeight:800, color:T.dark }}>Descripción</p>
+        </div>
         <div style={{ background:T.white, borderRadius:16, padding:'16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)' }}>
           <p style={{ fontSize:13, color:T.dark, lineHeight:1.8 }}>{det.descripcion}</p>
         </div>
       </div>
-      <div style={{ padding:'0 20px 16px' }}>
-        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Destacados</p>
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
+
+      {/* Destacados — 2x2 grid, colored dot LEFT + text */}
+      <div style={{ padding:'0 20px 20px' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:10 }}>
+          <div style={{ width:3, height:20, background:T.teal, borderRadius:2 }} />
+          <p style={{ fontSize:15, fontWeight:800, color:T.dark }}>Destacados</p>
+        </div>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
           {det.destacados.map((d, i) => (
-            <div key={i} style={{ display:'flex', alignItems:'center', gap:8, background:T.white, borderRadius:12, padding:'10px 12px', boxShadow:'0 2px 8px rgba(0,0,0,0.05)' }}>
-              <div style={{ width:8, height:8, borderRadius:'50%', background:T.teal, flexShrink:0 }} />
-              <p style={{ fontSize:11, color:T.dark, fontWeight:600, lineHeight:1.3 }}>{d}</p>
+            <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:10, background:T.white, borderRadius:12, padding:'12px 12px', boxShadow:'0 3px 10px rgba(0,0,0,0.07)' }}>
+              <div style={{ width:10, height:10, borderRadius:'50%', background:T.teal, flexShrink:0, marginTop:3 }} />
+              <p style={{ fontSize:11, color:T.dark, fontWeight:600, lineHeight:1.4 }}>{d}</p>
             </div>
           ))}
         </div>
       </div>
-      <div style={{ padding:'0 20px 16px' }}>
-        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Cómo llegar</p>
-        <div style={{ background:T.white, borderRadius:16, padding:'16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', display:'flex', gap:12 }}>
-          <div style={{ width:36, height:36, borderRadius:10, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginTop:2 }}>
+
+      {/* Cómo llegar — teal-tinted full-width card */}
+      <div style={{ padding:'0 20px 20px' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:10 }}>
+          <div style={{ width:3, height:20, background:T.teal, borderRadius:2 }} />
+          <p style={{ fontSize:15, fontWeight:800, color:T.dark }}>Cómo llegar</p>
+        </div>
+        <div style={{ background:T.tealBg, border:`1px solid ${T.teal}30`, borderRadius:16, padding:'16px', display:'flex', gap:12 }}>
+          <div style={{ width:38, height:38, borderRadius:10, background:T.white, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginTop:2, boxShadow:`0 2px 8px ${T.teal}30` }}>
             <MapPin size={18} color={T.teal} />
           </div>
           <p style={{ fontSize:13, color:T.dark, lineHeight:1.7 }}>{det.comoLlegar}</p>
         </div>
       </div>
+
+      {/* Tips — numbered with teal filled circle, white number */}
       <div style={{ padding:'0 20px 40px' }}>
-        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Tips importantes</p>
+        <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:10 }}>
+          <div style={{ width:3, height:20, background:T.teal, borderRadius:2 }} />
+          <p style={{ fontSize:15, fontWeight:800, color:T.dark }}>Tips importantes</p>
+        </div>
         <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
           {det.tips.map((tip, i) => (
             <div key={i} style={{ display:'flex', alignItems:'center', gap:12, background:T.white, borderRadius:12, padding:'12px 14px', boxShadow:'0 2px 8px rgba(0,0,0,0.05)' }}>
-              <div style={{ width:24, height:24, borderRadius:'50%', background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                <span style={{ fontSize:10, fontWeight:800, color:T.teal }}>{i + 1}</span>
+              <div style={{ width:28, height:28, borderRadius:'50%', background:T.teal, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <span style={{ fontSize:12, fontWeight:800, color:'#fff' }}>{i + 1}</span>
               </div>
-              <p style={{ fontSize:12, color:T.dark }}>{tip}</p>
+              <p style={{ fontSize:12, color:T.dark, lineHeight:1.5 }}>{tip}</p>
             </div>
           ))}
         </div>
@@ -397,66 +427,87 @@ function RutaDetailPage({ id, onBack }: { id: string; onBack: () => void }) {
   const det = RUTA_DETAILS[id];
   return (
     <div style={{ height:'100dvh', overflowY:'auto', background:T.bg }} className="hide-scrollbar">
-      <div style={{ background:`linear-gradient(145deg,${ruta.color},${ruta.color}cc)`, padding:'52px 20px 28px', position:'relative' }}>
+      {/* Color gradient header */}
+      <div style={{ background:`linear-gradient(145deg,${ruta.color},${ruta.color}aa)`, padding:'52px 20px 28px', position:'relative' }}>
         <button onClick={onBack} style={{ position:'absolute', top:52, left:20, width:42, height:42, borderRadius:'50%', background:'rgba(255,255,255,0.18)', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>
           <ArrowLeft size={20} color='#fff' />
         </button>
-        <div style={{ marginTop:8, display:'flex', alignItems:'center', gap:12, marginBottom:14 }}>
-          <div style={{ width:54, height:54, borderRadius:14, background:'rgba(255,255,255,0.15)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+        <div style={{ marginTop:8, display:'flex', alignItems:'center', gap:12, marginBottom:16 }}>
+          <div style={{ width:56, height:56, borderRadius:16, background:'rgba(255,255,255,0.15)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
             <ruta.Icon size={28} color='#fff' />
           </div>
           <div>
-            <h1 style={{ fontSize:22, fontWeight:800, color:'#fff', lineHeight:1.2, marginBottom:6 }}>{ruta.nombre}</h1>
+            <h1 style={{ fontSize:22, fontWeight:800, color:'#fff', lineHeight:1.2, marginBottom:8 }}>{ruta.nombre}</h1>
             <DiffBadge d={ruta.dificultad} />
           </div>
         </div>
+        {/* Stats pills — large text on rgba pills */}
         <div style={{ display:'flex', gap:10 }}>
           {[{ label:'Distancia', val:ruta.distancia }, { label:'Tiempo estimado', val:ruta.tiempo }].map(s => (
-            <div key={s.label} style={{ background:'rgba(255,255,255,0.15)', borderRadius:10, padding:'8px 16px' }}>
-              <p style={{ fontSize:10, color:'rgba(255,255,255,0.7)', marginBottom:2 }}>{s.label}</p>
-              <p style={{ fontSize:14, fontWeight:800, color:'#fff' }}>{s.val}</p>
+            <div key={s.label} style={{ background:'rgba(255,255,255,0.2)', borderRadius:12, padding:'10px 18px' }}>
+              <p style={{ fontSize:10, color:'rgba(255,255,255,0.7)', marginBottom:3 }}>{s.label}</p>
+              <p style={{ fontSize:22, fontWeight:800, color:'#fff', lineHeight:1 }}>{s.val}</p>
             </div>
           ))}
         </div>
       </div>
+
       <div style={{ padding:'20px 20px 0' }}>
+        {/* Description — clean white card */}
         <div style={{ background:T.white, borderRadius:16, padding:'16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', marginBottom:20 }}>
           <p style={{ fontSize:13, color:T.dark, lineHeight:1.8 }}>{det.descripcion}</p>
         </div>
-        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Puntos del recorrido</p>
-        <div style={{ background:T.white, borderRadius:16, overflow:'hidden', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', marginBottom:20 }}>
+
+        {/* Puntos del recorrido — vertical timeline */}
+        <p style={{ fontSize:15, fontWeight:800, color:T.dark, marginBottom:14 }}>Puntos del recorrido</p>
+        <div style={{ marginBottom:20 }}>
           {det.puntos.map((p, i) => (
-            <div key={i} style={{ display:'flex', alignItems:'center', gap:14, padding:'13px 16px', borderBottom: i < det.puntos.length - 1 ? `1px solid ${T.grayLight}` : 'none' }}>
-              <div style={{ width:28, height:28, borderRadius:'50%', background:`${ruta.color}22`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                <span style={{ fontSize:11, fontWeight:800, color:ruta.color }}>{i + 1}</span>
+            <div key={i} style={{ display:'flex', gap:14 }}>
+              {/* Left column: filled circle with number + dashed connecting line */}
+              <div style={{ display:'flex', flexDirection:'column', alignItems:'center', flexShrink:0, width:30 }}>
+                <div style={{ width:30, height:30, borderRadius:'50%', background:ruta.color, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, zIndex:1 }}>
+                  <span style={{ fontSize:12, fontWeight:800, color:'#fff' }}>{i + 1}</span>
+                </div>
+                {i < det.puntos.length - 1 && (
+                  <div style={{ width:0, flex:1, minHeight:20, borderLeft:`2px dashed ${ruta.color}50`, marginTop:3, marginBottom:3 }} />
+                )}
               </div>
-              <p style={{ fontSize:12, color:T.dark }}>{p}</p>
+              {/* Right column: point text */}
+              <div style={{ paddingTop:6, paddingBottom: i < det.puntos.length - 1 ? 14 : 0, flex:1 }}>
+                <p style={{ fontSize:12, color:T.dark, lineHeight:1.65 }}>{p}</p>
+              </div>
             </div>
           ))}
         </div>
-        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Equipamiento necesario</p>
-        <div style={{ display:'flex', flexWrap:'wrap', gap:8, marginBottom:20 }}>
+
+        {/* Equipamiento — 2-column colored chips */}
+        <p style={{ fontSize:15, fontWeight:800, color:T.dark, marginBottom:12 }}>Equipamiento necesario</p>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8, marginBottom:20 }}>
           {det.equipamiento.map((e, i) => (
-            <span key={i} style={{ background:T.white, border:`1px solid ${T.grayLight}`, color:T.dark, fontSize:11, fontWeight:600, padding:'7px 12px', borderRadius:100, boxShadow:'0 1px 4px rgba(0,0,0,0.06)' }}>{e}</span>
+            <div key={i} style={{ background:`${ruta.color}15`, border:`1px solid ${ruta.color}30`, color:T.dark, fontSize:11, fontWeight:600, padding:'10px 12px', borderRadius:12, lineHeight:1.4 }}>{e}</div>
           ))}
         </div>
-        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Tips importantes</p>
+
+        {/* Tips — route color filled circles */}
+        <p style={{ fontSize:15, fontWeight:800, color:T.dark, marginBottom:12 }}>Tips importantes</p>
         <div style={{ display:'flex', flexDirection:'column', gap:8, marginBottom:20 }}>
           {det.tips.map((tip, i) => (
             <div key={i} style={{ display:'flex', alignItems:'center', gap:12, background:T.white, borderRadius:12, padding:'12px 14px', boxShadow:'0 2px 8px rgba(0,0,0,0.05)' }}>
-              <div style={{ width:24, height:24, borderRadius:'50%', background:`${ruta.color}22`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                <span style={{ fontSize:10, fontWeight:800, color:ruta.color }}>{i + 1}</span>
+              <div style={{ width:28, height:28, borderRadius:'50%', background:ruta.color, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <span style={{ fontSize:12, fontWeight:800, color:'#fff' }}>{i + 1}</span>
               </div>
-              <p style={{ fontSize:12, color:T.dark }}>{tip}</p>
+              <p style={{ fontSize:12, color:T.dark, lineHeight:1.5 }}>{tip}</p>
             </div>
           ))}
         </div>
-        <div style={{ background:`${ruta.color}11`, borderRadius:16, padding:'14px 16px', marginBottom:40, border:`1px solid ${ruta.color}33` }}>
-          <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:5 }}>
-            <MapPin size={14} color={ruta.color} />
-            <p style={{ fontSize:11, fontWeight:700, color:ruta.color }}>Punto de inicio</p>
+
+        {/* Start point — colored banner */}
+        <div style={{ background:`${ruta.color}15`, border:`1px solid ${ruta.color}33`, borderRadius:16, padding:16, marginBottom:40 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:6 }}>
+            <MapPin size={15} color={ruta.color} />
+            <p style={{ fontSize:13, fontWeight:700, color:ruta.color }}>Punto de inicio</p>
           </div>
-          <p style={{ fontSize:12, color:T.dark }}>{det.inicio}</p>
+          <p style={{ fontSize:12, color:T.dark, lineHeight:1.65 }}>{det.inicio}</p>
         </div>
       </div>
     </div>
@@ -468,56 +519,88 @@ function ItinerarioDetailPage({ id, onBack }: { id: string; onBack: () => void }
   const det = ITINERARIO_DETAILS[id];
   return (
     <div style={{ height:'100dvh', overflowY:'auto', background:T.bg }} className="hide-scrollbar">
-      <div style={{ background:`linear-gradient(145deg,${it.color},${it.color}cc)`, padding:'52px 20px 28px', position:'relative' }}>
+      {/* Color gradient header */}
+      <div style={{ background:`linear-gradient(145deg,${it.color},${it.color}aa)`, padding:'52px 20px 28px', position:'relative' }}>
         <button onClick={onBack} style={{ position:'absolute', top:52, left:20, width:42, height:42, borderRadius:'50%', background:'rgba(255,255,255,0.18)', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>
           <ArrowLeft size={20} color='#fff' />
         </button>
         <div style={{ marginTop:8, display:'flex', alignItems:'center', gap:12, marginBottom:12 }}>
-          <div style={{ width:54, height:54, borderRadius:14, background:'rgba(255,255,255,0.15)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+          <div style={{ width:56, height:56, borderRadius:16, background:'rgba(255,255,255,0.15)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
             <it.Icon size={28} color='#fff' />
           </div>
           <div>
-            <h1 style={{ fontSize:22, fontWeight:800, color:'#fff', lineHeight:1.2, marginBottom:6 }}>{it.tipo}</h1>
+            <h1 style={{ fontSize:22, fontWeight:800, color:'#fff', lineHeight:1.2, marginBottom:8 }}>{it.tipo}</h1>
             <span style={{ background:'rgba(255,255,255,0.25)', color:'#fff', fontSize:11, fontWeight:700, padding:'4px 12px', borderRadius:100, display:'inline-block' }}>{it.dias}</span>
           </div>
         </div>
         <p style={{ fontSize:13, color:'rgba(255,255,255,0.85)', lineHeight:1.5 }}>{det.descripcion}</p>
       </div>
+
       <div style={{ padding:'20px 20px 0' }}>
+        {/* Per-day sections: day band + vertical timeline schedule */}
         {det.programa.map((dia, di) => (
           <div key={di} style={{ marginBottom:20 }}>
-            <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:10 }}>
-              <div style={{ width:28, height:28, borderRadius:8, background:`${it.color}22`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                <CalendarDays size={14} color={it.color} />
-              </div>
-              <p style={{ fontSize:14, fontWeight:800, color:T.dark }}>{dia.dia}</p>
+            {/* Day header band */}
+            <div style={{ background:`${it.color}18`, borderRadius:12, padding:'10px 14px', display:'flex', alignItems:'center', gap:8, marginBottom:14 }}>
+              <CalendarDays size={16} color={it.color} />
+              <p style={{ fontSize:13, fontWeight:800, color:T.dark }}>{dia.dia}</p>
             </div>
-            <div style={{ background:T.white, borderRadius:16, overflow:'hidden', boxShadow:'0 2px 10px rgba(0,0,0,0.06)' }}>
+            {/* Vertical timeline items */}
+            <div style={{ paddingLeft:4 }}>
               {dia.items.map((item, ii) => (
-                <div key={ii} style={{ display:'flex', gap:12, padding:'12px 14px', borderBottom: ii < dia.items.length - 1 ? `1px solid ${T.grayLight}` : 'none' }}>
-                  <span style={{ fontSize:11, fontWeight:700, color:it.color, minWidth:44, flexShrink:0, paddingTop:1 }}>{item.hora}</span>
-                  <p style={{ fontSize:12, color:T.dark, lineHeight:1.5 }}>{item.texto}</p>
+                <div key={ii} style={{ display:'flex', gap:14 }}>
+                  {/* Left: time badge + dotted vertical line */}
+                  <div style={{ display:'flex', flexDirection:'column', alignItems:'center', flexShrink:0 }}>
+                    <span style={{ background:it.color, color:'#fff', fontSize:10, fontWeight:700, borderRadius:100, padding:'4px 8px', whiteSpace:'nowrap', lineHeight:1.2 }}>{item.hora}</span>
+                    {ii < dia.items.length - 1 && (
+                      <div style={{ width:0, flex:1, minHeight:16, borderLeft:`2px dashed ${it.color}40`, marginTop:4, marginBottom:4 }} />
+                    )}
+                  </div>
+                  {/* Right: activity text */}
+                  <div style={{ paddingTop:3, paddingBottom: ii < dia.items.length - 1 ? 14 : 0, flex:1 }}>
+                    <p style={{ fontSize:12, color:T.dark, lineHeight:1.65 }}>{item.texto}</p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         ))}
-        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Qué llevar</p>
+
+        {/* Qué llevar — teal pill chips */}
+        <p style={{ fontSize:15, fontWeight:800, color:T.dark, marginBottom:12 }}>Qué llevar</p>
         <div style={{ display:'flex', flexWrap:'wrap', gap:8, marginBottom:20 }}>
           {det.queTraer.map((item, i) => (
-            <span key={i} style={{ background:T.white, border:`1px solid ${T.grayLight}`, color:T.dark, fontSize:11, fontWeight:600, padding:'7px 12px', borderRadius:100, boxShadow:'0 1px 4px rgba(0,0,0,0.06)' }}>{item}</span>
+            <span key={i} style={{ background:T.tealBg, border:`1px solid ${T.teal}30`, color:T.teal, borderRadius:100, padding:'7px 14px', fontWeight:600, fontSize:11 }}>{item}</span>
           ))}
         </div>
-        <div style={{ background:`${it.color}11`, borderRadius:16, padding:'14px 16px', marginBottom:40, border:`1px solid ${it.color}33` }}>
-          <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:5 }}>
-            <DollarSign size={14} color={it.color} />
-            <p style={{ fontSize:11, fontWeight:700, color:it.color }}>Presupuesto estimado</p>
+
+        {/* Presupuesto — full-width gradient banner */}
+        <div style={{ background:`linear-gradient(135deg,${it.color},${it.color}cc)`, color:'#fff', borderRadius:16, padding:18, marginBottom:40 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:6 }}>
+            <DollarSign size={16} color='rgba(255,255,255,0.9)' />
+            <p style={{ fontSize:12, fontWeight:700, color:'rgba(255,255,255,0.85)' }}>Presupuesto estimado</p>
           </div>
-          <p style={{ fontSize:13, fontWeight:700, color:T.dark }}>{det.presupuesto}</p>
+          <p style={{ fontSize:18, fontWeight:800, color:'#fff', lineHeight:1.3 }}>{det.presupuesto}</p>
         </div>
       </div>
     </div>
   );
+}
+
+function comodidadIcon(nombre: string) {
+  const n = nombre.toLowerCase();
+  if (n.includes('wifi') || n.includes('wi-fi')) return Wifi;
+  if (n.includes('desayuno') || n.includes('café') || n.includes('cafe') || n.includes('snack') || n.includes('restaur')) return Utensils;
+  if (n.includes('cocina')) return Flame;
+  if (n.includes('estacionamiento') || n.includes('parking')) return Car;
+  if (n.includes('lavandería') || n.includes('lavanderia')) return Check;
+  if (n.includes('chimenea') || n.includes('bbq') || n.includes('fogata') || n.includes('leña') || n.includes('lena')) return Flame;
+  if (n.includes('árbol') || n.includes('arbol') || n.includes('sendero')) return TreePine;
+  if (n.includes('recepción') || n.includes('recepcion')) return Building2;
+  if (n.includes('calefacción') || n.includes('calefaccion')) return Thermometer;
+  if (n.includes('ducha') || n.includes('agua caliente')) return Droplets;
+  if (n.includes('ruta') || n.includes('acceso')) return Route;
+  return Check;
 }
 
 function AlojamientoDetailPage({ id, onBack }: { id: string; onBack: () => void }) {
@@ -525,6 +608,7 @@ function AlojamientoDetailPage({ id, onBack }: { id: string; onBack: () => void 
   const det = ALOJAMIENTO_DETAILS[id];
   return (
     <div style={{ height:'100dvh', overflowY:'auto', background:T.bg }} className="hide-scrollbar">
+      {/* Photo hero 260px */}
       <div style={{ position:'relative', height:260 }}>
         <img src={a.img.replace('/160/160','/430/280')} alt={a.nombre} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
         <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom,rgba(0,0,0,0.2) 0%,transparent 35%,rgba(0,0,0,0.65) 100%)' }} />
@@ -536,57 +620,76 @@ function AlojamientoDetailPage({ id, onBack }: { id: string; onBack: () => void 
           <p style={{ fontSize:12, color:'rgba(255,255,255,0.85)' }}>{a.tipo}</p>
         </div>
       </div>
-      <div style={{ background:T.white, margin:'0 16px', borderRadius:'0 0 20px 20px', padding:'14px', boxShadow:'0 6px 24px rgba(0,0,0,0.10)', marginBottom:20 }}>
-        <div style={{ display:'flex', gap:8 }}>
-          {[{ label:'Rating', val:`${a.rating} ★`, color:T.star }, { label:'Precio/noche', val:a.precio, color:T.teal }].map(s => (
-            <div key={s.label} style={{ flex:1, textAlign:'center', background:T.bg, borderRadius:12, padding:'10px 6px' }}>
-              <p style={{ fontSize:14, fontWeight:800, color:s.color }}>{s.val}</p>
-              <p style={{ fontSize:10, color:T.gray }}>{s.label}</p>
-            </div>
-          ))}
+
+      {/* Stats — rating as ★ large star display, precio/noche in green */}
+      <div style={{ background:T.white, margin:'0 16px', borderRadius:'0 0 20px 20px', padding:'16px', boxShadow:'0 6px 24px rgba(0,0,0,0.10)', marginBottom:20 }}>
+        <div style={{ display:'flex', gap:10 }}>
+          <div style={{ flex:1, textAlign:'center', background:T.bg, borderRadius:14, padding:'14px 6px' }}>
+            <p style={{ fontSize:28, fontWeight:900, color:T.star, lineHeight:1 }}>★ {a.rating}</p>
+            <p style={{ fontSize:10, color:T.gray, marginTop:5 }}>Rating</p>
+          </div>
+          <div style={{ flex:1, textAlign:'center', background:T.bg, borderRadius:14, padding:'14px 6px' }}>
+            <p style={{ fontSize:26, fontWeight:900, color:T.green, lineHeight:1 }}>{a.precio}</p>
+            <p style={{ fontSize:10, color:T.gray, marginTop:5 }}>Precio / noche</p>
+          </div>
         </div>
       </div>
-      <div style={{ padding:'0 20px 16px' }}>
+
+      {/* Description — white card */}
+      <div style={{ padding:'0 20px 20px' }}>
         <div style={{ background:T.white, borderRadius:16, padding:'16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)' }}>
           <p style={{ fontSize:13, color:T.dark, lineHeight:1.8 }}>{det.descripcion}</p>
         </div>
       </div>
-      <div style={{ padding:'0 20px 16px' }}>
-        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Comodidades</p>
-        <div style={{ display:'flex', flexWrap:'wrap', gap:8 }}>
-          {det.comodidades.map((c, i) => (
-            <div key={i} style={{ display:'flex', alignItems:'center', gap:6, background:T.white, borderRadius:100, padding:'7px 14px', boxShadow:'0 2px 8px rgba(0,0,0,0.06)', border:`1px solid ${T.grayLight}` }}>
-              <div style={{ width:6, height:6, borderRadius:'50%', background:T.teal, flexShrink:0 }} />
-              <p style={{ fontSize:11, color:T.dark, fontWeight:600 }}>{c}</p>
-            </div>
-          ))}
+
+      {/* Comodidades — 2-column grid with icon-colored square + text */}
+      <div style={{ padding:'0 20px 20px' }}>
+        <p style={{ fontSize:15, fontWeight:800, color:T.dark, marginBottom:12 }}>Comodidades</p>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
+          {det.comodidades.map((c, i) => {
+            const IconComp = comodidadIcon(c);
+            return (
+              <div key={i} style={{ display:'flex', alignItems:'center', gap:10, background:T.white, borderRadius:12, padding:'12px', boxShadow:'0 2px 8px rgba(0,0,0,0.05)' }}>
+                <div style={{ width:34, height:34, borderRadius:10, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                  <IconComp size={16} color={T.teal} />
+                </div>
+                <p style={{ fontSize:11, color:T.dark, fontWeight:600, lineHeight:1.35 }}>{c}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
-      <div style={{ padding:'0 20px 16px' }}>
-        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Políticas</p>
-        <div style={{ background:T.white, borderRadius:16, overflow:'hidden', boxShadow:'0 2px 10px rgba(0,0,0,0.06)' }}>
+
+      {/* Políticas — each row with Check icon in teal circle + text */}
+      <div style={{ padding:'0 20px 20px' }}>
+        <p style={{ fontSize:15, fontWeight:800, color:T.dark, marginBottom:12 }}>Políticas</p>
+        <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
           {det.politicas.map((p, i) => (
-            <div key={i} style={{ display:'flex', alignItems:'center', gap:12, padding:'11px 14px', borderBottom: i < det.politicas.length - 1 ? `1px solid ${T.grayLight}` : 'none' }}>
-              <div style={{ width:6, height:6, borderRadius:'50%', background:T.teal, flexShrink:0 }} />
+            <div key={i} style={{ display:'flex', alignItems:'center', gap:12, background:T.white, borderRadius:12, padding:'12px 14px', boxShadow:'0 2px 8px rgba(0,0,0,0.05)' }}>
+              <div style={{ width:26, height:26, borderRadius:'50%', background:T.teal, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <Check size={13} color='#fff' />
+              </div>
               <p style={{ fontSize:12, color:T.dark }}>{p}</p>
             </div>
           ))}
         </div>
       </div>
+
+      {/* Contact card — MapPin + Phone in tealBg boxes side by side */}
       <div style={{ padding:'0 20px 40px' }}>
-        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Cómo llegar · Contacto</p>
-        <div style={{ background:T.white, borderRadius:16, padding:'16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', display:'flex', flexDirection:'column', gap:12 }}>
-          <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-            <div style={{ width:36, height:36, borderRadius:10, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+        <p style={{ fontSize:15, fontWeight:800, color:T.dark, marginBottom:12 }}>Dirección · Contacto</p>
+        <div style={{ display:'flex', gap:10 }}>
+          <div style={{ flex:1, background:T.tealBg, borderRadius:14, padding:'14px', display:'flex', flexDirection:'column', gap:8 }}>
+            <div style={{ width:34, height:34, borderRadius:10, background:T.white, display:'flex', alignItems:'center', justifyContent:'center' }}>
               <MapPin size={18} color={T.teal} />
             </div>
-            <p style={{ fontSize:13, color:T.dark }}>{det.direccion}</p>
+            <p style={{ fontSize:11, color:T.dark, lineHeight:1.5, fontWeight:500 }}>{det.direccion}</p>
           </div>
-          <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-            <div style={{ width:36, height:36, borderRadius:10, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+          <div style={{ flex:1, background:T.tealBg, borderRadius:14, padding:'14px', display:'flex', flexDirection:'column', gap:8 }}>
+            <div style={{ width:34, height:34, borderRadius:10, background:T.white, display:'flex', alignItems:'center', justifyContent:'center' }}>
               <Phone size={18} color={T.teal} />
             </div>
-            <p style={{ fontSize:13, fontWeight:700, color:T.teal }}>{det.contacto}</p>
+            <p style={{ fontSize:12, color:T.teal, fontWeight:700, lineHeight:1.5 }}>{det.contacto}</p>
           </div>
         </div>
       </div>
@@ -599,6 +702,7 @@ function RestauranteDetailPage({ id, onBack }: { id: string; onBack: () => void 
   const det = RESTAURANTE_DETAILS[id];
   return (
     <div style={{ height:'100dvh', overflowY:'auto', background:T.bg }} className="hide-scrollbar">
+      {/* Photo hero 260px with price badge */}
       <div style={{ position:'relative', height:260 }}>
         <img src={r.img.replace('/160/160','/430/280')} alt={r.nombre} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
         <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom,rgba(0,0,0,0.2) 0%,transparent 35%,rgba(0,0,0,0.65) 100%)' }} />
@@ -611,54 +715,71 @@ function RestauranteDetailPage({ id, onBack }: { id: string; onBack: () => void 
           <p style={{ fontSize:12, color:'rgba(255,255,255,0.85)' }}>{r.tipo}</p>
         </div>
       </div>
+
+      {/* Stats — rating as ★ number, precio, horario */}
       <div style={{ background:T.white, margin:'0 16px', borderRadius:'0 0 20px 20px', padding:'14px', boxShadow:'0 6px 24px rgba(0,0,0,0.10)', marginBottom:20 }}>
         <div style={{ display:'flex', gap:8 }}>
-          {[{ label:'Rating', val:`${r.rating} ★`, color:T.star }, { label:'Precio', val:r.precio, color:T.dark }, { label:'Horario', val:det.horario.split('·')[0].trim(), color:T.teal }].map(s => (
-            <div key={s.label} style={{ flex:1, textAlign:'center', background:T.bg, borderRadius:12, padding:'10px 4px' }}>
-              <p style={{ fontSize:12, fontWeight:800, color:s.color, lineHeight:1.2 }}>{s.val}</p>
-              <p style={{ fontSize:10, color:T.gray }}>{s.label}</p>
-            </div>
-          ))}
+          <div style={{ flex:1, textAlign:'center', background:T.bg, borderRadius:12, padding:'12px 4px' }}>
+            <p style={{ fontSize:22, fontWeight:900, color:T.star, lineHeight:1 }}>★ {r.rating}</p>
+            <p style={{ fontSize:10, color:T.gray, marginTop:4 }}>Rating</p>
+          </div>
+          <div style={{ flex:1, textAlign:'center', background:T.bg, borderRadius:12, padding:'12px 4px' }}>
+            <p style={{ fontSize:22, fontWeight:900, color:T.dark, lineHeight:1 }}>{r.precio}</p>
+            <p style={{ fontSize:10, color:T.gray, marginTop:4 }}>Precio</p>
+          </div>
+          <div style={{ flex:1, textAlign:'center', background:T.bg, borderRadius:12, padding:'12px 4px' }}>
+            <p style={{ fontSize:11, fontWeight:800, color:T.teal, lineHeight:1.3 }}>{r.horario}</p>
+            <p style={{ fontSize:10, color:T.gray, marginTop:4 }}>Horario</p>
+          </div>
         </div>
       </div>
-      <div style={{ padding:'0 20px 16px' }}>
+
+      {/* Descripción — editorial white card */}
+      <div style={{ padding:'0 20px 20px' }}>
         <div style={{ background:T.white, borderRadius:16, padding:'16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)' }}>
           <p style={{ fontSize:13, color:T.dark, lineHeight:1.8 }}>{det.descripcion}</p>
         </div>
       </div>
-      <div style={{ padding:'0 20px 16px' }}>
-        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Especialidades</p>
-        <div style={{ display:'flex', flexDirection:'column', gap:0, background:T.white, borderRadius:16, overflow:'hidden', boxShadow:'0 2px 10px rgba(0,0,0,0.06)' }}>
+
+      {/* Especialidades del chef — colored left accent bar + Utensils icon + text */}
+      <div style={{ padding:'0 20px 20px' }}>
+        <p style={{ fontSize:15, fontWeight:800, color:T.dark, marginBottom:12 }}>Especialidades del chef</p>
+        <div style={{ background:T.white, borderRadius:16, overflow:'hidden', boxShadow:'0 2px 10px rgba(0,0,0,0.06)' }}>
           {det.especialidades.map((e, i) => (
-            <div key={i} style={{ display:'flex', alignItems:'center', gap:12, padding:'12px 16px', borderBottom: i < det.especialidades.length - 1 ? `1px solid ${T.grayLight}` : 'none' }}>
-              <Utensils size={14} color={T.teal} />
-              <p style={{ fontSize:12, color:T.dark }}>{e}</p>
+            <div key={i} style={{ display:'flex', alignItems:'center', gap:0, borderBottom: i < det.especialidades.length - 1 ? `1px solid ${T.grayLight}` : 'none' }}>
+              {/* Colored left accent bar */}
+              <div style={{ width:3, alignSelf:'stretch', background:T.teal, flexShrink:0 }} />
+              <div style={{ display:'flex', alignItems:'center', gap:12, padding:'12px 16px', flex:1 }}>
+                <Utensils size={14} color={T.teal} />
+                <p style={{ fontSize:12, color:T.dark }}>{e}</p>
+              </div>
             </div>
           ))}
         </div>
       </div>
-      <div style={{ padding:'0 20px 16px' }}>
-        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Info útil</p>
-        <div style={{ display:'flex', flexWrap:'wrap', gap:8 }}>
+
+      {/* Info útil — 2-column grid of chips */}
+      <div style={{ padding:'0 20px 20px' }}>
+        <p style={{ fontSize:15, fontWeight:800, color:T.dark, marginBottom:12 }}>Info útil</p>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
           {det.info.map((info, i) => (
-            <div key={i} style={{ background:T.white, border:`1px solid ${T.grayLight}`, color:T.dark, fontSize:11, fontWeight:600, padding:'7px 12px', borderRadius:100, boxShadow:'0 1px 4px rgba(0,0,0,0.06)' }}>{info}</div>
+            <div key={i} style={{ background:T.bg, borderRadius:10, padding:'8px 10px', fontSize:11, color:T.dark, fontWeight:500, lineHeight:1.4 }}>{info}</div>
           ))}
         </div>
       </div>
+
+      {/* Contact — Clock + Phone in teal horizontal strip at bottom */}
       <div style={{ padding:'0 20px 40px' }}>
-        <div style={{ background:T.white, borderRadius:16, padding:'16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', display:'flex', flexDirection:'column', gap:12 }}>
-          <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-            <div style={{ width:36, height:36, borderRadius:10, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-              <Clock size={18} color={T.teal} />
-            </div>
-            <p style={{ fontSize:13, color:T.dark }}>{det.horario}</p>
+        <div style={{ background:T.teal, color:'#fff', borderRadius:16, padding:'14px 16px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:12 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:10, flex:1 }}>
+            <Clock size={18} color='rgba(255,255,255,0.85)' />
+            <p style={{ fontSize:12, color:'rgba(255,255,255,0.9)', lineHeight:1.4 }}>{det.horario}</p>
           </div>
-          <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-            <div style={{ width:36, height:36, borderRadius:10, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-              <Phone size={18} color={T.teal} />
-            </div>
-            <p style={{ fontSize:13, fontWeight:700, color:T.teal }}>{det.contacto}</p>
-          </div>
+          <div style={{ width:1, height:32, background:'rgba(255,255,255,0.25)', flexShrink:0 }} />
+          <a href={`tel:${det.contacto}`} style={{ display:'flex', alignItems:'center', gap:8, textDecoration:'none', flexShrink:0 }}>
+            <Phone size={18} color='rgba(255,255,255,0.85)' />
+            <p style={{ fontSize:12, fontWeight:700, color:'#fff' }}>{det.contacto}</p>
+          </a>
         </div>
       </div>
     </div>
@@ -670,6 +791,7 @@ function DestinoDetailPage({ id, onBack }: { id: string; onBack: () => void }) {
   const det = DESTINO_DETAILS[id];
   return (
     <div style={{ height:'100dvh', overflowY:'auto', background:T.bg }} className="hide-scrollbar">
+      {/* Color gradient header with d.color */}
       <div style={{ background:`linear-gradient(145deg,${d.color},${d.color}cc)`, padding:'52px 20px 28px', position:'relative' }}>
         <button onClick={onBack} style={{ position:'absolute', top:52, left:20, width:42, height:42, borderRadius:'50%', background:'rgba(255,255,255,0.18)', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>
           <ArrowLeft size={20} color='#fff' />
@@ -684,45 +806,73 @@ function DestinoDetailPage({ id, onBack }: { id: string; onBack: () => void }) {
             <p style={{ fontSize:12, color:'rgba(255,255,255,0.8)' }}>{d.desc}</p>
           </div>
         </div>
-        <div style={{ display:'flex', gap:10 }}>
-          {[{ label:'Distancia', val:d.distancia }, { label:'Tiempo estimado', val:d.tiempo }].map(s => (
-            <div key={s.label} style={{ background:'rgba(255,255,255,0.15)', borderRadius:10, padding:'8px 16px' }}>
-              <p style={{ fontSize:10, color:'rgba(255,255,255,0.7)', marginBottom:2 }}>{s.label}</p>
-              <p style={{ fontSize:14, fontWeight:800, color:'#fff' }}>{s.val}</p>
-            </div>
-          ))}
-        </div>
       </div>
+
       <div style={{ padding:'20px 20px 0' }}>
+        {/* "Viaje desde Chaitén" card — horizontal with arrows, distancia + tiempo badges */}
+        <div style={{ background:T.white, borderRadius:16, padding:'16px', boxShadow:'0 4px 16px rgba(0,0,0,0.09)', marginBottom:20 }}>
+          <p style={{ fontSize:11, fontWeight:700, color:T.gray, marginBottom:12, textTransform:'uppercase', letterSpacing:0.5 }}>Viaje desde Chaitén</p>
+          <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+            <div style={{ display:'flex', alignItems:'center', gap:6, flex:1 }}>
+              <div style={{ width:30, height:30, borderRadius:8, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <MapPin size={14} color={T.teal} />
+              </div>
+              <p style={{ fontSize:12, fontWeight:700, color:T.dark }}>Chaitén</p>
+            </div>
+            <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:4, flexShrink:0 }}>
+              <span style={{ fontSize:10, fontWeight:700, color:T.white, background:d.color, padding:'3px 10px', borderRadius:100 }}>{d.distancia}</span>
+              <div style={{ display:'flex', alignItems:'center', gap:3 }}>
+                <div style={{ width:14, height:1, background:T.grayLight }} />
+                <ChevronRight size={12} color={T.gray} />
+                <div style={{ width:14, height:1, background:T.grayLight }} />
+              </div>
+              <span style={{ fontSize:10, fontWeight:600, color:T.gray }}>{d.tiempo}</span>
+            </div>
+            <div style={{ display:'flex', alignItems:'center', gap:6, flex:1, justifyContent:'flex-end' }}>
+              <p style={{ fontSize:12, fontWeight:700, color:T.dark }}>{d.nombre}</p>
+              <div style={{ width:30, height:30, borderRadius:8, background:`${d.color}18`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <MapPin size={14} color={d.color} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Descripción */}
         <div style={{ background:T.white, borderRadius:16, padding:'16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', marginBottom:20 }}>
           <p style={{ fontSize:13, color:T.dark, lineHeight:1.8 }}>{det.descripcion}</p>
         </div>
-        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Qué hacer aquí</p>
-        <div style={{ background:T.white, borderRadius:16, overflow:'hidden', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', marginBottom:20 }}>
+
+        {/* Qué hacer aquí — numbered vertical list with d.color filled circles */}
+        <p style={{ fontSize:15, fontWeight:800, color:T.dark, marginBottom:12 }}>Qué hacer aquí</p>
+        <div style={{ display:'flex', flexDirection:'column', gap:8, marginBottom:20 }}>
           {det.queHacer.map((item, i) => (
-            <div key={i} style={{ display:'flex', alignItems:'center', gap:14, padding:'12px 16px', borderBottom: i < det.queHacer.length - 1 ? `1px solid ${T.grayLight}` : 'none' }}>
-              <div style={{ width:28, height:28, borderRadius:'50%', background:`${d.color}22`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                <span style={{ fontSize:11, fontWeight:800, color:d.color }}>{i + 1}</span>
+            <div key={i} style={{ display:'flex', alignItems:'center', gap:12, background:T.white, borderRadius:12, padding:'12px 14px', boxShadow:'0 2px 8px rgba(0,0,0,0.05)' }}>
+              <div style={{ width:28, height:28, borderRadius:'50%', background:d.color, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <span style={{ fontSize:12, fontWeight:800, color:'#fff' }}>{i + 1}</span>
               </div>
-              <p style={{ fontSize:12, color:T.dark }}>{item}</p>
+              <p style={{ fontSize:12, color:T.dark, lineHeight:1.5 }}>{item}</p>
             </div>
           ))}
         </div>
-        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Cómo llegar</p>
-        <div style={{ background:T.white, borderRadius:16, padding:'16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', display:'flex', gap:12, marginBottom:20 }}>
-          <div style={{ width:36, height:36, borderRadius:10, background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginTop:2 }}>
+
+        {/* Cómo llegar — teal-tinted card */}
+        <p style={{ fontSize:15, fontWeight:800, color:T.dark, marginBottom:12 }}>Cómo llegar</p>
+        <div style={{ background:T.tealBg, border:`1px solid ${T.teal}30`, borderRadius:16, padding:'16px', display:'flex', gap:12, marginBottom:20 }}>
+          <div style={{ width:38, height:38, borderRadius:10, background:T.white, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginTop:2, boxShadow:`0 2px 8px ${T.teal}20` }}>
             <MapPin size={18} color={T.teal} />
           </div>
           <p style={{ fontSize:13, color:T.dark, lineHeight:1.7 }}>{det.comoLlegar}</p>
         </div>
-        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Tips útiles</p>
+
+        {/* Tips — d.color accent filled circles */}
+        <p style={{ fontSize:15, fontWeight:800, color:T.dark, marginBottom:12 }}>Tips útiles</p>
         <div style={{ display:'flex', flexDirection:'column', gap:8, marginBottom:40 }}>
           {det.tips.map((tip, i) => (
             <div key={i} style={{ display:'flex', alignItems:'center', gap:12, background:T.white, borderRadius:12, padding:'12px 14px', boxShadow:'0 2px 8px rgba(0,0,0,0.05)' }}>
-              <div style={{ width:24, height:24, borderRadius:'50%', background:`${d.color}22`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                <span style={{ fontSize:10, fontWeight:800, color:d.color }}>{i + 1}</span>
+              <div style={{ width:28, height:28, borderRadius:'50%', background:d.color, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <span style={{ fontSize:12, fontWeight:800, color:'#fff' }}>{i + 1}</span>
               </div>
-              <p style={{ fontSize:12, color:T.dark }}>{tip}</p>
+              <p style={{ fontSize:12, color:T.dark, lineHeight:1.5 }}>{tip}</p>
             </div>
           ))}
         </div>
@@ -736,6 +886,7 @@ function ComoLlegarDetailPage({ id, onBack }: { id: string; onBack: () => void }
   const det = COMO_LLEGAR_DETAILS[id];
   return (
     <div style={{ height:'100dvh', overflowY:'auto', background:T.bg }} className="hide-scrollbar">
+      {/* Color gradient header */}
       <div style={{ background:`linear-gradient(145deg,${c.color},${c.color}cc)`, padding:'52px 20px 28px', position:'relative' }}>
         <button onClick={onBack} style={{ position:'absolute', top:52, left:20, width:42, height:42, borderRadius:'50%', background:'rgba(255,255,255,0.18)', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>
           <ArrowLeft size={20} color='#fff' />
@@ -759,49 +910,70 @@ function ComoLlegarDetailPage({ id, onBack }: { id: string; onBack: () => void }
           ))}
         </div>
       </div>
+
       <div style={{ padding:'20px 20px 0' }}>
+        {/* Description */}
         <div style={{ background:T.white, borderRadius:16, padding:'16px', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', marginBottom:20 }}>
           <p style={{ fontSize:13, color:T.dark, lineHeight:1.8 }}>{det.descripcion}</p>
         </div>
-        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Empresas disponibles</p>
-        <div style={{ background:T.white, borderRadius:16, overflow:'hidden', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', marginBottom:20 }}>
+
+        {/* Empresas — each as a full card: name + tel pill button */}
+        <p style={{ fontSize:15, fontWeight:800, color:T.dark, marginBottom:12 }}>Empresas disponibles</p>
+        <div style={{ display:'flex', flexDirection:'column', gap:10, marginBottom:20 }}>
           {det.empresas.map((emp, i) => (
-            <div key={i} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'13px 16px', borderBottom: i < det.empresas.length - 1 ? `1px solid ${T.grayLight}` : 'none' }}>
-              <p style={{ fontSize:13, fontWeight:700, color:T.dark }}>{emp.nombre}</p>
-              <a href={`tel:${emp.tel}`} style={{ display:'flex', alignItems:'center', gap:4, background:T.tealBg, border:`1px solid ${T.teal}`, borderRadius:100, padding:'6px 12px', color:T.teal, fontSize:11, fontWeight:600, flexShrink:0, textDecoration:'none' }}>
-                <Phone size={12} color={T.teal} /> {emp.tel}
+            <div key={i} style={{ background:T.white, borderRadius:14, padding:'14px 16px', boxShadow:'0 2px 10px rgba(0,0,0,0.07)', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+              <p style={{ fontSize:14, fontWeight:700, color:T.dark }}>{emp.nombre}</p>
+              <a href={`tel:${emp.tel}`} style={{ display:'flex', alignItems:'center', gap:6, background:`${c.color}18`, border:`1px solid ${c.color}40`, borderRadius:100, padding:'7px 14px', color:c.color, fontSize:11, fontWeight:700, flexShrink:0, textDecoration:'none' }}>
+                <Phone size={13} color={c.color} /> {emp.tel}
               </a>
             </div>
           ))}
         </div>
-        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Horarios y frecuencias</p>
+
+        {/* Horarios — Clock icon left, text right, subtle border-bottom separator */}
+        <p style={{ fontSize:15, fontWeight:800, color:T.dark, marginBottom:12 }}>Horarios y frecuencias</p>
         <div style={{ background:T.white, borderRadius:16, overflow:'hidden', boxShadow:'0 2px 10px rgba(0,0,0,0.06)', marginBottom:20 }}>
           {det.horarios.map((h, i) => (
-            <div key={i} style={{ display:'flex', alignItems:'center', gap:12, padding:'11px 16px', borderBottom: i < det.horarios.length - 1 ? `1px solid ${T.grayLight}` : 'none' }}>
-              <Clock size={14} color={T.teal} />
-              <p style={{ fontSize:12, color:T.dark }}>{h}</p>
+            <div key={i} style={{ display:'flex', alignItems:'center', gap:12, padding:'12px 16px', borderBottom: i < det.horarios.length - 1 ? `1px solid ${T.grayLight}` : 'none' }}>
+              <Clock size={15} color={T.teal} />
+              <p style={{ fontSize:12, color:T.dark, lineHeight:1.5 }}>{h}</p>
             </div>
           ))}
         </div>
-        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Paso a paso</p>
-        <div style={{ display:'flex', flexDirection:'column', gap:8, marginBottom:20 }}>
+
+        {/* Paso a paso — vertical infographic with dashed connecting line */}
+        <p style={{ fontSize:15, fontWeight:800, color:T.dark, marginBottom:14 }}>Paso a paso</p>
+        <div style={{ marginBottom:20 }}>
           {det.pasos.map((paso, i) => (
-            <div key={i} style={{ display:'flex', alignItems:'center', gap:12, background:T.white, borderRadius:12, padding:'12px 14px', boxShadow:'0 2px 8px rgba(0,0,0,0.05)' }}>
-              <div style={{ width:28, height:28, borderRadius:'50%', background:`${c.color}22`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                <span style={{ fontSize:11, fontWeight:800, color:c.color }}>{i + 1}</span>
+            <div key={i} style={{ display:'flex', gap:14 }}>
+              {/* Left column: c.color filled circle + dashed line */}
+              <div style={{ display:'flex', flexDirection:'column', alignItems:'center', flexShrink:0, width:32 }}>
+                <div style={{ width:32, height:32, borderRadius:'50%', background:c.color, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, zIndex:1 }}>
+                  <span style={{ fontSize:13, fontWeight:800, color:'#fff' }}>{i + 1}</span>
+                </div>
+                {i < det.pasos.length - 1 && (
+                  <div style={{ width:0, flex:1, minHeight:18, borderLeft:`2px dashed ${c.color}30`, marginTop:4, marginBottom:4 }} />
+                )}
               </div>
-              <p style={{ fontSize:12, color:T.dark }}>{paso}</p>
+              {/* Right: step text in white card */}
+              <div style={{ flex:1, paddingBottom: i < det.pasos.length - 1 ? 12 : 0 }}>
+                <div style={{ background:T.white, borderRadius:12, padding:'10px 14px', boxShadow:'0 2px 8px rgba(0,0,0,0.06)', marginTop:4 }}>
+                  <p style={{ fontSize:12, color:T.dark, lineHeight:1.6 }}>{paso}</p>
+                </div>
+              </div>
             </div>
           ))}
         </div>
-        <p style={{ fontSize:14, fontWeight:800, color:T.dark, marginBottom:12 }}>Tips importantes</p>
+
+        {/* Tips — tealBg cards instead of white */}
+        <p style={{ fontSize:15, fontWeight:800, color:T.dark, marginBottom:12 }}>Tips importantes</p>
         <div style={{ display:'flex', flexDirection:'column', gap:8, marginBottom:40 }}>
           {det.tips.map((tip, i) => (
-            <div key={i} style={{ display:'flex', alignItems:'center', gap:12, background:T.white, borderRadius:12, padding:'12px 14px', boxShadow:'0 2px 8px rgba(0,0,0,0.05)' }}>
-              <div style={{ width:24, height:24, borderRadius:'50%', background:T.tealBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                <span style={{ fontSize:10, fontWeight:800, color:T.teal }}>{i + 1}</span>
+            <div key={i} style={{ display:'flex', alignItems:'center', gap:12, background:T.tealBg, border:`1px solid ${T.teal}20`, borderRadius:12, padding:'12px 14px' }}>
+              <div style={{ width:26, height:26, borderRadius:'50%', background:T.teal, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <span style={{ fontSize:11, fontWeight:800, color:'#fff' }}>{i + 1}</span>
               </div>
-              <p style={{ fontSize:12, color:T.dark }}>{tip}</p>
+              <p style={{ fontSize:12, color:T.dark, lineHeight:1.5 }}>{tip}</p>
             </div>
           ))}
         </div>
