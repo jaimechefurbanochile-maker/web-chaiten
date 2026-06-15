@@ -8,6 +8,7 @@ import {
   Bike, Footprints, Truck, CloudRain, Thermometer, Sun, Sunrise, Route, DollarSign,
   CalendarDays, Wind, Users, ShoppingCart, Landmark, Navigation,
   ArrowLeft, Globe, Share2, Mail, Check, CheckCircle,
+  Menu, X, Quote,
 } from 'lucide-react';
 import { useWeather } from '../hooks/useWeather';
 
@@ -214,6 +215,15 @@ const COMO_LLEGAR_DETAILS: Record<string, { descripcion: string; empresas: { nom
   'avion': { descripcion: 'La opción más rápida para llegar a Chaitén. La aerolínea Aerocord opera vuelos regulares desde el aeropuerto de Puerto Montt con impresionantes vistas aéreas sobre los fiordos, volcanes y bosques de la Patagonia.', empresas: [{ nombre:'Aerocord', tel:'(65) 2 254 411' }, { nombre:'Vuelos charter (consultar)', tel:'+56 9 operadores locales' }], horarios: ['Puerto Montt → Chaitén: 1–2 vuelos diarios (según temporada)', 'Duración del vuelo: 45 minutos aproximadamente', 'Sujeto a condiciones meteorológicas (Patagonia)', 'Temporada alta (Dic–Feb): vuelos adicionales disponibles'], pasos: ['Reserva tu vuelo directamente con Aerocord por teléfono o web', 'Preséntate 45 min antes en aeropuerto El Tepual (PMC)', 'Vuelo de 45 min con vistas impresionantes a fiordos y volcanes', 'Aterrizaje en aeródromo de Chaitén (a 2 km del centro)', 'Taxi o remis al centro del pueblo · ~$3 USD'], tips: ['Confirma el vuelo el día anterior (clima patagónico)', 'Equipaje reducido — aviones pequeños de ~12 pasajeros', 'El aeropuerto está a 2 km del centro del pueblo', 'Reservar con varios días de anticipación en verano'] },
 };
 
+// ─── Testimonios ─────────────────────────────────────────────────────────────
+
+const TESTIMONIOS = [
+  { nombre:'Valentina R.', origen:'Santiago, Chile', avatar:'https://picsum.photos/id/1005/60/60', estrellas:5, texto:'Chaitén es de otro mundo. El Parque Pumalín nos dejó sin palabras — alerces de 4.000 años y cero turistas. Un lujo que no se compra.' },
+  { nombre:'Marco T.',     origen:'Buenos Aires, Argentina', avatar:'https://picsum.photos/id/1012/60/60', estrellas:5, texto:'La travesía en ferry por los fiordos es la experiencia más impresionante que he tenido viajando por Sudamérica. Imperdible.' },
+  { nombre:'Sarah K.',     origen:'Berlin, Germany', avatar:'https://picsum.photos/id/1027/60/60', estrellas:5, texto:'Absolutely authentic. No crowds, pristine nature, and locals who share their incredible story with real pride. Unmissable.' },
+  { nombre:'Pedro A.',     origen:'Valparaíso, Chile', avatar:'https://picsum.photos/id/1062/60/60', estrellas:5, texto:'Subir al mirador del volcán con la zona de exclusión de fondo es algo que te cambia. El silencio absoluto de la Patagonia.' },
+];
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function SectionHeader({ title, onSeeAll }: { title: string; onSeeAll?: () => void }) {
@@ -268,7 +278,7 @@ function TealHeader({ title, subtitle, showSearch = true, searchPlaceholder = '�
 
 function AttractivoCard({ a, onClick }: { a: typeof ATRACTIVOS[0]; onClick: () => void }) {
   return (
-    <div onClick={onClick} style={{ width:220, flexShrink:0, borderRadius:20, overflow:'hidden', background:T.white, boxShadow:'0 6px 24px rgba(0,0,0,0.12)', cursor:'pointer' }}>
+    <div onClick={onClick} className="card-lift" style={{ width:220, flexShrink:0, borderRadius:20, overflow:'hidden', background:T.white, boxShadow:'0 6px 24px rgba(0,0,0,0.12)', cursor:'pointer' }}>
       <div style={{ height:150, overflow:'hidden', position:'relative' }}>
         <img src={a.img} alt={a.nombre} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
         <span style={{ position:'absolute', top:10, left:10, background:'rgba(0,0,0,0.35)', color:'#fff', fontSize:10, fontWeight:700, padding:'4px 10px', borderRadius:100, backdropFilter:'blur(4px)' }}>{a.tipo}</span>
@@ -292,7 +302,7 @@ function ListRow({ img, title, sub, rating, right, last = false, onClick }: {
   img: string; title: string; sub: string; rating: number; right?: string; last?: boolean; onClick?: () => void;
 }) {
   return (
-    <div onClick={onClick} style={{ display:'flex', alignItems:'center', gap:14, background:T.white, padding:'14px', borderBottom:last?'none':`1px solid ${T.grayLight}`, cursor:'pointer' }}>
+    <div onClick={onClick} className="btn-tap" style={{ display:'flex', alignItems:'center', gap:14, background:T.white, padding:'14px', borderBottom:last?'none':`1px solid ${T.grayLight}`, cursor:'pointer' }}>
       <div style={{ width:74, height:74, borderRadius:12, overflow:'hidden', flexShrink:0 }}>
         <img src={img} alt={title} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
       </div>
@@ -317,6 +327,141 @@ function ListCard({ children, first = false, last = false }: { children: React.R
       boxShadow: first ? '0 4px 16px rgba(0,0,0,0.07)' : 'none',
     }}>
       {children}
+    </div>
+  );
+}
+
+// ─── Hamburger Menu ───────────────────────────────────────────────────────────
+
+function HamburgerMenu({ activeTab, onNav, onClose }: { activeTab: string; onNav: (tab: string) => void; onClose: () => void }) {
+  const items = [
+    { id:'home',     Icon:Home,       label:'Inicio',    desc:'Bienvenida y resumen del destino' },
+    { id:'explorar', Icon:Compass,    label:'Explorar',  desc:'Rutas, atractivos e itinerarios' },
+    { id:'pudi',     Icon:MessageCircle, label:'Pudi IA',desc:'Tu asistente de viaje inteligente' },
+    { id:'servicios',Icon:NavShield,  label:'Servicios', desc:'Emergencias, salud y combustible' },
+    { id:'info',     Icon:Info,       label:'Info',      desc:'Sobre Chaitén y datos útiles' },
+  ];
+  return (
+    <div className="drawer-overlay" onClick={onClose}>
+      <div className="drawer-panel" onClick={e => e.stopPropagation()}>
+        {/* Header */}
+        <div style={{ background:T.dark, padding:'52px 20px 20px', flexShrink:0 }}>
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:16 }}>
+            <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+              <div style={{ width:36, height:36, borderRadius:10, background:T.teal, display:'flex', alignItems:'center', justifyContent:'center', fontSize:18 }}>🦌</div>
+              <div>
+                <p style={{ fontSize:15, fontWeight:800, color:'#fff', lineHeight:1.1 }}>Guía Chaitén</p>
+                <p style={{ fontSize:10, color:'rgba(255,255,255,0.45)' }}>Patagonia Norte · Chile</p>
+              </div>
+            </div>
+            <button onClick={onClose} style={{ width:36, height:36, borderRadius:'50%', background:'rgba(255,255,255,0.1)', display:'flex', alignItems:'center', justifyContent:'center', border:'none', cursor:'pointer' }}>
+              <X size={18} color='rgba(255,255,255,0.7)' />
+            </button>
+          </div>
+        </div>
+        {/* Nav items */}
+        <div style={{ flex:1, overflowY:'auto', padding:'12px 0' }}>
+          {items.map(({ id, Icon, label, desc }) => {
+            const active = activeTab === id;
+            return (
+              <button key={id} onClick={() => { onNav(id); onClose(); }} style={{ width:'100%', display:'flex', alignItems:'center', gap:14, padding:'14px 20px', background:active ? T.tealBg : 'transparent', border:'none', cursor:'pointer', transition:'background 0.15s', textAlign:'left' }}>
+                <div style={{ width:40, height:40, borderRadius:12, background:active ? T.teal : T.bg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                  <Icon size={20} color={active ? '#fff' : T.gray} />
+                </div>
+                <div style={{ flex:1 }}>
+                  <p style={{ fontSize:14, fontWeight:700, color:active ? T.teal : T.dark, lineHeight:1.2, marginBottom:2 }}>{label}</p>
+                  <p style={{ fontSize:11, color:T.gray, lineHeight:1.3 }}>{desc}</p>
+                </div>
+                {active && <div style={{ width:6, height:6, borderRadius:'50%', background:T.teal, flexShrink:0 }} />}
+              </button>
+            );
+          })}
+        </div>
+        {/* Footer */}
+        <div style={{ padding:'16px 20px', borderTop:`1px solid ${T.grayLight}`, flexShrink:0 }}>
+          <p style={{ fontSize:11, color:T.gray, textAlign:'center', lineHeight:1.5 }}>© 2025 Guía Chaitén<br/>Hecho con ❤️ en la Patagonia</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Testimonios Section ──────────────────────────────────────────────────────
+
+function TestimoniosSection() {
+  return (
+    <div style={{ paddingTop:28, paddingBottom:4 }}>
+      <SectionHeader title="Lo que dicen los viajeros" />
+      <div style={{ display:'flex', gap:14, overflowX:'auto', padding:'0 20px 8px' }} className="hide-scrollbar">
+        {TESTIMONIOS.map((t, i) => (
+          <div key={i} className="testimonial-card">
+            {/* Stars */}
+            <div style={{ display:'flex', gap:2, marginBottom:10 }}>
+              {Array.from({ length: t.estrellas }).map((_, s) => (
+                <Star key={s} size={13} color={T.star} fill={T.star} />
+              ))}
+            </div>
+            {/* Quote */}
+            <div style={{ position:'relative', marginBottom:14 }}>
+              <Quote size={18} color={T.teal} style={{ opacity:0.3, position:'absolute', top:-2, left:-2 }} />
+              <p style={{ fontSize:12, color:T.dark, lineHeight:1.7, paddingLeft:18, fontStyle:'italic' }}>{t.texto}</p>
+            </div>
+            {/* Author */}
+            <div style={{ display:'flex', alignItems:'center', gap:10, paddingTop:12, borderTop:`1px solid ${T.grayLight}` }}>
+              <img src={t.avatar} alt={t.nombre} style={{ width:36, height:36, borderRadius:'50%', objectFit:'cover', flexShrink:0 }} />
+              <div>
+                <p style={{ fontSize:12, fontWeight:700, color:T.dark, lineHeight:1.2 }}>{t.nombre}</p>
+                <p style={{ fontSize:10, color:T.gray }}>{t.origen}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── App Footer ───────────────────────────────────────────────────────────────
+
+function AppFooter({ onNav }: { onNav: (tab: string) => void }) {
+  const links = [
+    { label:'Explorar',    tab:'explorar'  },
+    { label:'Alojamiento', tab:'home'      },
+    { label:'Gastronomía', tab:'home'      },
+    { label:'Cómo llegar', tab:'servicios' },
+    { label:'Servicios',   tab:'servicios' },
+    { label:'Historia',    tab:'info'      },
+  ];
+  return (
+    <div style={{ background:T.dark, padding:'28px 20px 40px', marginTop:24 }}>
+      <div style={{ display:'flex', flexDirection:'column', alignItems:'center', marginBottom:20 }}>
+        <div style={{ width:48, height:48, borderRadius:14, background:T.teal, display:'flex', alignItems:'center', justifyContent:'center', fontSize:22, marginBottom:10 }}>🦌</div>
+        <p style={{ fontSize:15, fontWeight:800, color:'#fff', marginBottom:3 }}>Guía Chaitén</p>
+        <p style={{ fontSize:11, color:'rgba(255,255,255,0.4)' }}>Patagonia Norte · Región de Los Lagos · Chile</p>
+      </div>
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:6, marginBottom:20 }}>
+        {links.map(({ label, tab }) => (
+          <button key={label} onClick={() => onNav(tab)} style={{ background:'rgba(255,255,255,0.07)', border:'none', borderRadius:10, padding:'10px 14px', fontSize:12, fontWeight:600, color:'rgba(255,255,255,0.75)', cursor:'pointer', textAlign:'left', transition:'background 0.15s' }}>
+            {label}
+          </button>
+        ))}
+      </div>
+      <div style={{ borderTop:'1px solid rgba(255,255,255,0.08)', paddingTop:16 }}>
+        <div style={{ display:'flex', justifyContent:'center', gap:16, marginBottom:12 }}>
+          {[{ Icon:Globe, label:'Mapa' }, { Icon:Share2, label:'Compartir' }, { Icon:Mail, label:'Contacto' }].map(({ Icon, label }) => (
+            <button key={label} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:4, background:'none', border:'none', cursor:'pointer' }}>
+              <div style={{ width:36, height:36, borderRadius:10, background:'rgba(255,255,255,0.08)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <Icon size={16} color='rgba(255,255,255,0.5)' />
+              </div>
+              <span style={{ fontSize:9, color:'rgba(255,255,255,0.35)', fontWeight:600 }}>{label}</span>
+            </button>
+          ))}
+        </div>
+        <p style={{ textAlign:'center', fontSize:10, color:'rgba(255,255,255,0.22)', lineHeight:1.6 }}>
+          © 2025 Guía Chaitén · Hecho con ❤️ en la Patagonia<br/>
+          Información actualizada · Sin fines de lucro
+        </p>
+      </div>
     </div>
   );
 }
@@ -1071,7 +1216,7 @@ function HistoriaPage({ onBack }: { onBack: () => void }) {
 
 // ─── HOME TAB ─────────────────────────────────────────────────────────────────
 
-function HomeTab({ wx, navigate, onTabChange }: { wx: ReturnType<typeof useWeather>; navigate: Navigate; onTabChange: (tab: NavTab) => void }) {
+function HomeTab({ wx, navigate, onTabChange, onMenuOpen }: { wx: ReturnType<typeof useWeather>; navigate: Navigate; onTabChange: (tab: NavTab) => void; onMenuOpen: () => void }) {
   return (
     <>
       {/* Header */}
@@ -1086,9 +1231,9 @@ function HomeTab({ wx, navigate, onTabChange }: { wx: ReturnType<typeof useWeath
               </span>
             </div>
           </div>
-          <div style={{ width:50, height:50, borderRadius:'50%', background:'rgba(255,255,255,0.25)', border:'2px solid rgba(255,255,255,0.5)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-            <Users size={24} color="rgba(255,255,255,0.9)" />
-          </div>
+          <button onClick={onMenuOpen} className="btn-tap" style={{ width:44, height:44, borderRadius:'50%', background:'rgba(255,255,255,0.22)', border:'2px solid rgba(255,255,255,0.4)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+            <Menu size={22} color="rgba(255,255,255,0.9)" />
+          </button>
         </div>
         <div style={{ margin:'18px 20px 0', display:'flex', alignItems:'center', gap:10, background:T.white, borderRadius:14, padding:'14px 18px' }}>
           <Search size={18} color='#C0C0C0' />
@@ -1415,6 +1560,9 @@ function HomeTab({ wx, navigate, onTabChange }: { wx: ReturnType<typeof useWeath
           </div>
         </div>
       </div>
+
+      {/* Testimonios */}
+      <TestimoniosSection />
 
       {/* Footer */}
       <div style={{ marginTop:28 }}>
@@ -1789,7 +1937,7 @@ function ServiciosTab() {
 
 // ─── INFO TAB ────────────────────────────────────────────────────────────────
 
-function InfoTab({ navigate }: { navigate: Navigate }) {
+function InfoTab({ navigate, onNav }: { navigate: Navigate; onNav: (tab: string) => void }) {
   return (
     <>
       <TealHeader title="Sobre Chaitén" subtitle="Patagonia Norte · Los Lagos, Chile" showSearch={false} />
@@ -1974,7 +2122,7 @@ function InfoTab({ navigate }: { navigate: Navigate }) {
           </ListCard>
         </div>
       </div>
-      <div style={{ height:24 }} />
+      <AppFooter onNav={onNav} />
     </>
   );
 }
@@ -1984,6 +2132,7 @@ function InfoTab({ navigate }: { navigate: Navigate }) {
 export default function ModernHome() {
   const [tab, setTab] = useState<NavTab>('home');
   const [page, setPage] = useState<Page>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const wx = useWeather();
 
   if (page) {
@@ -1998,15 +2147,17 @@ export default function ModernHome() {
   }
 
   const isPudi = tab === 'pudi';
+  const handleNav = (t: string) => { setTab(t as NavTab); setMenuOpen(false); };
 
   return (
-    <div style={{ display:'flex', flexDirection:'column', height:'100dvh', background:T.bg, overflow:'hidden' }}>
+    <div style={{ display:'flex', flexDirection:'column', height:'100dvh', background:T.bg, overflow:'hidden', position:'relative' }}>
+      {menuOpen && <HamburgerMenu activeTab={tab} onNav={handleNav} onClose={() => setMenuOpen(false)} />}
       <div style={{ flex:1, overflowY: isPudi ? 'hidden' : 'auto', overflowX:'hidden', display: isPudi ? 'flex' : 'block', flexDirection:'column' }} className={isPudi ? '' : 'hide-scrollbar'}>
-        {tab === 'home'      && <HomeTab wx={wx} navigate={setPage} onTabChange={setTab} />}
+        {tab === 'home'      && <HomeTab wx={wx} navigate={setPage} onTabChange={setTab} onMenuOpen={() => setMenuOpen(true)} />}
         {tab === 'explorar'  && <ExplorarTab navigate={setPage} />}
         {tab === 'pudi'      && <PudiTab />}
         {tab === 'servicios' && <ServiciosTab />}
-        {tab === 'info'      && <InfoTab navigate={setPage} />}
+        {tab === 'info'      && <InfoTab navigate={setPage} onNav={handleNav} />}
       </div>
 
       {/* Bottom Nav */}
@@ -2017,14 +2168,14 @@ export default function ModernHome() {
         ]).map(({ id, Icon, label }) => {
           const active = tab === id;
           return (
-            <button key={id} onClick={() => setTab(id)} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:3, padding:'4px 18px', background:'none', border:'none', cursor:'pointer' }}>
+            <button key={id} onClick={() => setTab(id)} className="btn-tap" style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:3, padding:'4px 14px', background:'none', border:'none', cursor:'pointer' }}>
               <Icon size={22} color={active ? T.teal : '#C0C0C0'} />
-              <span style={{ fontSize:10, fontWeight:active?700:500, color:active?T.teal:'#C0C0C0' }}>{label}</span>
+              <span className="bottom-nav-label" style={{ fontSize:10, fontWeight:active?700:500, color:active?T.teal:'#C0C0C0' }}>{label}</span>
             </button>
           );
         })}
 
-        <button onClick={() => setTab('pudi')} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:4, background:'none', border:'none', cursor:'pointer', marginBottom:4 }}>
+        <button onClick={() => setTab('pudi')} className="btn-tap" style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:4, background:'none', border:'none', cursor:'pointer', marginBottom:4 }}>
           <div style={{
             width:58, height:58, borderRadius:'50%',
             background: tab==='pudi' ? `linear-gradient(135deg,#0D1F17,${T.tealDark})` : 'linear-gradient(135deg,#C8F135,#a8d020)',
@@ -2042,9 +2193,9 @@ export default function ModernHome() {
         ]).map(({ id, Icon, label }) => {
           const active = tab === id;
           return (
-            <button key={id} onClick={() => setTab(id)} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:3, padding:'4px 18px', background:'none', border:'none', cursor:'pointer' }}>
+            <button key={id} onClick={() => setTab(id)} className="btn-tap" style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:3, padding:'4px 14px', background:'none', border:'none', cursor:'pointer' }}>
               <Icon size={22} color={active ? T.teal : '#C0C0C0'} />
-              <span style={{ fontSize:10, fontWeight:active?700:500, color:active?T.teal:'#C0C0C0' }}>{label}</span>
+              <span className="bottom-nav-label" style={{ fontSize:10, fontWeight:active?700:500, color:active?T.teal:'#C0C0C0' }}>{label}</span>
             </button>
           );
         })}

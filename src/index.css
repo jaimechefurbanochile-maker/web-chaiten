@@ -1,13 +1,13 @@
 :root {
-  --teal: #0DA5A0;
-  --teal-dark: #0A7A75;
-  --dark: #1C2E3A;
-  --gray: #9E9EA7;
-  --white: #ffffff;
-  --bg: #F5F6FA;
+  --teal:       #0DA5A0;
+  --teal-dark:  #0A7A75;
+  --dark:       #1C2E3A;
+  --gray:       #9E9EA7;
+  --white:      #ffffff;
+  --bg:         #F5F6FA;
   --gray-light: #EAEAEA;
-  --star: #FBBF24;
-  --accent: #C8F135;
+  --star:       #FBBF24;
+  --accent:     #C8F135;
 }
 
 *, *::before, *::after {
@@ -84,7 +84,7 @@ a {
   color: #C0C0C0;
 }
 
-/* ── Animations ── */
+/* ── Keyframes ── */
 @keyframes splashFade {
   0%   { opacity: 0; transform: scale(0.92); }
   100% { opacity: 1; transform: scale(1); }
@@ -99,4 +99,171 @@ a {
 }
 .slide-up {
   animation: slideUp 0.5s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes slideFromRight {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes drawerBg {
+  from { background: rgba(0,0,0,0); }
+  to   { background: rgba(0,0,0,0.52); }
+}
+
+/* ── Entrance animations ── */
+.anim-fade-up   { animation: fadeUp 0.45s cubic-bezier(0.22,1,0.36,1) both; }
+.anim-fade-up-1 { animation: fadeUp 0.45s 0.06s cubic-bezier(0.22,1,0.36,1) both; }
+.anim-fade-up-2 { animation: fadeUp 0.45s 0.12s cubic-bezier(0.22,1,0.36,1) both; }
+.anim-fade-up-3 { animation: fadeUp 0.45s 0.18s cubic-bezier(0.22,1,0.36,1) both; }
+.anim-fade-up-4 { animation: fadeUp 0.45s 0.24s cubic-bezier(0.22,1,0.36,1) both; }
+.anim-scale-in  { animation: scaleIn 0.35s cubic-bezier(0.22,1,0.36,1) both; }
+.anim-fade-in   { animation: fadeIn 0.3s ease both; }
+
+/* ── Hover / active effects ── */
+.card-lift {
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  cursor: pointer;
+}
+.card-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 36px rgba(0,0,0,0.14) !important;
+}
+.card-lift:active {
+  transform: translateY(-1px) scale(0.99);
+  transition: transform 0.1s ease;
+}
+
+.btn-tap {
+  transition: opacity 0.15s, transform 0.12s;
+}
+.btn-tap:hover  { opacity: 0.88; }
+.btn-tap:active { transform: scale(0.95); opacity: 0.8; }
+
+.nav-btn {
+  transition: color 0.18s;
+  position: relative;
+}
+.nav-btn::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: var(--teal);
+  border-radius: 1px;
+  transition: width 0.2s ease;
+}
+.nav-btn.active::after { width: 20px; }
+
+/* ── Hamburger drawer ── */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.52);
+  z-index: 200;
+  animation: drawerBg 0.25s ease both;
+}
+.drawer-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 82%;
+  max-width: 310px;
+  background: #fff;
+  box-shadow: -8px 0 40px rgba(0,0,0,0.22);
+  animation: slideFromRight 0.32s cubic-bezier(0.22,1,0.36,1) both;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Testimonial card ── */
+.testimonial-card {
+  min-width: 260px;
+  max-width: 280px;
+  flex-shrink: 0;
+  background: #fff;
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.09);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+.testimonial-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 32px rgba(0,0,0,0.14);
+}
+
+/* ── Responsive: tiny mobile (< 360px) ── */
+@media (max-width: 360px) {
+  #root {
+    max-width: 100%;
+    box-shadow: none;
+  }
+  .bottom-nav-label {
+    display: none;
+  }
+}
+
+/* ── Responsive: standard mobile (361px–480px) ── */
+@media (max-width: 480px) {
+  #root {
+    max-width: 100%;
+    box-shadow: none;
+  }
+}
+
+/* ── Responsive: tablet (481px–1024px) ── */
+@media (min-width: 481px) and (max-width: 1024px) {
+  body {
+    background: linear-gradient(135deg, #0A7A75, #0DA5A0 55%, #065F5B);
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  #root {
+    max-width: 440px;
+    height: min(90dvh, 820px);
+    border-radius: 32px;
+    box-shadow: 0 24px 72px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.12);
+    overflow: hidden;
+  }
+}
+
+/* ── Responsive: desktop (1025px+) ── */
+@media (min-width: 1025px) {
+  body {
+    background: linear-gradient(145deg, #0A7A75 0%, #0DA5A0 45%, #0A6E69 100%);
+    background-attachment: fixed;
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  #root {
+    max-width: 430px;
+    height: min(92dvh, 900px);
+    border-radius: 40px;
+    box-shadow:
+      0 40px 120px rgba(0,0,0,0.55),
+      0 0 0 1px rgba(255,255,255,0.15),
+      inset 0 1px 0 rgba(255,255,255,0.2);
+    overflow: hidden;
+  }
 }
